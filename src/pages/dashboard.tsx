@@ -3,6 +3,10 @@ import SalesFunnel from "@/components/dashboard/sales-funnel";
 import DealSizeDistribution from "@/components/dashboard/deal-size-distribution";
 import ReportsOverview from "@/components/dashboard/reports-overview";
 import LeadSourcesChart from "@/components/dashboard/lead-sources";
+import LeadConversion from "@/components/dashboard/lead-conversion";
+import TonnageSold from "@/components/dashboard/tonnage-sold";
+import PipelineStageOverview from "@/components/dashboard/pipeline-stage-overview";
+import QueryHandlingDistribution from "@/components/dashboard/query-handling-distribution";
 import LeadsIcon from "@/assets/icons/dashboard/leads.svg";
 import ConfirmedIcon from "@/assets/icons/dashboard/confirmed.svg";
 import ValueIcon from "@/assets/icons/dashboard/value.svg";
@@ -97,6 +101,26 @@ export default function Dashboard() {
           </div>
           <div className="lg:col-span-2">
             <LeadSourcesChart />
+          </div>
+        </div>
+
+        {/* Chart Row 3: Requested charts below */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-3">
+            <LeadConversion />
+          </div>
+          <div className="lg:col-span-2">
+            <TonnageSold />
+          </div>
+        </div>
+
+        {/* Chart Row 4: Pipeline stage and Query distribution */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+          <div className="lg:col-span-3">
+            <PipelineStageOverview />
+          </div>
+          <div className="lg:col-span-2">
+            <QueryHandlingDistribution />
           </div>
         </div>
       </div>
