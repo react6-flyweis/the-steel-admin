@@ -1,19 +1,17 @@
 import { Link, useLocation, useNavigate } from "react-router";
 import { useState } from "react";
-import {
-  LayoutDashboard,
-  Users,
-  MessageSquare,
-  UsersRound,
-  Image,
-  BarChart3,
-  FileText,
-  Settings,
-  Link2,
-  Table,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import dashboardIcon from "@/assets/icons/sidebar/dashboard.svg";
+import communication from "@/assets/icons/sidebar/communication.svg";
+import construction from "@/assets/icons/sidebar/construction.svg";
+import customer from "@/assets/icons/sidebar/customer.svg";
+import employee from "@/assets/icons/sidebar/employee.svg";
+import finance from "@/assets/icons/sidebar/finance.svg";
+import invoices from "@/assets/icons/sidebar/invoices.svg";
+import leadsIcon from "@/assets/icons/sidebar/leads.svg";
+import payments from "@/assets/icons/sidebar/payments.svg";
+import plant from "@/assets/icons/sidebar/plant.svg";
+import reportsIcon from "@/assets/icons/sidebar/reports.svg";
 import { Button } from "./ui/button";
 import { UserMenu } from "@/components/user-menu";
 // import { Button } from "./ui/button";
@@ -30,114 +28,86 @@ type NavGroup =
   | "documents"
   | "settings"
   | "links"
-  | "reports";
+  | "reports"
+  | "construction";
 
 const navigationGroups = [
   {
     id: "dashboard" as NavGroup,
-    icon: LayoutDashboard,
+    icon: dashboardIcon,
     label: "Dashboard",
     color: "bg-[#1e3a8a]",
     items: [{ path: "/", label: "Dashboard" }],
   },
   {
     id: "users" as NavGroup,
-    icon: Users,
-    label: "Users",
+    icon: customer,
+    label: "Customer",
     color: "bg-[#EAB308]",
-    items: [
-      { path: "/users", label: "All Users" },
-      { path: "/users/active", label: "Active Users" },
-      { path: "/users/pending", label: "Pending Users" },
-    ],
-  },
-  {
-    id: "messages" as NavGroup,
-    icon: MessageSquare,
-    label: "Messages",
-    color: "bg-[#a855f7]",
-    items: [
-      { path: "/messages", label: "Inbox" },
-      { path: "/messages/sent", label: "Sent" },
-      { path: "/messages/drafts", label: "Drafts" },
-    ],
-  },
-  {
-    id: "teams" as NavGroup,
-    icon: UsersRound,
-    label: "Teams",
-    color: "bg-[#ea580c]",
-    items: [
-      { path: "/teams", label: "All Teams" },
-      { path: "/teams/create", label: "Create Team" },
-      { path: "/teams/invites", label: "Invitations" },
-    ],
-  },
-  {
-    id: "gallery" as NavGroup,
-    icon: Image,
-    label: "Gallery",
-    color: "bg-[#16a34a]",
-    items: [
-      { path: "/gallery", label: "All Images" },
-      { path: "/gallery/upload", label: "Upload" },
-      { path: "/gallery/albums", label: "Albums" },
-    ],
-  },
-  {
-    id: "analytics" as NavGroup,
-    icon: BarChart3,
-    label: "Analytics",
-    color: "bg-[#000000]",
-    items: [
-      { path: "/analytics", label: "Overview" },
-      { path: "/analytics/traffic", label: "Traffic" },
-      { path: "/analytics/conversion", label: "Conversions" },
-    ],
-  },
-  {
-    id: "documents" as NavGroup,
-    icon: FileText,
-    label: "Documents",
-    color: "bg-[#a855f7]",
-    items: [
-      { path: "/documents", label: "All Documents" },
-      { path: "/documents/shared", label: "Shared" },
-      { path: "/documents/archived", label: "Archived" },
-    ],
-  },
-  {
-    id: "settings" as NavGroup,
-    icon: Settings,
-    label: "Settings",
-    color: "bg-[#0ea5e9]",
-    items: [
-      { path: "/settings", label: "General" },
-      { path: "/settings/profile", label: "Profile" },
-      { path: "/settings/security", label: "Security" },
-    ],
+    items: [{ path: "/customers", label: "Customer" }],
   },
   {
     id: "links" as NavGroup,
-    icon: Link2,
-    label: "Links",
-    color: "bg-[#ca8a04]",
-    items: [
-      { path: "/links", label: "All Links" },
-      { path: "/links/create", label: "Create Link" },
-      { path: "/links/analytics", label: "Link Analytics" },
-    ],
+    icon: leadsIcon,
+    label: "Leads",
+    color: "bg-[#a855f7]",
+    items: [{ path: "/leads", label: "Leads" }],
+  },
+  {
+    id: "teams" as NavGroup,
+    icon: employee,
+    label: "Employee Management",
+    color: "bg-[#ea580c]",
+    items: [{ path: "/employees", label: "Employees" }],
+  },
+  {
+    id: "settings" as NavGroup,
+    icon: payments,
+    label: "Payments",
+    color: "bg-[#16a34a]",
+    items: [{ path: "/payments", label: "Payments" }],
+  },
+  {
+    id: "analytics" as NavGroup,
+    icon: reportsIcon,
+    label: "Reports & Analytics",
+    color: "bg-[#000000]",
+    items: [{ path: "/analytics", label: "Analytics" }],
+  },
+  {
+    id: "documents" as NavGroup,
+    icon: invoices,
+    label: "Invoices",
+    color: "bg-[#a855f7]",
+    items: [{ path: "/invoices", label: "Invoices" }],
+  },
+  {
+    id: "gallery" as NavGroup,
+    icon: plant,
+    label: "Plant",
+    color: "bg-[#0ea5e9]",
+    items: [{ path: "/plant", label: "Plant" }],
   },
   {
     id: "reports" as NavGroup,
-    icon: Table,
-    label: "Reports",
+    icon: finance,
+    label: "Finance",
+    color: "bg-[#ca8a04]",
+    items: [{ path: "/finance", label: "Finance" }],
+  },
+  {
+    id: "construction" as NavGroup,
+    icon: construction,
+    label: "Construction",
     color: "bg-[#dc2626]",
-    items: [
-      { path: "/reports", label: "All Reports" },
-      { path: "/reports/generate", label: "Generate Report" },
-      { path: "/reports/scheduled", label: "Scheduled" },
-    ],
+    items: [{ path: "/construction", label: "Construction" }],
+  },
+  {
+    id: "messages" as NavGroup,
+    icon: communication,
+    label: "Communication",
+    color: "bg-gray-400",
+    items: [{ path: "/communication", label: "Communication" }],
   },
 ];
 
@@ -162,7 +132,7 @@ export function Sidebar() {
       <aside className="w-14 pt-28 bg-[#2563eb] h-screen fixed left-0 top-0 flex flex-col items-center   gap-4  z-20">
         <nav className="flex flex-col gap-3">
           {navigationGroups.map((group) => {
-            const Icon = group.icon;
+            const iconSrc = group.icon as string;
             const isActive = selectedGroup === group.id;
 
             return (
@@ -180,11 +150,15 @@ export function Sidebar() {
                   />
                 )}
                 <div
-                  className={`z-10 size-9 flex items-center justify-center rounded-full ${
+                  className={`z-10 w-9 h-9 flex items-center justify-center rounded-full ${
                     group.color
                   } ${isActive ? "" : ""}`}
                 >
-                  <Icon className="size-5 text-white" />
+                  <img
+                    src={iconSrc}
+                    alt={group.label}
+                    className="max-w-5 max-h-5 object-contain"
+                  />
                 </div>
               </button>
             );
