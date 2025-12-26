@@ -28,7 +28,7 @@ export default function StatCard({
           <p className="text-2xl mt-1">{value}</p>
         </div>
 
-        <div className="bg-white p-3 rounded-lg">{icon}</div>
+        <div className="bg-white p-2 rounded-md">{icon}</div>
       </div>
     </Card>
   );
