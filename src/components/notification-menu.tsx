@@ -4,8 +4,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+import notificationIcon from "@/assets/icons/notification.svg";
 
 export type NotificationItem = {
   id: string;
@@ -53,7 +54,11 @@ export function NotificationMenu() {
           aria-label="Open notifications"
           className="relative flex size-8 items-center justify-center rounded-full border-gray-200 bg-white text-gray-600 transition hover:border-gray-300 hover:text-gray-900"
         >
-          <Bell className="h-5 w-5" />
+          <img
+            src={notificationIcon}
+            alt="Notifications"
+            className="max-h-5 max-w-5"
+          />
           {total > 0 ? (
             <Badge className="absolute -right-1 -top-1 size-4 items-center justify-center rounded-full bg-red-600 p-0 text-xs font-semibold text-white">
               {total}
