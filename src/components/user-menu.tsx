@@ -14,7 +14,7 @@ export function UserMenu() {
   const goSettings = () => navigate("/settings");
   const signOut = () => {
     // Replace with real sign-out logic
-    navigate("/logout");
+    navigate("/sign-in");
   };
 
   return (
