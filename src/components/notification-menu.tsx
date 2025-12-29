@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 import notificationIcon from "@/assets/icons/notification.svg";
+import { Link } from "react-router";
 
 export type NotificationItem = {
   id: string;
@@ -105,12 +106,12 @@ export function NotificationMenu() {
         </div>
 
         <div className="border-t border-gray-100">
-          <button
-            type="button"
-            className="w-full rounded-b-2xl px-5 py-3 text-xs font-semibold text-blue-600 transition hover:bg-blue-50"
+          <Link
+            to="/notifications"
+            className="w-full block rounded-b-2xl px-5 py-3 text-xs font-semibold text-blue-600 transition hover:bg-blue-50"
           >
             View all notifications
-          </button>
+          </Link>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
