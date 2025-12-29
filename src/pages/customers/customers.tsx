@@ -94,7 +94,7 @@ const initialCustomers = [
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [customers, setCustomers] = useState(initialCustomers);
+  const [customers] = useState(initialCustomers);
   const navigate = useNavigate();
 
   return (
@@ -118,7 +118,7 @@ export default function CustomersPage() {
               Recent Signed Contracts
             </Button>
             <AddCustomerDialog
-              onAdd={(c) => setCustomers((prev) => [c, ...prev])}
+              onAdd={(c) => console.log("Added customer:", c)}
               trigger={
                 <Button size="lg" className="">
                   Add New Customer

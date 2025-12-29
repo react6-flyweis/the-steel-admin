@@ -25,57 +25,57 @@ import DetailedTaxReport from "@/components/sales-tax/DetailedTaxReport";
 import { cn } from "@/lib/utils";
 
 // Types
-interface StateData {
-  state: string;
-  abbreviation: string;
-  contracts: number;
-  rate: string;
-  sales: number;
-  taxDue: number;
-}
+// interface StateData {
+//   state: string;
+//   abbreviation: string;
+//   contracts: number;
+//   rate: string;
+//   sales: number;
+//   taxDue: number;
+// }
 
-const stateData: StateData[] = [
-  {
-    state: "Texas",
-    abbreviation: "TX",
-    contracts: 2,
-    rate: "8.25%",
-    sales: 112000,
-    taxDue: 9240,
-  },
-  {
-    state: "Louisiana",
-    abbreviation: "LA",
-    contracts: 1,
-    rate: "9.45%",
-    sales: 28500,
-    taxDue: 2693.25,
-  },
-  {
-    state: "New York",
-    abbreviation: "NE",
-    contracts: 1,
-    rate: "8%",
-    sales: 32000,
-    taxDue: 1920,
-  },
-  {
-    state: "Indiana",
-    abbreviation: "IA",
-    contracts: 1,
-    rate: "5.5%",
-    sales: 38000,
-    taxDue: 2090,
-  },
-  {
-    state: "Oklahoma",
-    abbreviation: "OK",
-    contracts: 1,
-    rate: "4.5%",
-    sales: 41000,
-    taxDue: 1845,
-  },
-];
+// const stateData: StateData[] = [
+//   {
+//     state: "Texas",
+//     abbreviation: "TX",
+//     contracts: 2,
+//     rate: "8.25%",
+//     sales: 112000,
+//     taxDue: 9240,
+//   },
+//   {
+//     state: "Louisiana",
+//     abbreviation: "LA",
+//     contracts: 1,
+//     rate: "9.45%",
+//     sales: 28500,
+//     taxDue: 2693.25,
+//   },
+//   {
+//     state: "New York",
+//     abbreviation: "NE",
+//     contracts: 1,
+//     rate: "8%",
+//     sales: 32000,
+//     taxDue: 1920,
+//   },
+//   {
+//     state: "Indiana",
+//     abbreviation: "IA",
+//     contracts: 1,
+//     rate: "5.5%",
+//     sales: 38000,
+//     taxDue: 2090,
+//   },
+//   {
+//     state: "Oklahoma",
+//     abbreviation: "OK",
+//     contracts: 1,
+//     rate: "4.5%",
+//     sales: 41000,
+//     taxDue: 1845,
+//   },
+// ];
 
 export default function SalesTaxReporting() {
   const navigate = useNavigate();
@@ -246,7 +246,7 @@ export default function SalesTaxReporting() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-2 gap-6">
-          <StateTaxCard stateData={stateData} />
+          <StateTaxCard />
 
           <BuildingTypeTaxCard />
         </div>

@@ -1,5 +1,3 @@
-import React from "react";
-
 export default function FilterTabs() {
   return (
     <div className="relative flex h-10 bg-[#89D5DC] overflow-hidden">
