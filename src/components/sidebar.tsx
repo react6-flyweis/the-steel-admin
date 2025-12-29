@@ -1,5 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router";
-import { useState } from "react";
+import { NavLink, useLocation, useNavigate } from "react-router";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import dashboardIcon from "@/assets/icons/sidebar/dashboard.svg";
 import communication from "@/assets/icons/sidebar/communication.svg";
@@ -37,6 +36,7 @@ const navigationGroups = [
     icon: dashboardIcon,
     label: "Dashboard",
     color: "bg-[#1e3a8a]",
+    link: "/",
     items: [{ path: "/", label: "Dashboard" }],
   },
   {
@@ -44,13 +44,19 @@ const navigationGroups = [
     icon: customer,
     label: "Customer",
     color: "bg-[#EAB308]",
-    items: [{ path: "/customers", label: "Customer" }],
+    link: "/customers",
+    items: [
+      { path: "/customers", label: "Customer" },
+      { path: "/customers/meetings", label: "Meetings" },
+      { path: "/customers/insights", label: "Insights" },
+    ],
   },
   {
     id: "links" as NavGroup,
     icon: leadsIcon,
     label: "Leads",
     color: "bg-[#a855f7]",
+    link: "/leads",
     items: [{ path: "/leads", label: "Leads" }],
   },
   {
@@ -58,6 +64,7 @@ const navigationGroups = [
     icon: employee,
     label: "Employee Management",
     color: "bg-[#ea580c]",
+    link: "/employees",
     items: [{ path: "/employees", label: "Employees" }],
   },
   {
@@ -65,6 +72,7 @@ const navigationGroups = [
     icon: payments,
     label: "Payments",
     color: "bg-[#16a34a]",
+    link: "/payments",
     items: [{ path: "/payments", label: "Payments" }],
   },
   {
@@ -72,6 +80,7 @@ const navigationGroups = [
     icon: reportsIcon,
     label: "Reports & Analytics",
     color: "bg-[#000000]",
+    link: "/analytics",
     items: [{ path: "/analytics", label: "Analytics" }],
   },
   {
@@ -79,6 +88,7 @@ const navigationGroups = [
     icon: invoices,
     label: "Invoices",
     color: "bg-[#a855f7]",
+    link: "/invoices",
     items: [{ path: "/invoices", label: "Invoices" }],
   },
   {
@@ -86,6 +96,7 @@ const navigationGroups = [
     icon: plant,
     label: "Plant",
     color: "bg-[#0ea5e9]",
+    link: "/plant",
     items: [{ path: "/plant", label: "Plant" }],
   },
   {
@@ -93,6 +104,7 @@ const navigationGroups = [
     icon: finance,
     label: "Finance",
     color: "bg-[#ca8a04]",
+    link: "/finance",
     items: [{ path: "/finance", label: "Finance" }],
   },
   {
@@ -100,6 +112,7 @@ const navigationGroups = [
     icon: construction,
     label: "Construction",
     color: "bg-[#dc2626]",
+    link: "/construction",
     items: [{ path: "/construction", label: "Construction" }],
   },
   {
@@ -107,6 +120,7 @@ const navigationGroups = [
     icon: communication,
     label: "Communication",
     color: "bg-gray-400",
+    link: "/communication",
     items: [{ path: "/communication", label: "Communication" }],
   },
 ];
@@ -114,16 +128,29 @@ const navigationGroups = [
 export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [selectedGroup, setSelectedGroup] = useState<NavGroup>("dashboard");
 
-  const currentGroup = navigationGroups.find((g) => g.id === selectedGroup);
+  // Determine active group based on current path
+  const activeGroup =
+    navigationGroups.find((group) =>
+      group.items.some((item) => {
+        if (item.path === "/") {
+          return location.pathname === "/";
+        }
+        return location.pathname.startsWith(item.path);
+      })
+    ) || navigationGroups[0];
 
-  const handleGroupChange = (groupId: NavGroup) => {
-    setSelectedGroup(groupId);
-    const group = navigationGroups.find((g) => g.id === groupId);
-    if (group && group.items.length > 0) {
-      navigate(group.items[0].path);
-    }
+  // Get the index of the active group
+  const activeGroupIndex = navigationGroups.findIndex(
+    (group) => group.id === activeGroup.id
+  );
+
+  // Calculate padding based on active group index
+  // Each icon with gap is approximately 48px (36px icon + 12px gap)
+  const menuPaddingTop = 10 + activeGroupIndex * 48;
+
+  const handleGroupChange = (group: (typeof navigationGroups)[0]) => {
+    navigate(group.link);
   };
 
   return (
@@ -133,12 +160,12 @@ export function Sidebar() {
         <nav className="flex flex-col gap-3">
           {navigationGroups.map((group) => {
             const iconSrc = group.icon as string;
-            const isActive = selectedGroup === group.id;
+            const isActive = activeGroup.id === group.id;
 
             return (
               <button
                 key={group.id}
-                onClick={() => handleGroupChange(group.id)}
+                onClick={() => handleGroupChange(group)}
                 className={`relative flex items-center justify-center transition-all `}
                 title={group.label}
               >
@@ -190,25 +217,34 @@ export function Sidebar() {
         </div>
 
         {/* Navigation Items */}
-        <nav className="flex-1 p-3 px-3">
+        <nav
+          className="flex-1 p-3 px-3"
+          style={{ paddingTop: `${menuPaddingTop}px` }}
+        >
           <div className="space-y-2">
-            {currentGroup?.items.map((item) => {
-              const isActive = location.pathname === item.path;
-
+            {activeGroup?.items.map((item, i) => {
+              const isFirst = i === 0;
               return (
-                <Link
+                <NavLink
                   key={item.path}
                   to={item.path}
-                  className={cn(
-                    "block px-4 py-2 rounded-xl transition-colors",
-                    isActive
-                      ? "text-white font-medium"
-                      : "text-gray-700 hover:bg-gray-100",
-                    currentGroup?.color
-                  )}
+                  // style={{ marginTop: i > 0 ? `${i * 8}px` : undefined }}
+                  className={({ isActive }) =>
+                    cn(
+                      "block px-4 py-2 rounded-lg transition-colors",
+                      {
+                        [`text-white ${activeGroup.color}`]:
+                          isFirst || isActive,
+                      },
+                      {
+                        "bg-white shadow-lg": !isFirst && !isActive,
+                      },
+                      { "w-4/5 mb-5": isFirst }
+                    )
+                  }
                 >
                   {item.label}
-                </Link>
+                </NavLink>
               );
             })}
           </div>
