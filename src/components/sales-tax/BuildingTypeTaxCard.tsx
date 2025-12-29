@@ -1,6 +1,4 @@
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { ChartContainer, ChartTooltip } from "@/components/ui/chart";
-import { PieChart, Pie, Cell } from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface BuildingTypeData {
   type: string;
@@ -20,80 +18,49 @@ const totalTaxByBuilding = buildingTypeData.reduce(
   0
 );
 
-const chartConfig = {
-  PEMB: { label: "PEMB", color: "#3B82F6" },
-  Storage: { label: "Storage", color: "#10B981" },
-  Shed: { label: "Shed", color: "#F59E0B" },
-  Commercial: { label: "Commercial", color: "#EF4444" },
-};
-
 export default function BuildingTypeTaxCard() {
   return (
     <Card className="bg-white">
       <CardHeader className="border-b">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Tax Distribution by Building Type
-        </h2>
+        <CardTitle>Tax Distribution by Building Type</CardTitle>
       </CardHeader>
-      <CardContent className="flex items-center">
-        <div className="flex items-center justify-center">
-          <ChartContainer
-            id="building-type"
-            config={chartConfig}
-            className="relative size-52"
-          >
-            <div className="w-full h-full relative">
-              <PieChart width={208} height={208}>
-                <Pie
-                  data={buildingTypeData}
-                  dataKey="value"
-                  nameKey="type"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={90}
-                >
-                  {buildingTypeData.map((entry) => (
-                    <Cell key={entry.type} fill={entry.color} />
-                  ))}
-                </Pie>
-                <ChartTooltip />
-                {/* <ChartLegend verticalAlign="bottom" /> */}
-              </PieChart>
-
-              <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                <div className="text-center">
-                  <div className="text-2xl font-bold ">
-                    ${totalTaxByBuilding.toLocaleString()}
-                  </div>
-                  <div className="text-xs text-gray-700">Total Tax</div>
-                </div>
-              </div>
-            </div>
-          </ChartContainer>
-        </div>
-
-        {/* Legend */}
-        <div className="space-y-2">
+      <CardContent>
+        <div className="space-y-4">
           {buildingTypeData.map((item) => {
             const percentage = (
               (item.value / totalTaxByBuilding) *
               100
             ).toFixed(0);
+            const width = `${(item.value / totalTaxByBuilding) * 100}%`;
             return (
-              <div
-                key={item.type}
-                className="flex items-center justify-between text-sm"
-              >
-                <div className="flex items-center gap-2">
-                  <div
-                    className="w-3 h-3 rounded-full"
-                    style={{ backgroundColor: item.color }}
-                  />
-                  <span className="text-gray-700">{item.type}</span>
+              <div key={item.type} className="space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: item.color }}
+                    />
+                    <span className="text-sm font-medium text-gray-900">
+                      {item.type}
+                    </span>
+                  </div>
+                  <div className="text-right text-gray-900 font-semibold">
+                    ${item.value.toLocaleString()}
+                  </div>
                 </div>
-                <span className="text-gray-900 font-medium">
-                  ${item.value.toLocaleString()} ({percentage}%)
-                </span>
+
+                <div>
+                  <div className="w-full bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <div
+                      className="h-2 rounded-full"
+                      style={{ width, backgroundColor: item.color }}
+                    />
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <div>{percentage}% of total</div>
+                    <div />
+                  </div>
+                </div>
               </div>
             );
           })}
