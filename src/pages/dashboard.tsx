@@ -7,41 +7,27 @@ import LeadConversion from "@/components/dashboard/lead-conversion";
 import TonnageSold from "@/components/dashboard/tonnage-sold";
 import PipelineStageOverview from "@/components/dashboard/pipeline-stage-overview";
 import QueryHandlingDistribution from "@/components/dashboard/query-handling-distribution";
+import ActivePipelineStages from "@/components/dashboard/active-pipeline-stages";
+import RecentClosedDeals from "@/components/dashboard/recent-closed-deals";
+import RecentSalesActivity from "@/components/dashboard/recent-sales-activity";
+import TopSalesPerformers from "@/components/dashboard/top-sales-performers";
 import LeadsIcon from "@/assets/icons/dashboard/leads.svg";
 import ConfirmedIcon from "@/assets/icons/dashboard/confirmed.svg";
 import ValueIcon from "@/assets/icons/dashboard/value.svg";
 import RevenueIcon from "@/assets/icons/dashboard/revenue.svg";
+import BuildingTypeTaxCard from "@/components/sales-tax/BuildingTypeTaxCard";
+import StateTaxCard from "@/components/sales-tax/StateTaxCard";
+import TaxSummaryCard from "@/components/sales-tax/TaxSummaryCard";
+import SalesTaxFiling from "@/components/dashboard/sales-tax-filing";
+import TaxReportExport from "@/components/dashboard/tax-report-export";
+import ConstructionProgressOverview from "@/components/dashboard/construction-progress-overview";
+import FilterTabs from "@/components/FilterTabs";
 
 export default function Dashboard() {
   return (
     <div className="">
       {/* Tabs */}
-      <div className="relative flex h-10 bg-[#89D5DC] overflow-hidden">
-        <button
-          className="relative w-64  px-8 text-white font-medium  z-30"
-          style={{
-            clipPath: "polygon(0 0, calc(100% - 30px) 0, 100% 100%, 0 100%)",
-          }}
-        >
-          Today
-        </button>
-        <button
-          className="relative w-64  px-8 text-white font-medium -ml-6 z-20 bg-[#6B93CE]"
-          style={{
-            clipPath: "polygon(30px 0, calc(100% - 30px) 0, 100% 100%, 0 100%)",
-          }}
-        >
-          Week
-        </button>
-        <button
-          className="relative w-64 px-8 text-white font-medium -ml-6 z-10 bg-[#4A72B7]"
-          style={{
-            clipPath: "polygon(30px 0, calc(100% - 30px) 0, 100% 100%, 0 100%)",
-          }}
-        >
-          Month
-        </button>
-      </div>
+      <FilterTabs />
 
       <div className="pr-5 pt-5 space-y-5">
         {/* Header */}
@@ -123,6 +109,40 @@ export default function Dashboard() {
             <QueryHandlingDistribution />
           </div>
         </div>
+
+        {/* Active Pipeline Stages and Recent Closed Deals */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <ActivePipelineStages />
+          </div>
+          <div className="lg:col-span-1">
+            <RecentClosedDeals />
+          </div>
+        </div>
+
+        {/* Recent Sales Activity and Top Sales Performers */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <RecentSalesActivity />
+          <TopSalesPerformers />
+        </div>
+
+        {/* Tax Cards Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <TaxSummaryCard />
+
+          <StateTaxCard />
+
+          <BuildingTypeTaxCard />
+        </div>
+
+        {/* Sales Tax Filing and Tax Report Export */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <SalesTaxFiling />
+          <TaxReportExport />
+        </div>
+
+        {/* Construction Progress Overview */}
+        <ConstructionProgressOverview />
       </div>
     </div>
   );
