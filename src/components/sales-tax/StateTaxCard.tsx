@@ -9,11 +9,50 @@ interface StateData {
   taxDue: number;
 }
 
-interface Props {
-  stateData: StateData[];
-}
+const stateData: StateData[] = [
+  {
+    state: "Texas",
+    abbreviation: "TX",
+    contracts: 2,
+    rate: "8.25%",
+    sales: 112000,
+    taxDue: 9240,
+  },
+  {
+    state: "Los Angeles",
+    abbreviation: "LA",
+    contracts: 1,
+    rate: "9.45%",
+    sales: 28500,
+    taxDue: 2693.25,
+  },
+  {
+    state: "New York",
+    abbreviation: "NE",
+    contracts: 1,
+    rate: "6%",
+    sales: 32000,
+    taxDue: 1920,
+  },
+  {
+    state: "Indiana",
+    abbreviation: "IA",
+    contracts: 1,
+    rate: "5.5%",
+    sales: 38000,
+    taxDue: 2090,
+  },
+  {
+    state: "Oklahoma",
+    abbreviation: "OK",
+    contracts: 1,
+    rate: "4.5%",
+    sales: 41000,
+    taxDue: 1845,
+  },
+];
 
-export default function StateTaxCard({ stateData }: Props) {
+export default function StateTaxCard() {
   return (
     <Card className="bg-white">
       <CardHeader className=" border-b">
