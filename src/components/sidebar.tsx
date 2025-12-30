@@ -97,7 +97,46 @@ const navigationGroups = [
     label: "Plant",
     color: "bg-[#0ea5e9]",
     link: "/plant",
-    items: [{ path: "/plant", label: "Plant" }],
+    items: [
+      { path: "/plant", label: "Plant Overview" },
+      { path: "/plant/equipment_management", label: "Equipment" },
+      {
+        path: "/plant/material_inventory_management",
+        label: "Material Inventory",
+      },
+      {
+        path: "/plant/production_management",
+        label: "Production Management",
+      },
+      {
+        path: "/plant/maintenance_logs",
+        label: "Maintenance Logs",
+      },
+      {
+        path: "/plant/upcoming_schedule",
+        label: "Upcoming Schedule",
+      },
+      {
+        path: "/plant/breakdown_cases",
+        label: "Breakdown Cases",
+      },
+      {
+        path: "/plant/service_providers",
+        label: "Service Providers",
+      },
+      {
+        path: "/plant/equipment_allocation",
+        label: "Equipment Allocation",
+      },
+      {
+        path: "/plant/transfer_requests",
+        label: "Transfer Requests",
+      },
+      {
+        path: "/plant/usage_tracking",
+        label: "Usage Tracking & Logs",
+      },
+    ],
   },
   {
     id: "reports" as NavGroup,
