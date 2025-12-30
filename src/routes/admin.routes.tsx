@@ -38,6 +38,46 @@ const Leads = lazy(() => import("@/pages/leads"));
 const AddNewLead = lazy(() => import("@/pages/add-new-lead"));
 const Notifications = lazy(() => import("@/pages/notifications"));
 
+const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
+const MaterialInventoryView = lazy(
+  () =>
+    import(
+      "@/plant/components/material_inventory_management/MaterialInventoryView"
+    )
+);
+const ProductionManagementView = lazy(
+  () => import("@/plant/components/ProductionManagementView")
+);
+const MaintenanceAndSchedulingView = lazy(
+  () =>
+    import(
+      "@/plant/components/maintenance_and_scheduling/MaintenanceAndSchedulingView"
+    )
+);
+const UpcomingScheduleView = lazy(
+  () =>
+    import("@/plant/components/maintenance_and_scheduling/UpcomingScheduleView")
+);
+const BreakdownCasesView = lazy(
+  () =>
+    import("@/plant/components/maintenance_and_scheduling/BreakdownCasesView")
+);
+const ServiceProvidersView = lazy(
+  () =>
+    import("@/plant/components/maintenance_and_scheduling/ServiceProvidersView")
+);
+const EquipmentAllocationView = lazy(
+  () =>
+    import("@/plant/components/equipment_allocation/EquipmentAllocationView")
+);
+const TransferRequestsView = lazy(
+  () => import("@/plant/components/equipment_allocation/TransferRequestsView")
+);
+const UsageTrackingView = lazy(
+  () => import("@/plant/components/equipment_allocation/UsageTrackingView")
+);
+const PlantDashboard = lazy(() => import("@/plant/PlantPage"));
+
 export const adminRoutes: RouteObject[] = [
   {
     path: "/sign-in",
@@ -83,6 +123,47 @@ export const adminRoutes: RouteObject[] = [
       { path: "settings", element: <div>Settings Page</div> },
       { path: "links", element: <div>Links Page</div> },
       { path: "reports", element: <div>Reports Page</div> },
+
+      //plants routes
+      { path: "plant", element: <PlantDashboard /> },
+      { path: "plant/equipment_management", element: <EquipmentView /> },
+      {
+        path: "plant/material_inventory_management",
+        element: <MaterialInventoryView />,
+      },
+      {
+        path: "plant/production_management",
+        element: <ProductionManagementView />,
+      },
+      {
+        path: "plant/maintenance_logs",
+        element: <MaintenanceAndSchedulingView />,
+      },
+      {
+        path: "plant/upcoming_schedule",
+        element: <UpcomingScheduleView />,
+      },
+      {
+        path: "plant/breakdown_cases",
+        element: <BreakdownCasesView />,
+      },
+      {
+        path: "plant/service_providers",
+        element: <ServiceProvidersView />,
+      },
+      {
+        path: "plant/equipment_allocation",
+        element: <EquipmentAllocationView />,
+      },
+      {
+        path: "plant/transfer_requests",
+        element: <TransferRequestsView />,
+      },
+      {
+        path: "plant/usage_tracking",
+        element: <UsageTrackingView />,
+      },
+
       { path: "*", element: <NotFound /> },
     ],
   },
