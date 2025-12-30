@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import {
   UserPlus,
-  Upload,
   Download,
   MessageSquare,
   Eye,
@@ -12,10 +12,15 @@ import {
   UserX,
   Mail,
 } from "lucide-react";
+import ImportLeadsDialog from "@/components/leads/import-leads-dialog";
+import AssignSalesDialog from "@/components/leads/assign-sales-dialog";
+import CreateQuotationDialog from "@/components/leads/create-quotation-dialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
+import LeadDetailDialog from "@/components/leads/lead-detail-dialog";
+import ChatDialog from "@/components/leads/chat-dialog";
 import {
   Select,
   SelectContent,
@@ -180,15 +185,14 @@ export default function LeadsPage() {
         {/* Action Buttons and Filters */}
         <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center justify-between">
           <div className="flex flex-wrap gap-3">
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <UserPlus className="h-4 w-4 mr-2" />
-              Add Lead
-            </Button>
+            <Link to="/leads/add" className="inline-block">
+              <Button className="bg-blue-600 hover:bg-blue-700">
+                <UserPlus className="h-4 w-4 mr-2" />
+                Add Lead
+              </Button>
+            </Link>
 
-            <Button variant="outline" className="bg-white">
-              <Upload className="h-4 w-4 mr-2" />
-              Import CSV
-            </Button>
+            <ImportLeadsDialog />
             <Button variant="outline" className="bg-white">
               <Download className="h-4 w-4 mr-2" />
               Export Data
@@ -343,9 +347,13 @@ export default function LeadsPage() {
                                   <UserPlus className="h-3 w-3" />
                                 </AvatarFallback>
                               </Avatar>
-                              <span className="text-sm text-green-600 font-medium cursor-pointer">
-                                {lead.assignmentStatus}
-                              </span>
+                              <AssignSalesDialog
+                                trigger={
+                                  <span className="text-sm text-green-600 font-medium cursor-pointer">
+                                    {lead.assignmentStatus}
+                                  </span>
+                                }
+                              />
                             </>
                           )}
                         </div>
@@ -372,35 +380,50 @@ export default function LeadsPage() {
                         </span>
                       </td>
                       <td className="px-6 py-4">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="relative p-2 h-8 w-8"
-                        >
-                          <MessageSquare className="h-4 w-4 text-blue-600" />
-                          {lead.chatCount > 0 && (
-                            <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
-                              {lead.chatCount}
-                            </span>
-                          )}
-                        </Button>
+                        <ChatDialog
+                          lead={lead}
+                          trigger={
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="relative p-2 h-8 w-8"
+                            >
+                              <MessageSquare className="h-4 w-4 text-blue-600" />
+                              {lead.chatCount > 0 && (
+                                <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center">
+                                  {lead.chatCount}
+                                </span>
+                              )}
+                            </Button>
+                          }
+                        />
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="p-2 h-8 w-8"
-                          >
-                            <Eye className="h-4 w-4 text-gray-600" />
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="p-2 h-8 w-8"
-                          >
-                            <Edit className="h-4 w-4 text-gray-600" />
-                          </Button>
+                          <LeadDetailDialog
+                            lead={lead}
+                            trigger={
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="p-2 h-8 w-8"
+                              >
+                                <Eye className="h-4 w-4 text-gray-600" />
+                              </Button>
+                            }
+                          />
+                          <CreateQuotationDialog
+                            leadData={{ name: lead.name, id: lead.id }}
+                            trigger={
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="p-2 h-8 w-8"
+                              >
+                                <Edit className="h-4 w-4 text-gray-600" />
+                              </Button>
+                            }
+                          />
                           <Button
                             variant="ghost"
                             size="sm"
