@@ -35,6 +35,7 @@ const ScheduleMeeting = lazy(
   () => import("@/pages/customers/schedule-meeting")
 );
 const Leads = lazy(() => import("@/pages/leads"));
+const AddNewLead = lazy(() => import("@/pages/add-new-lead"));
 const Notifications = lazy(() => import("@/pages/notifications"));
 
 export const adminRoutes: RouteObject[] = [
@@ -48,6 +49,7 @@ export const adminRoutes: RouteObject[] = [
     children: [
       { index: true, element: <Dashboard /> },
       { path: "leads", element: <Leads /> },
+      { path: "leads/add", element: <AddNewLead /> },
       { path: "customers", element: <Customers /> },
       { path: "customers/insights", element: <CustomerInsights /> },
       { path: "customers/meetings", element: <Meetings /> },
