@@ -8,7 +8,14 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { MessageCircle, FileText, User, SparkleIcon } from "lucide-react";
+import {
+  MessageCircle,
+  FileText,
+  User,
+  SparkleIcon,
+  Copy,
+  Send,
+} from "lucide-react";
 
 export default function AiScriptGenerator() {
   const items = [
@@ -63,7 +70,7 @@ export default function AiScriptGenerator() {
           return (
             <div
               key={it.name}
-              className="flex items-start justify-between bg-muted rounded-md p-4"
+              className="flex items-center justify-between border rounded-md p-4"
             >
               <div className="flex items-start space-x-3">
                 <Avatar className={`h-9 w-9 ${it.bg}`}>
@@ -74,26 +81,44 @@ export default function AiScriptGenerator() {
 
                 <div>
                   <div className="font-medium text-foreground">{it.name}</div>
-                  <div className="text-sm text-muted-foreground">
+                  <div className="text-sm text-muted-foreground max-w-xl">
                     {it.snippet}
+                  </div>
+                  <div className="text-xs text-muted-foreground mt-2">
+                    {it.time}
                   </div>
                 </div>
               </div>
 
-              <div className="text-sm text-muted-foreground">
-                <div className="text-right">{it.time}</div>
-                <div className="text-xs mt-1">
-                  <span
-                    className={`inline-block px-2 py-0.5 rounded-full text-xs ${
-                      it.tone === "professional"
-                        ? "bg-blue-100 text-blue-700"
-                        : it.tone === "friendly"
-                        ? "bg-green-100 text-green-700"
-                        : "bg-red-100 text-red-700"
-                    }`}
+              <div className="flex flex-col items-end space-y-2">
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${
+                    it.tone === "professional"
+                      ? "bg-blue-100 text-blue-700"
+                      : it.tone === "friendly"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {it.tone}
+                </span>
+
+                <div className="flex items-center space-x-2">
+                  <button
+                    className="p-1 rounded hover:bg-muted/40"
+                    aria-label="copy"
+                    title="Copy"
                   >
-                    {it.tone}
-                  </span>
+                    <Copy className="h-4 w-4 text-muted-foreground" />
+                  </button>
+
+                  <button
+                    className="p-1 rounded hover:bg-muted/40"
+                    aria-label="send"
+                    title="Send"
+                  >
+                    <Send className="h-4 w-4 text-muted-foreground" />
+                  </button>
                 </div>
               </div>
             </div>
