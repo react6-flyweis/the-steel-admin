@@ -1,195 +1,128 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Mail, User } from "lucide-react";
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+  CardDescription,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  MessageCircle,
+  FileText,
+  Mail,
+  Phone,
+  type LucideIcon,
+} from "lucide-react";
 
-interface CommunicationItem {
-  id: string;
-  clientName: string;
-  message: string;
-  contactPerson: string;
-  timestamp: string;
-  status: string;
-}
+type TimelineItem = {
+  id: number;
+  name: string;
+  note: string;
+  time: string;
+  type: "note" | "email" | "call" | "doc";
+  bg: string;
+  icon: LucideIcon;
+};
 
 export default function LeadCommunicationTimeline() {
-  const navigate = useNavigate();
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
-  const [status, setStatus] = useState("completed");
-  const [searchClient, setSearchClient] = useState("");
-
-  const communicationItems: CommunicationItem[] = [
+  const items: TimelineItem[] = [
     {
-      id: "1",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-15 at 3:45 PM",
-      status: "completed",
+      id: 1,
+      name: "Sarah Johnson",
+      note: "Discussed pricing options and implementation timeline",
+      time: "2 hours ago",
+      type: "note",
+      icon: MessageCircle,
+      bg: "bg-purple-50 text-purple-600",
     },
     {
-      id: "2",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-15 at 3:45 PM",
-      status: "completed",
+      id: 2,
+      name: "Michael Chen",
+      note: "Sent product demo video and case studies",
+      time: "4 hours ago",
+      type: "email",
+      icon: Mail,
+      bg: "bg-sky-50 text-sky-600",
     },
     {
-      id: "3",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-16 at 3:45 PM",
-      status: "completed",
+      id: 3,
+      name: "Emily Davis",
+      note: "30-min discovery call completed - high interest level",
+      time: "6 hours ago",
+      type: "call",
+      icon: Phone,
+      bg: "bg-emerald-50 text-emerald-600",
     },
     {
-      id: "4",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-15 at 3:45 PM",
-      status: "completed",
-    },
-    {
-      id: "5",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-15 at 3:45 PM",
-      status: "completed",
-    },
-    {
-      id: "6",
-      clientName: "Sarah Johnson",
-      message:
-        "Hi Sarah, Following up on our discussion about the implementation timeline...",
-      contactPerson: "John Smith",
-      timestamp: "2024-01-15 at 3:45 PM",
-      status: "completed",
+      id: 4,
+      name: "Robert Wilson",
+      note: "Lead requested technical specifications document",
+      time: "1 day ago",
+      type: "doc",
+      icon: FileText,
+      bg: "bg-gray-50 text-gray-600",
     },
   ];
 
   return (
-    <div className="w-full">
-      {/* Header */}
-      <div className="bg-[#4ECDC4] text-white px-6 py-3">
-        <h2 className="text-lg font-semibold">Lead Communication Timeline</h2>
-      </div>
-
-      <div className="p-5">
-        {/* Filters */}
-
-        <div className="bg-white p-4 rounded-md grid grid-cols-1 md:grid-cols-4 gap-4 my-6">
-          {/* Date From */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Date From
-            </label>
-            <Input
-              type="text"
-              placeholder="dd-mm-yyyy"
-              value={dateFrom}
-              onChange={(e) => setDateFrom(e.target.value)}
-              className="w-full"
-            />
-          </div>
-
-          {/* Date To */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Date To
-            </label>
-            <Input
-              type="text"
-              placeholder="dd-mm-yyyy"
-              value={dateTo}
-              onChange={(e) => setDateTo(e.target.value)}
-              className="w-full"
-            />
-          </div>
-
-          {/* Status */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Status
-            </label>
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="completed">Completed</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="scheduled">Scheduled</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Client Search */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Client
-            </label>
-            <Input
-              type="text"
-              placeholder="Search client..."
-              value={searchClient}
-              onChange={(e) => setSearchClient(e.target.value)}
-              className="w-full"
-            />
-          </div>
+    <Card>
+      <CardHeader className="flex items-center justify-between border-b">
+        <div>
+          <CardTitle>📞 Lead Communication Timeline</CardTitle>
+          <CardDescription>Recent activities</CardDescription>
         </div>
 
-        {/* Timeline Grid - Two Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {communicationItems.map((item) => (
-            <Card
-              key={item.id}
-              className="py-0 rounded-md ring-0 border-none cursor-pointer hover:shadow-lg transition-shadow"
-              onClick={() => navigate(`/leads/${item.id}/timeline`)}
+        <div className="flex items-center space-x-2" data-slot="card-action">
+          <Button className="bg-emerald-600 hover:bg-emerald-700 text-white">
+            + Add Note
+          </Button>
+          <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+            Log Call
+          </Button>
+        </div>
+      </CardHeader>
+
+      <CardContent className="space-y-3">
+        {items.map((it) => {
+          const Icon = it.icon;
+          return (
+            <div
+              key={it.id}
+              className="flex items-start justify-between bg-muted rounded-md p-4"
             >
-              <CardContent className="p-4">
-                {/* Client Name */}
-                <h3 className="font-semibold text-gray-900 mb-2">
-                  {item.clientName}
-                </h3>
+              <div className="flex items-start space-x-3">
+                <Avatar className={`h-9 w-9 ${it.bg}`}>
+                  <AvatarFallback className="text-sm">
+                    <Icon className="h-4 w-4" />
+                  </AvatarFallback>
+                </Avatar>
 
-                {/* Message with Icon */}
-                <div className="flex items-start gap-2 mb-3">
-                  <Mail className="h-4 w-4 text-gray-500 mt-0.5 flex-shrink-0" />
-                  <p className="text-sm text-gray-600 line-clamp-2">
-                    {item.message}
-                  </p>
+                <div>
+                  <div className="font-medium text-foreground">{it.name}</div>
+                  <div className="text-sm text-muted-foreground">{it.note}</div>
                 </div>
+              </div>
 
-                {/* Contact Person and Timestamp */}
-                <div className="flex items-center justify-between text-xs text-gray-500">
-                  <div className="flex items-center gap-1">
-                    <User className="h-3 w-3" />
-                    <span>{item.contactPerson}</span>
-                  </div>
-                  <span>{item.timestamp}</span>
+              <div className="text-sm text-muted-foreground">
+                <div className="text-right">{it.time}</div>
+                <div className="text-xs mt-1">
+                  <span
+                    className={`inline-block px-2 py-0.5 rounded-full text-xs bg-gray-100 text-gray-700`}
+                  >
+                    {it.type}
+                  </span>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </div>
-    </div>
+              </div>
+            </div>
+          );
+        })}
+      </CardContent>
+
+      <CardFooter className="justify-center">
+        <a className="text-primary hover:underline">View Full Timeline →</a>
+      </CardFooter>
+    </Card>
   );
 }
