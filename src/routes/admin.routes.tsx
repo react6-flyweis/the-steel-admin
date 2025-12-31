@@ -37,6 +37,22 @@ const ScheduleMeeting = lazy(
 const Leads = lazy(() => import("@/pages/leads"));
 const AddNewLead = lazy(() => import("@/pages/add-new-lead"));
 const Notifications = lazy(() => import("@/pages/notifications"));
+const FollowUp = lazy(() => import("@/pages/follow-up"));
+const LeadCommunicationTimelinePage = lazy(
+  () => import("@/pages/lead-communication-timeline")
+);
+const SingleLeadTimelinePage = lazy(
+  () => import("@/pages/single-lead-timeline")
+);
+const SingleLeadEmailsPage = lazy(() => import("@/pages/single-lead-emails"));
+const SingleLeadChatsPage = lazy(() => import("@/pages/single-lead-chats"));
+const SmartReminders = lazy(() => import("@/pages/smart-reminders"));
+const SmartReminderDetail = lazy(() => import("@/pages/single-reminder"));
+const SingleLeadNotesPage = lazy(() => import("@/pages/single-lead-notes"));
+const SingleLeadCallsPage = lazy(() => import("@/pages/single-lead-calls"));
+const AiScriptGeneratorPage = lazy(() => import("@/pages/ai-script-generator"));
+const LeadScoring = lazy(() => import("@/pages/lead-scoring"));
+const FollowUpKpis = lazy(() => import("@/pages/follow-up-kpis"));
 
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
 const MaterialInventoryView = lazy(
@@ -90,6 +106,51 @@ export const adminRoutes: RouteObject[] = [
       { index: true, element: <Dashboard /> },
       { path: "leads", element: <Leads /> },
       { path: "leads/add", element: <AddNewLead /> },
+      { path: "leads/follow-up", element: <FollowUp /> },
+      {
+        path: "leads/follow-up/communication-timeline",
+        element: <LeadCommunicationTimelinePage />,
+      },
+      {
+        path: "leads/:leadId/timeline",
+        element: <SingleLeadTimelinePage />,
+      },
+      {
+        path: "leads/:leadId/emails",
+        element: <SingleLeadEmailsPage />,
+      },
+      {
+        path: "leads/:leadId/chats",
+        element: <SingleLeadChatsPage />,
+      },
+      {
+        path: "leads/:leadId/notes",
+        element: <SingleLeadNotesPage />,
+      },
+      {
+        path: "leads/:leadId/calls",
+        element: <SingleLeadCallsPage />,
+      },
+      {
+        path: "leads/follow-up/smart-reminders",
+        element: <SmartReminders />,
+      },
+      {
+        path: "leads/follow-up/smart-reminders/:id",
+        element: <SmartReminderDetail />,
+      },
+      {
+        path: "leads/follow-up/script-generator",
+        element: <AiScriptGeneratorPage />,
+      },
+      {
+        path: "leads/follow-up/scoring",
+        element: <LeadScoring />,
+      },
+      {
+        path: "leads/follow-up/kpis",
+        element: <FollowUpKpis />,
+      },
       { path: "customers", element: <Customers /> },
       { path: "customers/insights", element: <CustomerInsights /> },
       { path: "customers/meetings", element: <Meetings /> },
