@@ -6,7 +6,6 @@ import {
   MessageSquare,
   Eye,
   Edit,
-  Link2,
   Users,
   UserCheck,
   UserX,
@@ -412,6 +411,13 @@ export default function LeadsPage() {
                               </Button>
                             }
                           />
+                          <AssignSalesDialog
+                            trigger={
+                              <Button variant="ghost" size="icon">
+                                <UserPlus />
+                              </Button>
+                            }
+                          />
                           <CreateQuotationDialog
                             leadData={{ name: lead.name, id: lead.id }}
                             trigger={
@@ -424,13 +430,6 @@ export default function LeadsPage() {
                               </Button>
                             }
                           />
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="p-2 h-8 w-8"
-                          >
-                            <Link2 className="h-4 w-4 text-gray-600" />
-                          </Button>
                         </div>
                       </td>
                     </tr>
