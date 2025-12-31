@@ -15,14 +15,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxContent,
-  ComboboxList,
-  ComboboxItem,
-  ComboboxEmpty,
-} from "@/components/ui/combobox";
+import ClientSelector from "@/components/customers/client-selector";
 
 const meetingSchema = z.object({
   client: z.string().min(1, "Please select a client"),
@@ -37,19 +30,8 @@ const meetingSchema = z.object({
 
 type MeetingFormData = z.infer<typeof meetingSchema>;
 
-// Mock client data
-const clients = [
-  { id: "1", name: "John Smith", company: "Tech Solutions Inc." },
-  { id: "2", name: "Sarah Johnson", company: "Digital Marketing Pro" },
-  { id: "3", name: "Michael Brown", company: "Creative Design Studio" },
-  { id: "4", name: "Emily Davis", company: "Global Innovations LLC" },
-  { id: "5", name: "David Wilson", company: "Enterprise Systems Corp" },
-  { id: "6", name: "Lisa Anderson", company: "Strategic Consulting Group" },
-];
-
 export default function ScheduleMeeting() {
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState("");
   const [selectedClient, setSelectedClient] = useState("");
 
   const {
@@ -65,16 +47,7 @@ export default function ScheduleMeeting() {
     },
   });
 
-  const filteredClients = clients.filter(
-    (client) =>
-      client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      client.company.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
-  const selectedClientData = clients.find((c) => c.id === selectedClient);
-  const displayValue = selectedClientData
-    ? `${selectedClientData.name} - ${selectedClientData.company}`
-    : searchQuery;
+  // clients list available for the selector
 
   const onSubmit = (data: MeetingFormData) => {
     console.log("Meeting scheduled:", data);
@@ -112,49 +85,10 @@ export default function ScheduleMeeting() {
               <Label htmlFor="client">
                 Select a client <span className="text-red-500">*</span>
               </Label>
-              <Combobox
+              <ClientSelector
                 value={selectedClient}
-                onValueChange={(value) => {
-                  setSelectedClient(value ?? "");
-                  setValue("client", value ?? "");
-                  if (value) {
-                    const client = clients.find((c) => c.id === value);
-                    if (client) {
-                      setSearchQuery(`${client.name} - ${client.company}`);
-                    }
-                  }
-                }}
-              >
-                <ComboboxInput
-                  placeholder="Search clients..."
-                  value={displayValue}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    if (selectedClient && e.target.value !== displayValue) {
-                      setSelectedClient("");
-                      setValue("client", "");
-                    }
-                  }}
-                  showClear
-                />
-                <ComboboxContent>
-                  <ComboboxList>
-                    <ComboboxEmpty>No client found</ComboboxEmpty>
-                    {filteredClients.map((client) => (
-                      <ComboboxItem key={client.id} value={client.id}>
-                        <div className="flex flex-col">
-                          <span className="font-medium text-gray-900">
-                            {client.name}
-                          </span>
-                          <span className="text-sm text-gray-500">
-                            {client.company}
-                          </span>
-                        </div>
-                      </ComboboxItem>
-                    ))}
-                  </ComboboxList>
-                </ComboboxContent>
-              </Combobox>
+                onValueChange={(value) => setSelectedClient(value ?? "")}
+              />
               {errors.client && (
                 <p className="text-sm text-red-500">{errors.client.message}</p>
               )}
