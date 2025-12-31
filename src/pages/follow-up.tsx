@@ -11,7 +11,7 @@ import {
 import UpcomingFollowUps from "@/components/follow-up/upcoming-follow-ups";
 import SmartReminders from "@/components/follow-up/smart-reminders";
 import AddFollowUpDialog from "@/components/follow-up/add-follow-up-dialog";
-import LeadCommunicationTimeline from "@/components/follow-up/lead-communication-timeline";
+import LeadCommunicationTimeline from "@/components/leads/lead-communication-timeline";
 import AiScriptGenerator from "@/components/follow-up/ai-script-generator";
 import LeadScoring from "@/components/follow-up/lead-scoring";
 import FollowUpKpis from "@/components/follow-up/follow-up-kpis";
