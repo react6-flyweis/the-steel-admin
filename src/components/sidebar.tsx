@@ -30,7 +30,16 @@ type NavGroup =
   | "reports"
   | "construction";
 
-const navigationGroups = [
+interface NavigationGroup {
+  id: NavGroup;
+  icon: string;
+  label: string;
+  color: string;
+  link: string;
+  items: { path: string; label: string }[];
+}
+
+const navigationGroups: NavigationGroup[] = [
   {
     id: "dashboard" as NavGroup,
     icon: dashboardIcon,
@@ -57,7 +66,38 @@ const navigationGroups = [
     label: "Leads",
     color: "bg-[#a855f7]",
     link: "/leads",
-    items: [{ path: "/leads", label: "Leads" }],
+    items: [
+      // [
+      {
+        path: "/leads",
+        label: "Leads",
+      },
+      // { path: "/leads/overview", label: "Overview" },
+      // {
+      //   path: "/leads/follow-up",
+      //   label: "Follow ups",
+      //   collapsible: true,
+      //   subItems: [
+      { path: "/leads/follow-up", label: "Overview" },
+      {
+        path: "/leads/follow-up/communication-timeline",
+        label: "Lead Communication Timeline",
+      },
+      {
+        path: "/leads/follow-up/smart-reminders",
+        label: "Smart Follow up Reminders",
+      },
+      {
+        path: "/leads/follow-up/script-generator",
+        label: "AI Follow-Up Script Generator",
+      },
+      { path: "/leads/follow-up/scoring", label: "Lead Scoring" },
+      { path: "/leads/follow-up/kpis", label: "Follow-Up KPIs" },
+      //   ],
+      // },
+      { path: "/leads/ai-support", label: "AI Support" },
+      // ],
+    ],
   },
   {
     id: "teams" as NavGroup,
