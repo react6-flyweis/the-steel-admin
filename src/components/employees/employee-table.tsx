@@ -1,0 +1,260 @@
+import { useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectLabel,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Edit, Trash2, Search, Eye, Users } from "lucide-react";
+import { Link } from "react-router";
+
+export interface Employee {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  joinedDate: string;
+  role: "Manager" | "Employee" | "Admin";
+  team: string;
+  status: "active" | "inactive";
+  leads: number;
+  avatar?: string;
+}
+
+interface EmployeeTableProps {
+  employees: Employee[];
+}
+
+export function EmployeeTable({ employees }: EmployeeTableProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [roleFilter, setRoleFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  const filteredEmployees = employees.filter((employee) => {
+    const matchesSearch =
+      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      employee.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = roleFilter === "all" || employee.role === roleFilter;
+    const matchesStatus =
+      statusFilter === "all" || employee.status === statusFilter;
+
+    return matchesSearch && matchesRole && matchesStatus;
+  });
+
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  const getRoleBadgeColor = (role: string) => {
+    switch (role) {
+      case "Manager":
+        return "bg-blue-100 text-blue-700";
+      case "Employee":
+        return "bg-green-100 text-green-700";
+      case "Admin":
+        return "bg-red-100 text-red-700";
+      default:
+        return "bg-gray-100 text-gray-700";
+    }
+  };
+
+  const getStatusBadgeColor = (status: string) => {
+    return status === "active"
+      ? "bg-green-100 text-green-700"
+      : "bg-red-100 text-red-700";
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Search and Filters */}
+      <div className="bg-white p-4 rounded-md flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+          <Input
+            placeholder="Search by name or email..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+
+        <div className="flex gap-2">
+          <Select value={roleFilter} onValueChange={setRoleFilter}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="All Roles" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>All</SelectLabel>
+                <SelectItem value="all">All Roles</SelectItem>
+                <SelectItem value="Manager">Manager</SelectItem>
+                <SelectItem value="Employee">Employee</SelectItem>
+                <SelectItem value="Admin">Admin</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
+            <SelectTrigger className="w-[140px]">
+              <SelectValue placeholder="All Status" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>All</SelectLabel>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Employee Directory Table */}
+      <div className="bg-white rounded-lg border">
+        <div className="p-4 border-b">
+          <h3 className="font-semibold text-lg">
+            Employee Directory ({filteredEmployees.length} employees)
+          </h3>
+        </div>
+
+        <div className="overflow-x-auto">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-gray-50">
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  EMPLOYEE
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  CONTACT
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  ROLE
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  TEAM
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  STATUS
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider">
+                  LEADS
+                </TableHead>
+                <TableHead className="text-xs text-gray-500 uppercase tracking-wider text-right">
+                  ACTIONS
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filteredEmployees.map((employee) => (
+                <TableRow key={employee.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarImage src={employee.avatar} />
+                        <AvatarFallback className="bg-gray-100 text-gray-700">
+                          {getInitials(employee.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-blue-600 hover:underline">
+                          {employee.name}
+                        </p>
+                        <p className="text-sm text-gray-500">
+                          Joined {employee.joinedDate}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="space-y-1">
+                      <p className="text-sm">{employee.email}</p>
+                      <p className="text-sm text-gray-500">{employee.phone}</p>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className={`${getRoleBadgeColor(
+                        employee.role
+                      )} rounded-full px-3 py-1 text-sm font-medium`}
+                    >
+                      {employee.role}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <span className="text-sm">{employee.team}</span>
+                  </TableCell>
+                  <TableCell>
+                    <Badge
+                      className={`${getStatusBadgeColor(
+                        employee.status
+                      )} rounded-full px-3 py-1 text-sm font-medium`}
+                    >
+                      {employee.status.charAt(0).toUpperCase() +
+                        employee.status.slice(1)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">{employee.leads}</span>
+                      <Users className="h-4 w-4 text-gray-400" />
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end gap-2">
+                      <Link
+                        to={`/employees/${employee.id}`}
+                        className="inline-flex h-8 w-8 items-center justify-center text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md"
+                      >
+                        <Eye className="h-4 w-4" />
+                      </Link>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                      >
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+
+        {filteredEmployees.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            No employees found matching your criteria.
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
