@@ -1,5 +1,11 @@
 import { NavLink, useLocation, useNavigate } from "react-router";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronLeft,
+  ChevronRight,
+  ChevronUp,
+} from "lucide-react";
+import { useState, useEffect } from "react";
 import dashboardIcon from "@/assets/icons/sidebar/dashboard.svg";
 import communication from "@/assets/icons/sidebar/communication.svg";
 import construction from "@/assets/icons/sidebar/construction.svg";
@@ -28,7 +34,15 @@ type NavGroup =
   | "settings"
   | "links"
   | "reports"
-  | "construction";
+  | "construction"
+  | "ai-marketing";
+
+interface NavigationItem {
+  path: string;
+  label: string;
+  collapsible?: boolean;
+  subItems?: { path: string; label: string; badge?: number }[];
+}
 
 interface NavigationGroup {
   id: NavGroup;
@@ -36,7 +50,7 @@ interface NavigationGroup {
   label: string;
   color: string;
   link: string;
-  items: { path: string; label: string }[];
+  items: NavigationItem[];
 }
 
 const navigationGroups: NavigationGroup[] = [
@@ -67,36 +81,33 @@ const navigationGroups: NavigationGroup[] = [
     color: "bg-[#a855f7]",
     link: "/leads",
     items: [
-      // [
       {
         path: "/leads",
         label: "Leads",
       },
-      // { path: "/leads/overview", label: "Overview" },
-      // {
-      //   path: "/leads/follow-up",
-      //   label: "Follow ups",
-      //   collapsible: true,
-      //   subItems: [
-      { path: "/leads/follow-up", label: "Overview" },
       {
-        path: "/leads/follow-up/communication-timeline",
-        label: "Lead Communication Timeline",
+        path: "/leads/follow-up",
+        label: "Follow ups",
+        collapsible: true,
+        subItems: [
+          { path: "/leads/follow-up", label: "Overview" },
+          {
+            path: "/leads/follow-up/communication-timeline",
+            label: "Lead Communication Timeline",
+          },
+          {
+            path: "/leads/follow-up/smart-reminders",
+            label: "Smart Follow up Reminders",
+          },
+          {
+            path: "/leads/follow-up/script-generator",
+            label: "AI Follow-Up Script Generator",
+          },
+          { path: "/leads/follow-up/scoring", label: "Lead Scoring" },
+          { path: "/leads/follow-up/kpis", label: "Follow-Up KPIs" },
+        ],
       },
-      {
-        path: "/leads/follow-up/smart-reminders",
-        label: "Smart Follow up Reminders",
-      },
-      {
-        path: "/leads/follow-up/script-generator",
-        label: "AI Follow-Up Script Generator",
-      },
-      { path: "/leads/follow-up/scoring", label: "Lead Scoring" },
-      { path: "/leads/follow-up/kpis", label: "Follow-Up KPIs" },
-      //   ],
-      // },
-      { path: "/leads/ai-support", label: "AI Support" },
-      // ],
+      { path: "/leads/ai-marketing", label: "AI Support" },
     ],
   },
   {
@@ -105,7 +116,27 @@ const navigationGroups: NavigationGroup[] = [
     label: "Employee Management",
     color: "bg-[#ea580c]",
     link: "/employees",
-    items: [{ path: "/employees", label: "Employees" }],
+    items: [
+      {
+        path: "/employees",
+        label: "Employees",
+        collapsible: true,
+        subItems: [
+          { path: "/employees", label: "All Employees", badge: 6 },
+          { path: "/employees?team=sales", label: "Sales", badge: 2 },
+          { path: "/employees?team=support", label: "Support", badge: 1 },
+          { path: "/employees?team=marketing", label: "Marketing", badge: 1 },
+          {
+            path: "/employees?team=construction",
+            label: "Construction",
+            badge: 1,
+          },
+          { path: "/employees?team=plant", label: "Plant", badge: 1 },
+        ],
+      },
+      { path: "/employees/performance", label: "Employee performance" },
+      { path: "/employees/audit-log", label: "Audit Log" },
+    ],
   },
   {
     id: "settings" as NavGroup,
@@ -113,7 +144,19 @@ const navigationGroups: NavigationGroup[] = [
     label: "Payments",
     color: "bg-[#16a34a]",
     link: "/payments",
-    items: [{ path: "/payments", label: "Payments" }],
+    items: [
+      { path: "/payments", label: "Payments" },
+      // tax & report : Sales tax reporting
+      {
+        label: "Tax & Report",
+        path: "/payments/sales-tax-reporting",
+      },
+      // taxation
+      {
+        label: "Taxation",
+        path: "/payments/taxation",
+      },
+    ],
   },
   {
     id: "analytics" as NavGroup,
@@ -207,6 +250,9 @@ const navigationGroups: NavigationGroup[] = [
 export function Sidebar() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
+    new Set()
+  );
 
   // Determine active group based on current path
   const activeGroup =
@@ -215,9 +261,44 @@ export function Sidebar() {
         if (item.path === "/") {
           return location.pathname === "/";
         }
+        if (item.collapsible && item.subItems) {
+          return item.subItems.some((subItem) =>
+            location.pathname.startsWith(subItem.path)
+          );
+        }
         return location.pathname.startsWith(item.path);
       })
     ) || navigationGroups[0];
+
+  // Auto-expand collapsible section if any of its child routes is active
+  useEffect(() => {
+    activeGroup?.items.forEach((item) => {
+      if (item.collapsible && item.subItems) {
+        const isAnySubItemActive = item.subItems.some((subItem) =>
+          location.pathname.startsWith(subItem.path)
+        );
+        if (isAnySubItemActive) {
+          setCollapsedSections((prev) => {
+            const newSet = new Set(prev);
+            newSet.delete(item.path);
+            return newSet;
+          });
+        }
+      }
+    });
+  }, [location.pathname, activeGroup]);
+
+  const toggleSection = (path: string) => {
+    setCollapsedSections((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(path)) {
+        newSet.delete(path);
+      } else {
+        newSet.add(path);
+      }
+      return newSet;
+    });
+  };
 
   // Get the index of the active group
   const activeGroupIndex = navigationGroups.findIndex(
@@ -303,11 +384,67 @@ export function Sidebar() {
           <div className="space-y-2">
             {activeGroup?.items.map((item, i) => {
               const isFirst = i === 0;
+
+              if (item.collapsible && item.subItems) {
+                const isExpanded = !collapsedSections.has(item.path);
+                const isAnySubItemActive = item.subItems.some((subItem) =>
+                  location.pathname.startsWith(subItem.path)
+                );
+
+                return (
+                  <div key={item.path}>
+                    <button
+                      onClick={() => toggleSection(item.path)}
+                      className={cn(
+                        "w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors bg-white",
+                        {
+                          "ring shadow-lg": isAnySubItemActive,
+                        }
+                      )}
+                    >
+                      <span>{item.label}</span>
+                      {isExpanded ? (
+                        <ChevronUp className="size-4" />
+                      ) : (
+                        <ChevronDown className="size-4" />
+                      )}
+                    </button>
+                    {isExpanded && (
+                      <div className="mt-2 mb-1 space-y-2">
+                        {item.subItems.map((subItem) => (
+                          <NavLink
+                            key={subItem.path}
+                            to={subItem.path}
+                            className={({ isActive }) =>
+                              cn(
+                                "block px-4 py-2 rounded-lg transition-colors text-sm",
+                                {
+                                  [`text-white ${activeGroup.color}`]: isActive,
+                                  "bg-white shadow": !isActive,
+                                }
+                              )
+                            }
+                          >
+                            <div className="flex items-center justify-between">
+                              <span>{subItem.label}</span>
+                              {/* {subItem.badge != null && (
+                                <span className="ml-3 inline-flex items-center justify-center text-xs font-medium text-white bg-[#fb923c] rounded-full px-2 py-0.5">
+                                  {subItem.badge}
+                                </span>
+                              )} */}
+                            </div>
+                          </NavLink>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
               return (
                 <NavLink
                   key={item.path}
                   to={item.path}
-                  // style={{ marginTop: i > 0 ? `${i * 8}px` : undefined }}
                   className={({ isActive }) =>
                     cn(
                       "block px-4 py-2 rounded-lg transition-colors",
