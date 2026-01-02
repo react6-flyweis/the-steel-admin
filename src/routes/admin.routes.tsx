@@ -5,7 +5,12 @@ import { AdminLayout } from "@/components/admin-layout";
 
 const SignIn = lazy(() => import("@/pages/sign-in"));
 const Dashboard = lazy(() => import("@/pages/dashboard"));
-const SalesTaxReporting = lazy(() => import("@/pages/sales-tax-reporting"));
+const SalesTaxReporting = lazy(
+  () => import("@/pages/payments/sales-tax-reporting")
+);
+const SalesTaxReportingLegacy = lazy(
+  () => import("@/pages/sales-tax-reporting")
+);
 const SalesTaxFiling = lazy(() => import("@/pages/sales-tax-filing"));
 const PipelineStages = lazy(() => import("@/pages/pipeline-stages"));
 const Customers = lazy(() => import("@/pages/customers/customers"));
@@ -53,6 +58,15 @@ const SingleLeadCallsPage = lazy(() => import("@/pages/single-lead-calls"));
 const AiScriptGeneratorPage = lazy(() => import("@/pages/ai-script-generator"));
 const LeadScoring = lazy(() => import("@/pages/lead-scoring"));
 const FollowUpKpis = lazy(() => import("@/pages/follow-up-kpis"));
+const AIMarketing = lazy(() => import("@/pages/employees/ai-marketing"));
+const Employees = lazy(() => import("@/pages/employees/employees"));
+const EmployeeProfile = lazy(
+  () => import("@/pages/employees/employee-profile")
+);
+const EmployeePerformance = lazy(
+  () => import("@/pages/employees/employee-performance")
+);
+const EmployeeAuditLog = lazy(() => import("@/pages/employees/audit-log"));
 
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
 const MaterialInventoryView = lazy(
@@ -151,6 +165,7 @@ export const adminRoutes: RouteObject[] = [
         path: "leads/follow-up/kpis",
         element: <FollowUpKpis />,
       },
+      { path: "leads/ai-marketing", element: <AIMarketing /> },
       { path: "customers", element: <Customers /> },
       { path: "customers/insights", element: <CustomerInsights /> },
       { path: "customers/meetings", element: <Meetings /> },
@@ -171,9 +186,19 @@ export const adminRoutes: RouteObject[] = [
       },
       { path: "customers/contracts", element: <Contracts /> },
       { path: "customers/contracts/:id", element: <ContractDetail /> },
-      { path: "sales-tax", element: <SalesTaxReporting /> },
+      { path: "sales-tax", element: <SalesTaxReportingLegacy /> },
+      {
+        path: "payments",
+        children: [
+          { path: "sales-tax-reporting", element: <SalesTaxReporting /> },
+        ],
+      },
       { path: "sales-tax-filing", element: <SalesTaxFiling /> },
       { path: "pipeline-stages", element: <PipelineStages /> },
+      { path: "employees", element: <Employees /> },
+      { path: "employees/performance", element: <EmployeePerformance /> },
+      { path: "employees/audit-log", element: <EmployeeAuditLog /> },
+      { path: "employees/:id", element: <EmployeeProfile /> },
       { path: "users", element: <div>Users Page</div> },
       { path: "messages", element: <div>Messages Page</div> },
       { path: "notifications", element: <Notifications /> },
