@@ -13,8 +13,8 @@ import AILearningHistory from "@/components/ai-marketing/ai-learning-history";
 
 export default function AIMarketing() {
   return (
-    <div className="pr-5 pt-5 space-y-6 bg-[#e3ebff] min-h-screen">
-      <div className="flex items-center justify-between">
+    <div className="pr-5 pt-5 p-5 lg:p-0 space-y-6  min-h-screen">
+      <div className="gap-5 flex flex-col md:flex-row md:items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-slate-900">
             AI Support Monitoring
