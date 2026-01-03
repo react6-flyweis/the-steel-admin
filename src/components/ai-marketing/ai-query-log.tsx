@@ -48,7 +48,13 @@ const rows = [
   },
 ];
 
-function Badge({ children, color = "bg-gray-100 text-gray-800" }: any) {
+function Badge({
+  children,
+  color = "bg-gray-100 text-gray-800",
+}: {
+  children: React.ReactNode;
+  color?: string;
+}) {
   return (
     <span className={`px-3 py-1 rounded-full text-sm font-medium ${color}`}>
       {children}
@@ -76,18 +82,20 @@ function Stars({ n }: { n: number }) {
 
 export default function AIQueryLog() {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6 mt-6">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-slate-900">AI Query Log</h2>
-        <div className="flex items-center gap-3">
-          <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 gap-2">
+    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6 mt-6">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900">
+          AI Query Log
+        </h2>
+        <div className="flex items-center gap-3 w-full sm:w-auto">
+          <div className="flex items-center bg-gray-100 rounded-lg px-3 py-2 gap-2 w-full sm:w-auto">
             <Search className="w-4 h-4 text-slate-400" />
             <input
               placeholder="Search by customer or type..."
-              className="bg-transparent outline-none text-sm text-slate-600"
+              className="bg-transparent outline-none text-sm text-slate-600 w-full"
             />
           </div>
-          <div className="bg-gray-100 rounded-lg px-3 py-2 text-sm text-slate-700">
+          <div className="hidden sm:inline-flex bg-gray-100 rounded-lg px-3 py-2 text-sm text-slate-700">
             All Queries
           </div>
         </div>
@@ -97,13 +105,15 @@ export default function AIQueryLog() {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="text-slate-500 text-sm border-b">
-              <th className="py-4 pl-2">Query ID</th>
-              <th className="py-4">Customer Name</th>
-              <th className="py-4">Type</th>
-              <th className="py-4">Handled By</th>
-              <th className="py-4">Resolution</th>
-              <th className="py-4">Satisfaction</th>
-              <th className="py-4 pr-2">Timestamp</th>
+              <th className="py-3 pl-2 sm:py-4">Query ID</th>
+              <th className="py-3 sm:py-4">Customer Name</th>
+              <th className="py-3 sm:py-4 hidden sm:table-cell">Type</th>
+              <th className="py-3 sm:py-4 hidden sm:table-cell">Handled By</th>
+              <th className="py-3 sm:py-4 hidden sm:table-cell">Resolution</th>
+              <th className="py-3 sm:py-4">Satisfaction</th>
+              <th className="py-3 pr-2 sm:py-4 hidden sm:table-cell">
+                Timestamp
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -112,9 +122,18 @@ export default function AIQueryLog() {
                 key={r.id}
                 className={`${r.resolution === "Escalated" ? "bg-red-50" : ""}`}
               >
-                <td className="py-6 pl-2 font-medium text-slate-800">{r.id}</td>
-                <td className="py-6 text-slate-700">{r.name}</td>
-                <td className="py-6 text-slate-600 flex items-center gap-2">
+                <td className="py-3 pl-2 sm:py-6 font-medium text-slate-800">
+                  {r.id}
+                </td>
+                <td className="py-3 sm:py-6 text-slate-700 min-w-0">
+                  <div className="flex flex-col">
+                    <span className="font-medium truncate">{r.name}</span>
+                    <span className="text-xs text-slate-500 sm:hidden mt-1">
+                      {r.timestamp}
+                    </span>
+                  </div>
+                </td>
+                <td className="py-3 hidden sm:table-cell text-slate-600 flex items-center gap-2">
                   {r.type === "Text" ? (
                     <MessageSquare className="w-4 h-4 text-slate-400" />
                   ) : (
@@ -122,7 +141,7 @@ export default function AIQueryLog() {
                   )}
                   <span>{r.type}</span>
                 </td>
-                <td className="py-6">
+                <td className="py-3 hidden sm:table-cell">
                   <Badge
                     color={
                       r.handledBy === "AI"
@@ -133,7 +152,7 @@ export default function AIQueryLog() {
                     {r.handledBy}
                   </Badge>
                 </td>
-                <td className="py-6">
+                <td className="py-3 hidden sm:table-cell">
                   {r.resolution === "Resolved" ? (
                     <Badge color="bg-emerald-100 text-emerald-800">
                       Resolved
@@ -142,32 +161,34 @@ export default function AIQueryLog() {
                     <Badge color="bg-rose-100 text-rose-800">Escalated</Badge>
                   )}
                 </td>
-                <td className="py-6">
+                <td className="py-3 sm:py-6">
                   <div className="flex items-center gap-2 text-sm">
                     <Stars n={r.rating} />
                     <span className="text-slate-500">({r.rating})</span>
                   </div>
                 </td>
-                <td className="py-6 pr-2 text-slate-500">{r.timestamp}</td>
+                <td className="py-3 pr-2 sm:py-6 text-slate-500 hidden sm:table-cell">
+                  {r.timestamp}
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
 
-      <div className="flex items-center justify-between mt-6 text-sm text-slate-600">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-6 text-sm text-slate-600 gap-3">
         <div>Showing 1 to 5 of 6 results</div>
-        <div className="flex items-center gap-2">
-          <button className="px-3 py-2 rounded-md bg-white border text-slate-600">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button className="w-full sm:w-auto px-3 py-2 rounded-md bg-white border text-slate-600">
             Previous
           </button>
-          <button className="px-3 py-2 rounded-md bg-blue-600 text-white">
+          <button className="w-full sm:w-auto px-3 py-2 rounded-md bg-blue-600 text-white">
             1
           </button>
-          <button className="px-3 py-2 rounded-md bg-white border text-slate-600">
+          <button className="w-full sm:w-auto px-3 py-2 rounded-md bg-white border text-slate-600">
             2
           </button>
-          <button className="px-3 py-2 rounded-md bg-white border text-slate-600">
+          <button className="w-full sm:w-auto px-3 py-2 rounded-md bg-white border text-slate-600">
             Next
           </button>
         </div>

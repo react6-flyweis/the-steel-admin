@@ -1,7 +1,19 @@
 import { useState } from "react";
 import { useParams, Link } from "react-router";
 import StatCard from "@/components/ui/stat-card";
-import { Users, Percent, CheckSquare, Smile, DollarSign } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+// Tabs: using original nav-style tabs (no shadcn Tabs)
+import {
+  Users,
+  Percent,
+  CheckSquare,
+  Smile,
+  DollarSign,
+  ArrowLeft,
+} from "lucide-react";
 
 type Employee = {
   id: string;
@@ -84,63 +96,51 @@ export default function EmployeeProfilePage() {
   const [activeTab, setActiveTab] = useState<string>("personal");
 
   return (
-    <div className="p-6 space-y-6 ">
-      <div className="flex items-center gap-4">
-        <Link
-          to="/employees"
-          className="inline-flex items-center gap-2 text-sm text-white bg-blue-600 px-3 py-2 rounded shadow-sm"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-          Back
-        </Link>
-        <h2 className="text-xl font-semibold">Employee Profile</h2>
+    <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+        <Button asChild size="sm">
+          <Link to="/employees" className="inline-flex items-center gap-2">
+            <ArrowLeft />
+            Back
+          </Link>
+        </Button>
+        <h2 className="text-lg sm:text-xl font-semibold">Employee Profile</h2>
       </div>
 
       {/* Header Card */}
-      <div className="bg-white rounded-xl shadow-md px-8 py-8 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <div className="h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center text-2xl font-semibold text-gray-700 overflow-hidden ring-4 ring-white">
-            {employee.name
-              .split(" ")
-              .map((n) => n[0])
-              .slice(0, 2)
-              .join("")}
-          </div>
+      <Card className="px-6 sm:px-8 py-6 sm:py-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="flex items-start sm:items-center gap-4">
+          <Avatar size="lg">
+            <AvatarFallback>
+              {employee.name
+                .split(" ")
+                .map((n) => n[0])
+                .slice(0, 2)
+                .join("")}
+            </AvatarFallback>
+          </Avatar>
           <div>
-            <h3 className="text-2xl font-bold">{employee.name}</h3>
+            <h3 className="text-xl sm:text-2xl font-bold truncate">
+              {employee.name}
+            </h3>
             <div className="text-sm text-gray-600 mt-1">{employee.role}</div>
             <div className="text-sm text-gray-400 mt-1">
               Joined {employee.joinedDate}
             </div>
           </div>
         </div>
-        <div className="text-right">
+        <div className="text-right mt-4 sm:mt-0">
           <div className="inline-flex flex-col items-end gap-2">
-            <span className="px-4 py-1 rounded-full bg-green-100 text-green-700 text-sm">
-              {employee.status}
-            </span>
+            <Badge variant="secondary">{employee.status}</Badge>
             <div className="text-sm text-gray-600">
-              <span className="text-2xl font-semibold text-gray-900 mr-1">
+              <span className="text-2xl sm:text-3xl font-semibold text-gray-900 mr-1">
                 {employee.leads}
               </span>
               <span className="text-sm text-gray-600">leads assigned</span>
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Tabs */}
       <div>
@@ -230,29 +230,31 @@ export default function EmployeeProfilePage() {
           )}
 
           {activeTab === "assigned" && (
-            <div className="space-y-4 bg-white rounded-lg shadow-sm px-6 py-5">
+            <div className="space-y-4 bg-white rounded-lg shadow-sm px-4 sm:px-6 py-5 overflow-x-auto">
               {mockAssignedLeads.map((lead) => (
                 <div
                   key={lead.id}
-                  className=" flex items-center justify-between"
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-3 rounded-md"
                 >
-                  <div className="flex items-center gap-8 w-full">
-                    <div className="min-w-[160px]">
-                      <div className="font-medium text-sm">{lead.name}</div>
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 w-full">
+                    <div className="w-full sm:min-w-40">
+                      <div className="font-medium text-sm truncate">
+                        {lead.name}
+                      </div>
                       <div className="text-xs text-gray-400 mt-1">
                         {lead.code}
                       </div>
                     </div>
 
-                    <div className="flex-1 text-sm text-gray-700">
+                    <div className="w-full flex-1 text-sm text-gray-700 truncate">
                       {lead.email}
                     </div>
 
-                    <div className="min-w-[120px] text-sm text-gray-700">
+                    <div className="w-full sm:min-w-[120px] text-sm text-gray-700">
                       {lead.phone}
                     </div>
 
-                    <div className="min-w-[160px] text-sm text-gray-500">
+                    <div className="w-full sm:min-w-[160px] text-sm text-gray-500 truncate">
                       {lead.location}
                     </div>
 
@@ -266,7 +268,7 @@ export default function EmployeeProfilePage() {
                     </div>
                   </div>
 
-                  <div className="ml-6 text-sm font-semibold text-gray-800">
+                  <div className="sm:ml-6 text-sm font-semibold text-gray-800 mt-2 sm:mt-0">
                     {lead.date}
                   </div>
                 </div>
