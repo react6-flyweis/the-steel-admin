@@ -1,6 +1,7 @@
 import MetricCard from "@/components/employee-performance/MetricCard";
 import PerformanceChart from "@/components/employee-performance/PerformanceChart";
 import TopPerformerCard from "@/components/employee-performance/TopPerformerCard";
+import PerformanceTable from "@/components/employee-performance/PerformanceTable";
 
 const sampleData = [
   {
@@ -120,7 +121,7 @@ export default function EmployeePerformancePage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 bg-white rounded-lg p-6 shadow-sm">
-          <div className="flex items-center gap-6">
+          <div className="flex flex-col md:flex-row items-center gap-6">
             <PerformanceChart data={sampleData} />
 
             <div className="flex-1">
@@ -186,116 +187,7 @@ export default function EmployeePerformancePage() {
       </div>
 
       {/* Employee performance table */}
-      <div className="bg-white rounded-lg p-6 shadow-sm">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold">Employee Performance</h2>
-          <div className="flex items-center gap-3">
-            <input
-              placeholder="Search employees..."
-              className="border rounded-md px-3 py-2 text-sm"
-            />
-            <select className="border rounded-md px-3 py-2 text-sm">
-              <option>All</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-180">
-            <thead>
-              <tr className="text-left text-xs text-gray-500 border-b">
-                <th className="py-3">Employee</th>
-                <th className="py-3">Department</th>
-                <th className="py-3">Deals Closed</th>
-                <th className="py-3">Total Earnings</th>
-                <th className="py-3">Commission</th>
-                <th className="py-3">PERFORMANCE</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
-              {sampleData.map((d) => {
-                return (
-                  <tr key={d.name} className="text-sm">
-                    <td className="py-4 flex items-center gap-3">
-                      <div
-                        className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-700 overflow-hidden"
-                        aria-hidden
-                      >
-                        {d.name
-                          .split(" ")
-                          .map((n) => n[0])
-                          .slice(0, 2)
-                          .join("")}
-                      </div>
-                      <div>
-                        <div className="font-medium">{d.name}</div>
-                        <div className="text-xs text-gray-400">{d.role}</div>
-                      </div>
-                    </td>
-
-                    <td className="py-4">
-                      <span
-                        className={`inline-block px-3 py-1 rounded-full text-xs font-medium text-white`}
-                        style={{
-                          background:
-                            d.department === "Sales"
-                              ? "#EDF8FF"
-                              : d.department === "Business Development"
-                              ? "#F3F0FF"
-                              : "#F0F9F4",
-                          color:
-                            d.department === "Sales"
-                              ? "#0369A1"
-                              : d.department === "Business Development"
-                              ? "#3730A3"
-                              : "#065F46",
-                        }}
-                      >
-                        {d.department}
-                      </span>
-                    </td>
-
-                    <td className="py-4 text-gray-600 flex items-center gap-2">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-gray-400"
-                        viewBox="0 0 20 20"
-                        fill="currentColor"
-                      >
-                        <path d="M9 2a1 1 0 00-1 1v1H5a2 2 0 00-2 2v8a1 1 0 001 1h10a1 1 0 001-1V6a2 2 0 00-2-2h-3V3a1 1 0 00-1-1H9z" />
-                      </svg>
-                      {d.deals}
-                    </td>
-
-                    <td className="py-4 font-semibold">
-                      {formatCurrency(d.value)}
-                    </td>
-
-                    <td className="py-4">{d.commission}</td>
-
-                    <td className="py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-36 h-3 bg-gray-200 rounded-full overflow-hidden">
-                          <div
-                            className="h-3 rounded-full"
-                            style={{
-                              width: `${d.perf}%`,
-                              background: `linear-gradient(90deg, #06b6d4, #16a34a)`,
-                            }}
-                          />
-                        </div>
-                        <div className="text-xs text-gray-500 w-8">
-                          {d.perf}%
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <PerformanceTable data={sampleData} />
     </div>
   );
 }
