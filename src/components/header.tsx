@@ -1,15 +1,30 @@
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 import { NotificationMenu } from "@/components/notification-menu";
 import steelLogo from "@/assets/the-steel-logo-dark.svg";
 
-export function Header() {
+interface HeaderProps {
+  onMenuClick: () => void;
+}
+
+export function Header({ onMenuClick }: HeaderProps) {
   return (
-    <header className="bg-white border-b px-8 py-4">
+    <header className="bg-white border-b px-4 md:px-8 py-4">
       <div className="flex items-center justify-between">
+        {/* Mobile Menu Button */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="lg:hidden"
+          onClick={onMenuClick}
+        >
+          <Menu className="size-6" />
+        </Button>
+
         {/* Search Bar */}
-        <div className="relative w-72">
+        <div className="hidden md:block relative w-48 md:w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
           <Input
             type="text"
@@ -19,7 +34,7 @@ export function Header() {
         </div>
 
         {/* Right Side - Notifications and Logo */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-3 md:gap-6">
           <NotificationMenu />
 
           {/* The Steel Logo */}
@@ -27,7 +42,7 @@ export function Header() {
             <img
               src={steelLogo}
               alt="The Steel Logo"
-              className="max-h-10 max-w-24 w-auto"
+              className="max-h-8 md:max-h-10 max-w-20 md:max-w-24 w-auto"
             />
           </div>
         </div>

@@ -4,6 +4,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronUp,
+  X,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import dashboardIcon from "@/assets/icons/sidebar/dashboard.svg";
@@ -171,8 +172,17 @@ const navigationGroups: NavigationGroup[] = [
     icon: invoices,
     label: "Invoices",
     color: "bg-[#a855f7]",
-    link: "/invoices",
-    items: [{ path: "/invoices", label: "Invoices" }],
+    link: "/invoice",
+    items: [
+      { path: "/invoice", label: "Invoice" },
+      // invite list
+      { path: "/invoice/list", label: "Invoice List" },
+      // sales growth
+      {
+        path: "/invoice/sales-growth",
+        label: "Sales Growth",
+      },
+    ],
   },
   {
     id: "gallery" as NavGroup,
@@ -247,7 +257,12 @@ const navigationGroups: NavigationGroup[] = [
   },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
@@ -311,161 +326,196 @@ export function Sidebar() {
 
   const handleGroupChange = (group: (typeof navigationGroups)[0]) => {
     navigate(group.link);
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      onClose();
+    }
+  };
+
+  const handleNavClick = () => {
+    // Close sidebar on mobile after navigation
+    if (window.innerWidth < 768) {
+      onClose();
+    }
   };
 
   return (
-    <div className="flex">
-      {/* Icon Sidebar */}
-      <aside className="w-14 pt-28 bg-[#2563eb] h-screen fixed left-0 top-0 flex flex-col items-center   gap-4  z-20">
-        <nav className="flex flex-col gap-3">
-          {navigationGroups.map((group) => {
-            const iconSrc = group.icon as string;
-            const isActive = activeGroup.id === group.id;
+    <>
+      {/* Backdrop for mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          onClick={onClose}
+        />
+      )}
 
-            return (
-              <button
-                key={group.id}
-                onClick={() => handleGroupChange(group)}
-                className={`relative flex items-center justify-center transition-all `}
-                title={group.label}
-              >
-                {isActive && (
-                  <img
-                    src={activeBgImage}
-                    alt="Active background"
-                    className="absolute -right-3 max-w-13 object-contain"
-                  />
-                )}
-                <div
-                  className={`z-10 w-9 h-9 flex items-center justify-center rounded-full ${
-                    group.color
-                  } ${isActive ? "" : ""}`}
+      <div
+        className={`flex fixed inset-y-0 left-0 lg:left-0 lg:top-0 z-50 transition-transform duration-300 lg:translate-x-0 h-screen ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
+        {/* Icon Sidebar */}
+        <aside className="w-14 pt-28 bg-[#2563eb] h-screen flex flex-col items-center gap-4 z-20">
+          <nav className="flex flex-col gap-3">
+            {navigationGroups.map((group) => {
+              const iconSrc = group.icon as string;
+              const isActive = activeGroup.id === group.id;
+
+              return (
+                <button
+                  key={group.id}
+                  onClick={() => handleGroupChange(group)}
+                  className={`relative flex items-center justify-center transition-all `}
+                  title={group.label}
                 >
-                  <img
-                    src={iconSrc}
-                    alt={group.label}
-                    className="max-w-5 max-h-5 object-contain"
-                  />
-                </div>
-              </button>
-            );
-          })}
-        </nav>
-      </aside>
+                  {isActive && (
+                    <img
+                      src={activeBgImage}
+                      alt="Active background"
+                      className="absolute -right-3 max-w-13 object-contain"
+                    />
+                  )}
+                  <div
+                    className={`z-10 w-9 h-9 flex items-center justify-center rounded-full ${
+                      group.color
+                    } ${isActive ? "" : ""}`}
+                  >
+                    <img
+                      src={iconSrc}
+                      alt={group.label}
+                      className="max-w-5 max-h-5 object-contain"
+                    />
+                  </div>
+                </button>
+              );
+            })}
+          </nav>
+        </aside>
 
-      {/* Main Sidebar */}
-      <aside className="w-56 bg-[#E8EFF9] h-screen fixed left-14 top-0 flex flex-col overflow-y-auto z-30">
-        {/* Header */}
-        <div className="p-2 border-b relative">
-          <UserMenu />
-          <div className="flex items-center justify-between mt-1 text-xs text-gray-400">
-            <Button
-              className="rounded bg-gray-300 px-4 text-foreground hover:bg-gray-400"
-              size="sm"
+        {/* Main Sidebar */}
+        <aside className="w-56 bg-[#E8EFF9] h-full flex flex-col overflow-y-auto thin-scrollbar z-30">
+          {/* Header */}
+          <div className="p-2 border-b relative">
+            {/* Close button for mobile */}
+            <button
+              onClick={onClose}
+              className="absolute top-2 right-2 lg:hidden p-1 hover:bg-gray-200 rounded"
             >
-              <span>Today</span>
-            </Button>
-            <div className="flex gap-1">
-              <button className="hover:text-gray-600">
-                <ChevronLeft className="size-4" />
-              </button>
-              <button className="hover:text-gray-600">
-                <ChevronRight className="size-4" />
-              </button>
+              <X className="h-5 w-5" />
+            </button>
+            <UserMenu />
+            <div className="flex items-center justify-between mt-1 text-xs text-gray-400">
+              <Button
+                className="rounded bg-gray-300 px-4 text-foreground hover:bg-gray-400"
+                size="sm"
+              >
+                <span>Today</span>
+              </Button>
+              <div className="flex gap-1">
+                <button className="hover:text-gray-600">
+                  <ChevronLeft className="size-4" />
+                </button>
+                <button className="hover:text-gray-600">
+                  <ChevronRight className="size-4" />
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        {/* Navigation Items */}
-        <nav
-          className="flex-1 p-3 px-3"
-          style={{ paddingTop: `${menuPaddingTop}px` }}
-        >
-          <div className="space-y-2">
-            {activeGroup?.items.map((item, i) => {
-              const isFirst = i === 0;
+          {/* Navigation Items */}
+          <nav
+            className="flex-1 p-3 px-3"
+            style={{ paddingTop: `${menuPaddingTop}px` }}
+          >
+            <div className="space-y-2">
+              {activeGroup?.items.map((item, i) => {
+                const isFirst = i === 0;
 
-              if (item.collapsible && item.subItems) {
-                const isExpanded = !collapsedSections.has(item.path);
-                const isAnySubItemActive = item.subItems.some((subItem) =>
-                  location.pathname.startsWith(subItem.path)
-                );
+                if (item.collapsible && item.subItems) {
+                  const isExpanded = !collapsedSections.has(item.path);
+                  const isAnySubItemActive = item.subItems.some((subItem) =>
+                    location.pathname.startsWith(subItem.path)
+                  );
 
-                return (
-                  <div key={item.path}>
-                    <button
-                      onClick={() => toggleSection(item.path)}
-                      className={cn(
-                        "w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors bg-white",
-                        {
-                          "ring shadow-lg": isAnySubItemActive,
-                        }
-                      )}
-                    >
-                      <span>{item.label}</span>
-                      {isExpanded ? (
-                        <ChevronUp className="size-4" />
-                      ) : (
-                        <ChevronDown className="size-4" />
-                      )}
-                    </button>
-                    {isExpanded && (
-                      <div className="mt-2 mb-1 space-y-2">
-                        {item.subItems.map((subItem) => (
-                          <NavLink
-                            key={subItem.path}
-                            to={subItem.path}
-                            className={({ isActive }) =>
-                              cn(
-                                "block px-4 py-2 rounded-lg transition-colors text-sm",
-                                {
-                                  [`text-white ${activeGroup.color}`]: isActive,
-                                  "bg-white shadow": !isActive,
-                                }
-                              )
-                            }
-                          >
-                            <div className="flex items-center justify-between">
-                              <span>{subItem.label}</span>
-                              {/* {subItem.badge != null && (
+                  return (
+                    <div key={item.path}>
+                      <button
+                        onClick={() => toggleSection(item.path)}
+                        className={cn(
+                          "w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors bg-white",
+                          {
+                            "ring shadow-lg": isAnySubItemActive,
+                          }
+                        )}
+                      >
+                        <span>{item.label}</span>
+                        {isExpanded ? (
+                          <ChevronUp className="size-4" />
+                        ) : (
+                          <ChevronDown className="size-4" />
+                        )}
+                      </button>
+                      {isExpanded && (
+                        <div className="mt-2 mb-1 space-y-2">
+                          {item.subItems.map((subItem) => (
+                            <NavLink
+                              key={subItem.path}
+                              to={subItem.path}
+                              onClick={handleNavClick}
+                              className={({ isActive }) =>
+                                cn(
+                                  "block px-4 py-2 rounded-lg transition-colors text-sm",
+                                  {
+                                    [`text-white ${activeGroup.color}`]:
+                                      isActive,
+                                    "bg-white shadow": !isActive,
+                                  }
+                                )
+                              }
+                            >
+                              <div className="flex items-center justify-between">
+                                <span>{subItem.label}</span>
+                                {/* {subItem.badge != null && (
                                 <span className="ml-3 inline-flex items-center justify-center text-xs font-medium text-white bg-[#fb923c] rounded-full px-2 py-0.5">
                                   {subItem.badge}
                                 </span>
                               )} */}
-                            </div>
-                          </NavLink>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                );
-              }
+                              </div>
+                            </NavLink>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
 
-              return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  className={({ isActive }) =>
-                    cn(
-                      "block px-4 py-2 rounded-lg transition-colors",
-                      {
-                        [`text-white ${activeGroup.color}`]:
-                          isFirst || isActive,
-                      },
-                      {
-                        "bg-white shadow-lg": !isFirst && !isActive,
-                      },
-                      { "w-4/5 mb-5": isFirst }
-                    )
-                  }
-                >
-                  {item.label}
-                </NavLink>
-              );
-            })}
-          </div>
-        </nav>
-      </aside>
-    </div>
+                return (
+                  <NavLink
+                    key={item.path}
+                    to={item.path}
+                    onClick={handleNavClick}
+                    className={({ isActive }) =>
+                      cn(
+                        "block px-4 py-2 rounded-lg transition-colors",
+                        {
+                          [`text-white ${activeGroup.color}`]:
+                            isFirst || isActive,
+                        },
+                        {
+                          "bg-white shadow-lg": !isFirst && !isActive,
+                        },
+                        { "w-4/5 mb-5": isFirst }
+                      )
+                    }
+                  >
+                    {item.label}
+                  </NavLink>
+                );
+              })}
+            </div>
+          </nav>
+        </aside>
+      </div>
+    </>
   );
 }
