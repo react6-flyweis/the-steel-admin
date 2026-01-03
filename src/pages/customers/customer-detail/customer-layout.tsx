@@ -24,9 +24,9 @@ export default function CustomerDetailLayout() {
   };
 
   return (
-    <div className="p-6 space-y-6 min-h-screen">
+    <div className="p-4 sm:p-6 space-y-6 min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <Button
             variant="default"
@@ -39,7 +39,7 @@ export default function CustomerDetailLayout() {
           </Button>
           <h1 className="text-lg ">Customer Info</h1>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700">
+        <Button className="bg-green-600 hover:bg-green-700 w-full sm:w-auto mt-3 sm:mt-0">
           <MailIcon className="h-4 w-4 mr-2" />
           Schedule Meeting
         </Button>
@@ -50,10 +50,10 @@ export default function CustomerDetailLayout() {
         {/* <CardHeader>
           <CardTitle>Profile</CardTitle>
         </CardHeader> */}
-        <CardContent className="flex gap-8 justify-between items-end px-0">
-          <div className="flex gap-2">
+        <CardContent className="flex flex-col md:flex-row gap-6 md:gap-8 justify-between items-start md:items-end px-0">
+          <div className="flex gap-2 items-start">
             {/* Avatar */}
-            <Avatar className="size-16">
+            <Avatar className="h-12 w-12 md:h-16 md:w-16">
               <AvatarImage
                 src="https://ui-avatars.com/api/?name=John+Doe&background=3b82f6&color=fff&size=128"
                 alt={customer.customerName}
@@ -64,7 +64,7 @@ export default function CustomerDetailLayout() {
             </Avatar>
 
             {/* Customer Details */}
-            <div className="space-y-2">
+            <div className="space-y-2 md:space-y-0">
               <div>
                 <h2 className="text-xl font-semibold text-gray-900">
                   {customer.customerName}
@@ -77,7 +77,7 @@ export default function CustomerDetailLayout() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 text-sm">
+          <div className="flex flex-col gap-2 md:mr-6 text-sm mt-4 md:mt-0">
             <div className="flex items-center gap-2">
               <span className="text-gray-400">✉</span>
               <span className="text-gray-700">{customer.email}</span>
@@ -88,14 +88,14 @@ export default function CustomerDetailLayout() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2 mt-3 md:mt-0 md:mr-6">
             <p className="text-xs text-gray-500 uppercase">Inquiry For</p>
             <p className="text-sm font-medium text-gray-900">
               {customer.inquiryFor}
             </p>
           </div>
 
-          <div className="flex items-center  px-8">
+          <div className="flex items-center px-0 md:px-8 mt-3 md:mt-0">
             <Badge className="bg-green-50 text-green-700 border-green-200">
               {customer.status}
             </Badge>
@@ -104,7 +104,7 @@ export default function CustomerDetailLayout() {
       </Card>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Payment Received"
           value="$1,850"

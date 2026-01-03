@@ -110,7 +110,7 @@ export default function CustomerInfoPage() {
             <div className="mt-4 text-center">
               <Button
                 variant="link"
-                className="text-blue-600 text-sm"
+                className="text-blue-600 text-sm w-full sm:w-auto"
                 onClick={() => navigate(`/customers/${id}/payments`)}
               >
                 View All
@@ -129,10 +129,10 @@ export default function CustomerInfoPage() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left text-xs font-medium text-gray-500 uppercase pb-2">
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                       Date
                     </th>
-                    <th className="text-left text-xs font-medium text-gray-500 uppercase pb-2">
+                    <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                       Changed By
                     </th>
                   </tr>
@@ -154,7 +154,7 @@ export default function CustomerInfoPage() {
             <div className="mt-4 text-center">
               <Button
                 variant="link"
-                className="text-blue-600 text-sm"
+                className="text-blue-600 text-sm w-full sm:w-auto"
                 onClick={() => navigate(`/customers/${id}/status`)}
               >
                 View All
@@ -177,16 +177,16 @@ export default function CustomerInfoPage() {
                   <th className="text-left text-xs font-medium text-gray-500 uppercase pb-3">
                     Service
                   </th>
-                  <th className="text-left text-xs font-medium text-gray-500 uppercase pb-3">
+                  <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                     Amount
                   </th>
-                  <th className="text-left text-xs font-medium text-gray-500 uppercase pb-3">
+                  <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                     Status
                   </th>
-                  <th className="text-left text-xs font-medium text-gray-500 uppercase pb-3">
+                  <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                     Start Date
                   </th>
-                  <th className="text-left text-xs font-medium text-gray-500 uppercase pb-3">
+                  <th className="text-left text-xs font-medium text-gray-500 uppercase py-2 px-2 sm:px-4">
                     End Date
                   </th>
                 </tr>
@@ -194,13 +194,13 @@ export default function CustomerInfoPage() {
               <tbody>
                 {projectHistory.map((project, index) => (
                   <tr key={index} className="border-b last:border-0">
-                    <td className="py-4 text-sm text-gray-900">
+                    <td className="py-3 sm:py-4 text-sm text-gray-900 px-2 sm:px-4">
                       {project.service}
                     </td>
-                    <td className="py-4 text-sm text-gray-700">
+                    <td className="py-3 sm:py-4 text-sm text-gray-700 px-2 sm:px-4">
                       {project.amount}
                     </td>
-                    <td className="py-4">
+                    <td className="py-3 sm:py-4 px-2 sm:px-4">
                       <span
                         className={`text-sm ${
                           project.status === "Completed"
@@ -211,10 +211,10 @@ export default function CustomerInfoPage() {
                         {project.status}
                       </span>
                     </td>
-                    <td className="py-4 text-sm text-gray-700">
+                    <td className="py-3 sm:py-4 text-sm text-gray-700 px-2 sm:px-4">
                       {project.startDate}
                     </td>
-                    <td className="py-4 text-sm text-gray-700">
+                    <td className="py-3 sm:py-4 text-sm text-gray-700 px-2 sm:px-4">
                       {project.endDate}
                     </td>
                   </tr>
@@ -240,11 +240,11 @@ export default function CustomerInfoPage() {
           <CardTitle>Photos</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {photos.map((photo, index) => (
               <div
                 key={index}
-                className=" rounded-lg overflow-hidden h-32  bg-gray-100"
+                className=" rounded-lg overflow-hidden h-28 sm:h-32 bg-gray-100"
               >
                 <img
                   src={photo}

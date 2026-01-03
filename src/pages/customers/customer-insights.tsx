@@ -102,7 +102,7 @@ const getBadgeColor = (type: Insight["type"]) => {
 
 export default function CustomerInsights() {
   return (
-    <div className="p-6">
+    <div className="p-4 sm:p-6">
       <CardHeader className="px-0 pt-0">
         <CardTitle className="text-2xl font-bold">Customer Insights</CardTitle>
       </CardHeader>
@@ -113,22 +113,34 @@ export default function CustomerInsights() {
           return (
             <Card key={insight.id}>
               <CardContent>
-                <div className="flex items-start gap-4">
-                  <div className={`p-3 rounded ${getIconColor(insight.type)}`}>
+                <div className="flex flex-col sm:flex-row items-start gap-3">
+                  <div
+                    className={`p-2 sm:p-3 rounded ${getIconColor(
+                      insight.type
+                    )}`}
+                  >
                     <Icon className="w-5 h-5" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-1">
-                      {insight.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm mb-3">
-                      {insight.description}
-                    </p>
-                    <Badge
-                      className={`${getBadgeColor(insight.type)} font-normal`}
-                    >
-                      Recommended Action: {insight.recommendedAction}
-                    </Badge>
+
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-1">
+                        {insight.title}
+                      </h3>
+                      <p className="text-gray-400 text-sm mb-2">
+                        {insight.description}
+                      </p>
+                    </div>
+
+                    <div className="mt-0 sm:mt-0">
+                      <Badge
+                        className={`${getBadgeColor(
+                          insight.type
+                        )} font-normal mt-2 sm:mt-0 block`}
+                      >
+                        Recommended Action: {insight.recommendedAction}
+                      </Badge>
+                    </div>
                   </div>
                 </div>
               </CardContent>

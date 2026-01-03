@@ -380,7 +380,7 @@ export default function ContractDetail() {
 
       {/* Contract Content */}
       <Card className="">
-        <CardContent className="p-12 bg-white">
+        <CardContent className="p-6 md:p-12 bg-white">
           {/* Header */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-6">
