@@ -29,7 +29,7 @@ export default function Dashboard() {
       {/* Tabs */}
       <FilterTabs />
 
-      <div className="pr-5 pt-5 space-y-5">
+      <div className="pr-5 pt-5 p-5 lg:p-0 space-y-5">
         {/* Header */}
         <div className="">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -40,7 +40,7 @@ export default function Dashboard() {
         </div>
 
         {/* Metrics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Leads"
             value={"247"}
