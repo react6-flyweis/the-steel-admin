@@ -76,12 +76,12 @@ export default function SmartReminders() {
 
   return (
     <div className="w-full">
-      <div className="bg-[#89D5DC] text-white px-6 py-4 flex items-center justify-between border-b">
-        <h2 className="text-lg font-semibold flex items-center gap-2">
+      <div className="bg-[#89D5DC] text-white px-4 sm:px-6 py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b">
+        <h2 className="text-base sm:text-lg font-semibold flex items-center gap-2">
           Smart Follow-Up Reminders
         </h2>
       </div>
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <Card className="rounded-lg shadow-md">
           <CardHeader className="border-b">
             <div className="flex items-start justify-between gap-4 w-full">
@@ -94,8 +94,8 @@ export default function SmartReminders() {
                 </p>
               </div>
 
-              <div className="ml-auto">
-                <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
+              <div className="">
+                <span className="whitespace-nowrap inline-flex items-center px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-sm font-medium">
                   3 active
                 </span>
               </div>
@@ -107,9 +107,9 @@ export default function SmartReminders() {
               {reminders.map((reminder) => (
                 <div
                   key={reminder.id}
-                  className="w-full bg-white rounded-lg shadow-sm border border-gray-100 px-4 py-3 flex items-center justify-between"
+                  className="w-full bg-white rounded-lg shadow-sm border border-gray-100 px-4 py-3 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3"
                 >
-                  <div className="flex-1 pr-4">
+                  <div className="flex-1 pr-0 sm:pr-4">
                     <div className="flex items-center gap-3">
                       <h3 className="font-semibold text-gray-900 text-base">
                         <Link
@@ -124,24 +124,24 @@ export default function SmartReminders() {
                         <Check className="h-4 w-4 text-green-700" />
                       </Badge>
                     </div>
-                    <p className="text-sm text-gray-600 mt-1 truncate">
+                    <p className="text-sm text-wrap text-gray-600 mt-1 truncate">
                       Best time to follow up is{" "}
                       <span className="font-medium">{reminder.bestTime}</span>{" "}
                       {reminder.reason}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 mt-3 sm:mt-0 sm:justify-end">
                     <Button
                       onClick={() => handleApply(reminder.id)}
-                      className="px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white shadow"
+                      className="flex-1 px-5 py-2 rounded-md bg-blue-600 hover:bg-blue-700 text-white shadow"
                     >
                       Apply
                     </Button>
                     <Button
                       onClick={() => handleSnooze(reminder.id)}
                       variant="outline"
-                      className="px-4 py-2 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200"
+                      className="flex-1 rounded-md bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200"
                     >
                       Snooze
                     </Button>

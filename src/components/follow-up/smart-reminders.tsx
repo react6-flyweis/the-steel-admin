@@ -35,9 +35,11 @@ const mockReminders: Reminder[] = [
 export default function SmartReminders() {
   return (
     <Card className="p-6 gap-0">
-      <div className="flex items-center gap-2">
-        <span className="text-xl">🧠</span>
-        <h2 className="text-lg font-semibold">Smart Follow-Up Reminders</h2>
+      <div className="flex flex-col md:flex-row  md:items-center gap-2">
+        <div className="">
+          <span className="text-xl">🧠</span>
+          <h2 className="text-lg font-semibold">Smart Follow-Up Reminders</h2>
+        </div>
         <span className="ml-auto bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
           3 active
         </span>
