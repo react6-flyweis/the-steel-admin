@@ -20,11 +20,11 @@ export default function FollowUpPage() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   return (
-    <div className="pr-5 pt-5 space-y-5">
+    <div className="p-4 sm:p-6 max-w-7xl mx-auto space-y-5">
       {/* Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
             Follow-up & Task Management
           </h1>
           <p className="text-gray-600 mt-1">
@@ -33,7 +33,7 @@ export default function FollowUpPage() {
         </div>
         <Button
           onClick={() => setIsAddDialogOpen(true)}
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto mt-3 sm:mt-0"
         >
           <Plus className="w-4 h-4 mr-2" />
           Add Follow-up
@@ -41,7 +41,7 @@ export default function FollowUpPage() {
       </div>
 
       {/* Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <StatCard
           title="Total Follow-ups"
           value="8"

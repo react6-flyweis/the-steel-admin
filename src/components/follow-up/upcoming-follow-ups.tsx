@@ -66,7 +66,7 @@ export default function UpcomingFollowUps() {
 
   return (
     <Card className="p-6">
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-4 gap-5">
         <div className="flex items-center gap-2">
           <span className="text-xl">📅</span>
           <h2 className="text-lg font-semibold">Upcoming Follow-Ups</h2>
@@ -81,7 +81,7 @@ export default function UpcomingFollowUps() {
             variant={viewMode === "calendar" ? "default" : "ghost"}
             onClick={() => setViewMode("calendar")}
             className={cn(
-              "px-3 h-8 text-xs",
+              "flex-1 px-3 h-8 text-xs",
               viewMode === "calendar"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-transparent text-gray-600 hover:bg-gray-200"
@@ -95,7 +95,7 @@ export default function UpcomingFollowUps() {
             variant={viewMode === "list" ? "default" : "ghost"}
             onClick={() => setViewMode("list")}
             className={cn(
-              "px-3 h-8 text-xs",
+              "flex-1 px-3 h-8 text-xs",
               viewMode === "list"
                 ? "bg-blue-600 text-white hover:bg-blue-700"
                 : "bg-transparent text-gray-600 hover:bg-gray-200"

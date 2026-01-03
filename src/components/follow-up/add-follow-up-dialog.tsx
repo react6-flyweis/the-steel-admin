@@ -143,7 +143,7 @@ export default function AddFollowUpDialog({ open, onOpenChange }: Props) {
             </div>
           </div>
 
-          <DialogFooter className="p-4">
+          <DialogFooter className="p-4 flex-row">
             <Button
               type="button"
               size="lg"

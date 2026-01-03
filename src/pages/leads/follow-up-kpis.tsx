@@ -103,13 +103,15 @@ export default function FollowUpKpis() {
   return (
     <div className="">
       {/* Header */}
-      <div className="flex bg-teal-400 p-4 items-center justify-between">
+      <div className="flex flex-col sm:flex-row bg-teal-400 p-4 sm:px-6 items-start sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl text-white font-semibold ">Lead Scoring</h1>
+          <h1 className="text-lg sm:text-xl text-white font-semibold">
+            Lead Scoring
+          </h1>
         </div>
       </div>
 
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-6">
         {/* KPI Cards Section */}
         <div>
           <h2 className="text-2xl font-semibold text-gray-700 mb-2">
@@ -117,7 +119,7 @@ export default function FollowUpKpis() {
           </h2>
           <p className=" text-gray-500 mb-4">Performance metrics</p>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {kpiCards.map((card) => (
               <Card
                 key={card.id}
@@ -140,7 +142,9 @@ export default function FollowUpKpis() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-1">
-                    <div className={`text-3xl font-bold ${card.valueClass}`}>
+                    <div
+                      className={`text-xl md:text-3xl font-bold ${card.valueClass}`}
+                    >
                       {card.value}
                     </div>
                     <div
@@ -161,7 +165,7 @@ export default function FollowUpKpis() {
         </div>
 
         {/* Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Follow Ups Chart */}
           <Card>
             <CardHeader>
