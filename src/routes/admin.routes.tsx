@@ -88,6 +88,11 @@ const SalesTaxReporting = lazy(
   () => import("@/pages/payments/sales-tax-reporting")
 );
 
+// Invoice section
+const InvoiceForm = lazy(() => import("@/pages/invoices/invoice-form"));
+const InvoiceList = lazy(() => import("@/pages/invoices/invoice-list"));
+const SalesGrowth = lazy(() => import("@/pages/invoices/sales-growth"));
+
 // plant management section
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
 const MaterialInventoryView = lazy(
@@ -273,6 +278,18 @@ export const adminRoutes: RouteObject[] = [
 
       // global routes
       { path: "notifications", element: <Notifications /> },
+
+      // invoice routes
+      {
+        path: "invoice",
+        children: [
+          { index: true, element: <InvoiceForm /> },
+          { path: "list", element: <InvoiceList /> },
+          { path: "new", element: <InvoiceForm /> },
+          { path: ":id", element: <InvoiceForm /> },
+          { path: "sales-growth", element: <SalesGrowth /> },
+        ],
+      },
 
       //plants routes
       {
