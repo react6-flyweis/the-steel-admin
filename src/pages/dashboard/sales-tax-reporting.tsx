@@ -144,10 +144,10 @@ export default function SalesTaxReporting() {
   ];
 
   return (
-    <div className="pr-5">
+    <div className="pr-5 p-5 lg:p-0">
       {/* Header */}
-      <div className=" py-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="py-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-4 flex-wrap">
           <Button
             variant="default"
             size="default"
@@ -159,7 +159,7 @@ export default function SalesTaxReporting() {
           </Button>
           <h1 className="text-2xl  text-gray-900">Sales Tax Reporting</h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mt-3 sm:mt-0">
           <Button
             variant="default"
             className="bg-green-600 hover:bg-green-700 text-white px-4"
@@ -180,11 +180,11 @@ export default function SalesTaxReporting() {
 
       {/* Filters */}
       <div className="bg-white rounded px-6 py-4">
-        <div className="flex items-center gap-6">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Report Period:</span>
             <Select value={reportPeriod} onValueChange={setReportPeriod}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="Select period" />
               </SelectTrigger>
               <SelectContent>
@@ -198,7 +198,7 @@ export default function SalesTaxReporting() {
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">State Filter:</span>
             <Select value={stateFilter} onValueChange={setStateFilter}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-full sm:w-40">
                 <SelectValue placeholder="Select state" />
               </SelectTrigger>
               <SelectContent>
@@ -215,7 +215,7 @@ export default function SalesTaxReporting() {
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Report Type:</span>
             <Select value={reportType} onValueChange={setReportType}>
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-full sm:w-48">
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
@@ -231,11 +231,13 @@ export default function SalesTaxReporting() {
       {/* Content */}
       <div className="mt-5 ">
         {/* Stats Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
           {stats.map((s) => (
             <Card key={s.title} className="border-0 rounded">
               <div className="text-center">
-                <div className={`text-3xl font-bold ${s.textClass}`}>
+                <div
+                  className={`text-2xl md:text-3xl font-bold ${s.textClass}`}
+                >
                   {typeof s.value === "number" ? s.format(s.value) : s.value}
                 </div>
                 <div className="text-sm text-gray-600 mt-1">{s.title}</div>
@@ -245,7 +247,7 @@ export default function SalesTaxReporting() {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <StateTaxCard />
 
           <BuildingTypeTaxCard />
@@ -263,19 +265,21 @@ export default function SalesTaxReporting() {
           </h2>
 
           {/* Export Options */}
-          <div className="grid grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
             {exportOptions.map((opt) => {
               const Icon = opt.icon;
               return (
                 <button
                   key={opt.key}
                   className={cn(
-                    "border-2 border-dashed rounded-lg p-4 transition-colors",
+                    "w-full border-2 border-dashed rounded-lg p-4 transition-colors",
                     opt.colorClass
                   )}
                 >
                   <div className="flex flex-col items-center text-center">
-                    <Icon className={cn("size-10 mb-3", opt.iconColorClass)} />
+                    <Icon
+                      className={cn("w-10 h-10 mb-3", opt.iconColorClass)}
+                    />
                     <h3 className="font-semibold text-gray-900 mb-1">
                       {opt.title}
                     </h3>

@@ -25,10 +25,10 @@ export default function StatCard({
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm opacity-90">{title}</p>
-          <p className="text-2xl mt-1">{value}</p>
+          <p className="text-xl md:text-2xl mt-1">{value}</p>
         </div>
 
-        <div className="bg-white p-2 rounded-md">{icon}</div>
+        <div className="shrink-0 bg-white p-2 rounded-md">{icon}</div>
       </div>
     </Card>
   );
