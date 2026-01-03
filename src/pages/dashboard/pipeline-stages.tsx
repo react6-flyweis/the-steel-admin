@@ -3,7 +3,7 @@ import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router";
-import { ManageStagesDialog } from "@/components/manage-stages-dialog";
+import { ManageStagesDialog } from "@/components/dashboard/manage-stages-dialog";
 
 interface Lead {
   id: string;

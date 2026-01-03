@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import PayTaxDialog from "@/components/pay-tax-dialog";
+import PayTaxDialog from "@/components/dashboard/pay-tax-dialog";
 import {
   Select,
   SelectContent,
@@ -110,7 +110,9 @@ export default function SalesTaxFiling() {
   const handleMarkAsPaid = () => {
     // For demo: mark all Pending records as Filed
     setRecords((prev) =>
-      prev.map((r) => (r.filingStatus === "Pending" ? { ...r, filingStatus: "Filed" } : r))
+      prev.map((r) =>
+        r.filingStatus === "Pending" ? { ...r, filingStatus: "Filed" } : r
+      )
     );
     console.log("Marked as paid. Uploaded file:", selectedFile);
     setSelectedFile(null);
@@ -166,7 +168,11 @@ export default function SalesTaxFiling() {
           </div>
 
           <>
-            <Button variant="default" size="default" onClick={() => setIsDialogOpen(true)}>
+            <Button
+              variant="default"
+              size="default"
+              onClick={() => setIsDialogOpen(true)}
+            >
               Pay Tax
             </Button>
 
