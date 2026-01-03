@@ -139,136 +139,184 @@ export const adminRoutes: RouteObject[] = [
     element: <AdminLayout />,
     children: [
       { index: true, element: <Dashboard /> },
-      { path: "leads", element: <Leads /> },
-      { path: "leads/add", element: <AddNewLead /> },
-      { path: "leads/follow-up", element: <FollowUp /> },
+      { path: "sales-tax-filing", element: <SalesTaxFiling /> },
+      { path: "pipeline-stages", element: <PipelineStages /> },
+      { path: "sales-tax", element: <SalesTaxReportingLegacy /> },
+
+      // leads routes
       {
-        path: "leads/follow-up/communication-timeline",
-        element: <LeadCommunicationTimelinePage />,
-      },
-      {
-        path: "leads/:leadId/timeline",
-        element: <SingleLeadTimelinePage />,
-      },
-      {
-        path: "leads/:leadId/emails",
-        element: <SingleLeadEmailsPage />,
-      },
-      {
-        path: "leads/:leadId/chats",
-        element: <SingleLeadChatsPage />,
-      },
-      {
-        path: "leads/:leadId/notes",
-        element: <SingleLeadNotesPage />,
-      },
-      {
-        path: "leads/:leadId/calls",
-        element: <SingleLeadCallsPage />,
-      },
-      {
-        path: "leads/follow-up/smart-reminders",
-        element: <SmartReminders />,
-      },
-      {
-        path: "leads/follow-up/smart-reminders/:id",
-        element: <SmartReminderDetail />,
-      },
-      {
-        path: "leads/follow-up/script-generator",
-        element: <AiScriptGeneratorPage />,
-      },
-      {
-        path: "leads/follow-up/scoring",
-        element: <LeadScoring />,
-      },
-      {
-        path: "leads/follow-up/kpis",
-        element: <FollowUpKpis />,
-      },
-      { path: "leads/ai-marketing", element: <AIMarketing /> },
-      { path: "customers", element: <Customers /> },
-      { path: "customers/insights", element: <CustomerInsights /> },
-      { path: "customers/meetings", element: <Meetings /> },
-      { path: "customers/meetings/schedule", element: <ScheduleMeeting /> },
-      {
-        path: "customers/meetings/reschedule/:id",
-        element: <ScheduleMeeting />,
-      },
-      {
-        path: "customers/:id",
-        element: <CustomerDetailLayout />,
+        path: "leads",
         children: [
-          { index: true, element: <CustomerInfo /> },
-          { path: "payments", element: <CustomerPayments /> },
-          { path: "status", element: <CustomerStatus /> },
-          { path: "order", element: <CustomerOrder /> },
+          { index: true, element: <Leads /> },
+          { path: "add", element: <AddNewLead /> },
+          { path: "ai-marketing", element: <AIMarketing /> },
+
+          // /leads/follow-up routes
+          {
+            path: "follow-up",
+            children: [
+              { index: true, element: <FollowUp /> },
+              {
+                path: "communication-timeline",
+                element: <LeadCommunicationTimelinePage />,
+              },
+              {
+                path: "script-generator",
+                element: <AiScriptGeneratorPage />,
+              },
+              {
+                path: "scoring",
+                element: <LeadScoring />,
+              },
+              {
+                path: "kpis",
+                element: <FollowUpKpis />,
+              },
+              {
+                path: "smart-reminders",
+                children: [
+                  { index: true, element: <SmartReminders /> },
+                  {
+                    path: ":id",
+                    element: <SmartReminderDetail />,
+                  },
+                ],
+              },
+            ],
+          },
+
+          // /leads/:leadId routes
+          {
+            path: ":leadId",
+            children: [
+              { path: "timeline", element: <SingleLeadTimelinePage /> },
+              {
+                path: "emails",
+                element: <SingleLeadEmailsPage />,
+              },
+              {
+                path: "chats",
+                element: <SingleLeadChatsPage />,
+              },
+              {
+                path: "notes",
+                element: <SingleLeadNotesPage />,
+              },
+              {
+                path: "calls",
+                element: <SingleLeadCallsPage />,
+              },
+            ],
+          },
         ],
       },
-      { path: "customers/contracts", element: <Contracts /> },
-      { path: "customers/contracts/:id", element: <ContractDetail /> },
-      { path: "sales-tax", element: <SalesTaxReportingLegacy /> },
+
+      // customers routes
+      {
+        path: "customers",
+        children: [
+          { index: true, element: <Customers /> },
+          { path: "insights", element: <CustomerInsights /> },
+
+          // /customers/meetings routes
+          {
+            path: "meetings",
+            children: [
+              { index: true, element: <Meetings /> },
+              { path: "schedule", element: <ScheduleMeeting /> },
+              {
+                path: "reschedule/:id",
+                element: <ScheduleMeeting />,
+              },
+            ],
+          },
+          {
+            path: "contracts",
+            children: [
+              { index: true, element: <Contracts /> },
+              { path: ":id", element: <ContractDetail /> },
+            ],
+          },
+
+          // /customers/:id routes
+          {
+            path: ":id",
+            element: <CustomerDetailLayout />,
+            children: [
+              { index: true, element: <CustomerInfo /> },
+              { path: "payments", element: <CustomerPayments /> },
+              { path: "status", element: <CustomerStatus /> },
+              { path: "order", element: <CustomerOrder /> },
+            ],
+          },
+        ],
+      },
+
+      //  payments routes
       {
         path: "payments",
         children: [
           { path: "sales-tax-reporting", element: <SalesTaxReporting /> },
         ],
       },
-      { path: "sales-tax-filing", element: <SalesTaxFiling /> },
-      { path: "pipeline-stages", element: <PipelineStages /> },
-      { path: "employees", element: <Employees /> },
-      { path: "employees/performance", element: <EmployeePerformance /> },
-      { path: "employees/audit-log", element: <EmployeeAuditLog /> },
-      { path: "employees/:id", element: <EmployeeProfile /> },
-      { path: "users", element: <div>Users Page</div> },
-      { path: "messages", element: <div>Messages Page</div> },
+
+      // employees routes
+      {
+        path: "employees",
+        children: [
+          { index: true, element: <Employees /> },
+          { path: "performance", element: <EmployeePerformance /> },
+          { path: "audit-log", element: <EmployeeAuditLog /> },
+          { path: ":id", element: <EmployeeProfile /> },
+        ],
+      },
+
+      // global routes
       { path: "notifications", element: <Notifications /> },
-      { path: "teams", element: <div>Teams Page</div> },
-      { path: "gallery", element: <div>Gallery Page</div> },
-      { path: "analytics", element: <div>Analytics Page</div> },
-      { path: "documents", element: <div>Documents Page</div> },
-      { path: "settings", element: <div>Settings Page</div> },
-      { path: "links", element: <div>Links Page</div> },
-      { path: "reports", element: <div>Reports Page</div> },
 
       //plants routes
-      { path: "plant", element: <PlantDashboard /> },
-      { path: "plant/equipment_management", element: <EquipmentView /> },
       {
-        path: "plant/material_inventory_management",
-        element: <MaterialInventoryView />,
-      },
-      {
-        path: "plant/production_management",
-        element: <ProductionManagementView />,
-      },
-      {
-        path: "plant/maintenance_logs",
-        element: <MaintenanceAndSchedulingView />,
-      },
-      {
-        path: "plant/upcoming_schedule",
-        element: <UpcomingScheduleView />,
-      },
-      {
-        path: "plant/breakdown_cases",
-        element: <BreakdownCasesView />,
-      },
-      {
-        path: "plant/service_providers",
-        element: <ServiceProvidersView />,
-      },
-      {
-        path: "plant/equipment_allocation",
-        element: <EquipmentAllocationView />,
-      },
-      {
-        path: "plant/transfer_requests",
-        element: <TransferRequestsView />,
-      },
-      {
-        path: "plant/usage_tracking",
-        element: <UsageTrackingView />,
+        path: "plant",
+        children: [
+          { index: true, element: <PlantDashboard /> },
+          { path: "equipment_management", element: <EquipmentView /> },
+          {
+            path: "material_inventory_management",
+            element: <MaterialInventoryView />,
+          },
+          {
+            path: "production_management",
+            element: <ProductionManagementView />,
+          },
+          {
+            path: "maintenance_logs",
+            element: <MaintenanceAndSchedulingView />,
+          },
+          {
+            path: "upcoming_schedule",
+            element: <UpcomingScheduleView />,
+          },
+          {
+            path: "breakdown_cases",
+            element: <BreakdownCasesView />,
+          },
+          {
+            path: "service_providers",
+            element: <ServiceProvidersView />,
+          },
+          {
+            path: "equipment_allocation",
+            element: <EquipmentAllocationView />,
+          },
+          {
+            path: "transfer_requests",
+            element: <TransferRequestsView />,
+          },
+          {
+            path: "usage_tracking",
+            element: <UsageTrackingView />,
+          },
+        ],
       },
 
       { path: "*", element: <NotFound /> },
