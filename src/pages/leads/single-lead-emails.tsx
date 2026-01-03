@@ -92,10 +92,12 @@ export default function SingleLeadEmails() {
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back
         </Button>
-        <h2 className="text-lg font-semibold">Lead Communication Timeline</h2>
+        <h2 className="text-base sm:text-lg font-semibold">
+          Lead Communication Timeline
+        </h2>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Email List */}
         <Card className="rounded-md">
           <CardHeader>
@@ -114,7 +116,7 @@ export default function SingleLeadEmails() {
           {/* Email Items */}
           <CardContent className="relative">
             {/* Vertical Line */}
-            <div className="absolute left-12 top-0 bottom-0 w-0.5 bg-gray-200" />
+            <div className="absolute left-10 sm:left-12 top-0 bottom-0 w-0.5 bg-gray-200" />
 
             {/* Email List */}
             <div className="space-y-6">
@@ -124,17 +126,20 @@ export default function SingleLeadEmails() {
                 </div>
               ) : (
                 emails.map((email) => (
-                  <div key={email.id} className="relative flex gap-4">
+                  <div
+                    key={email.id}
+                    className="relative flex flex-col sm:flex-row gap-4"
+                  >
                     {/* Icon */}
-                    <div className="relative z-10 flex-shrink-0 w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center shadow-lg">
-                      <Mail className="h-5 w-5 text-white" />
+                    <div className="relative z-10 flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-blue-500 flex items-center justify-center shadow-lg">
+                      <Mail className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
                     </div>
 
                     {/* Compact Card (matches image) */}
                     <div className="flex-1">
-                      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 hover:shadow-md transition-shadow cursor-pointer">
-                        <div className="flex items-start justify-between">
-                          <div className="pr-4">
+                      <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-3 sm:p-4 hover:shadow-md transition-shadow cursor-pointer">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-start justify-between">
+                          <div className="pr-0 sm:pr-4">
                             <h4 className="font-semibold text-gray-900">
                               {email.contactPerson}
                             </h4>
@@ -142,7 +147,7 @@ export default function SingleLeadEmails() {
                               {email.message}
                             </p>
                           </div>
-                          <span className="text-xs text-gray-400 whitespace-nowrap ml-4">
+                          <span className="text-xs text-gray-400 whitespace-nowrap ml-0 sm:ml-4 mt-2 sm:mt-0">
                             {email.timestamp}
                           </span>
                         </div>

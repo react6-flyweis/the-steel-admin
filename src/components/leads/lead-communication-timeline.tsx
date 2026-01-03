@@ -68,7 +68,7 @@ export default function LeadCommunicationTimeline() {
 
   return (
     <Card>
-      <CardHeader className="flex items-center justify-between border-b">
+      <CardHeader className="flex flex-col md:flex-row md:items-center justify-between border-b">
         <div>
           <CardTitle>📞 Lead Communication Timeline</CardTitle>
           <CardDescription>Recent activities</CardDescription>
