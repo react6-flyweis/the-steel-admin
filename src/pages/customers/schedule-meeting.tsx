@@ -56,7 +56,7 @@ export default function ScheduleMeeting() {
   };
 
   return (
-    <div className="p-6 max-w-4xl">
+    <div className="p-4 sm:p-6 max-w-4xl mx-auto w-full">
       {/* Header */}
       <div className="flex items-center gap-3 mb-6">
         <Button
@@ -74,12 +74,12 @@ export default function ScheduleMeeting() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        <div className="bg-white rounded-lg p-6 shadow space-y-5">
+        <div className="bg-white rounded-lg p-4 sm:p-6 shadow space-y-5">
           <h3 className="text-base font-semibold text-gray-900">
             Meeting Details
           </h3>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {/* Select a client */}
             <div className="space-y-2">
               <Label htmlFor="client">
@@ -162,7 +162,7 @@ export default function ScheduleMeeting() {
             {/* Meeting mode */}
             <div className="space-y-2">
               <Label>Meeting mode</Label>
-              <div className="flex items-center gap-6 pt-2">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 pt-2">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input
                     type="radio"
@@ -215,16 +215,19 @@ export default function ScheduleMeeting() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-3">
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3">
           <Button
             type="button"
             variant="outline"
-            onClick={() => navigate("/customer-meetings")}
-            className="px-6"
+            onClick={() => navigate("/customers/meetings")}
+            className="w-full sm:w-auto px-6"
           >
             Cancel
           </Button>
-          <Button type="submit" className="bg-blue-600 hover:bg-blue-700 px-6">
+          <Button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 w-full sm:w-auto px-6"
+          >
             Schedule meeting
           </Button>
         </div>

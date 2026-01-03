@@ -138,25 +138,25 @@ export default function Meetings() {
   return (
     <div className="p-6 space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-2xl font-bold text-gray-900">Upcoming Meetings</h1>
       </div>
 
       {/* Search and Filters */}
-      <div className="flex  items-center gap-4 bg-white p-5 rounded-lg shadow">
-        <div className="flex flex-1 gap-4">
-          <div className="relative flex-1 max-w-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-white p-5 rounded-lg shadow">
+        <div className="flex flex-col sm:flex-row flex-1 gap-4 w-full">
+          <div className="relative flex-1 w-full sm:max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
             <Input
               placeholder="Search meetings..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
+              className="pl-10 w-full"
             />
           </div>
 
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-45">
+            <SelectTrigger className="w-full sm:w-48">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent>
@@ -168,7 +168,7 @@ export default function Meetings() {
         </div>
 
         <Button
-          className="bg-blue-600 hover:bg-blue-700"
+          className="bg-blue-600 hover:bg-blue-700 mt-3 sm:mt-0 w-full sm:w-auto"
           onClick={() => navigate("/customers/meetings/schedule")}
         >
           Schedule meeting
@@ -176,7 +176,7 @@ export default function Meetings() {
       </div>
 
       {/* Meetings Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {filteredMeetings.map((meeting) => (
           <Card
             key={meeting.id}
@@ -212,11 +212,10 @@ export default function Meetings() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex gap-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button
-                // variant="outline"
                 size="sm"
-                className="flex-1 bg-blue-200 text-blue-600  hover:bg-blue-100 hover:text-blue-700"
+                className="w-full sm:flex-1 bg-blue-200 text-blue-600 hover:bg-blue-100 hover:text-blue-700"
                 onClick={() =>
                   navigate(`/customers/meetings/reschedule/${meeting.id}`)
                 }
@@ -224,9 +223,8 @@ export default function Meetings() {
                 Edit
               </Button>
               <Button
-                // variant="outline"
                 size="sm"
-                className="flex-1 bg-orange-200 text-orange-600  hover:bg-orange-100 hover:text-orange-700"
+                className="w-full sm:flex-1 bg-orange-200 text-orange-600 hover:bg-orange-100 hover:text-orange-700"
                 onClick={() =>
                   navigate(`/customers/meetings/reschedule/${meeting.id}`)
                 }
