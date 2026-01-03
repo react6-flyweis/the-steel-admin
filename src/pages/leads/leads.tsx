@@ -146,15 +146,15 @@ export default function LeadsPage() {
   return (
     <>
       <FilterTabs />
-      <div className="p-6 space-y-6">
+      <div className="p-4 sm:p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl text-gray-900">Leads</h1>
+          <h1 className="text-2xl sm:text-3xl text-gray-900">Leads</h1>
           <p className="text-gray-500 mt-1">Assign and view leads</p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Leads"
             value="7"
@@ -269,25 +269,25 @@ export default function LeadsPage() {
                         className="rounded border-gray-300"
                       />
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Lead Info
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Assigned To
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Progress
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Quote Value
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Chat
                     </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Actions
                     </th>
                   </tr>
@@ -295,7 +295,7 @@ export default function LeadsPage() {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {leads.map((lead, index) => (
                     <tr key={index} className="hover:bg-gray-50">
-                      <td className="px-4 py-4">
+                      <td className="px-3 py-2 sm:px-4 sm:py-4">
                         <input
                           type="checkbox"
                           checked={selectedLeads.includes(lead.id)}
@@ -305,7 +305,7 @@ export default function LeadsPage() {
                           className="rounded border-gray-300"
                         />
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <div className="flex flex-col">
                           <span className="font-medium text-gray-900">
                             {lead.name}
@@ -318,7 +318,7 @@ export default function LeadsPage() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <div className="flex items-center gap-2">
                           {lead.assignedTo ? (
                             <>
@@ -357,7 +357,7 @@ export default function LeadsPage() {
                           )}
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <div className="flex flex-col gap-1">
                           {getProgressDots(lead.progress)}
                           <span className="text-xs text-gray-500">
@@ -365,7 +365,7 @@ export default function LeadsPage() {
                           </span>
                         </div>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <Badge
                           className={getStatusBadgeColor(lead.statusColor)}
                           variant="secondary"
@@ -373,12 +373,12 @@ export default function LeadsPage() {
                           {lead.status}
                         </Badge>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <span className="font-medium text-gray-900">
                           {lead.quoteValue}
                         </span>
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <ChatDialog
                           lead={lead}
                           trigger={
@@ -397,7 +397,7 @@ export default function LeadsPage() {
                           }
                         />
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-3 py-2 sm:px-6 sm:py-4">
                         <div className="flex items-center gap-2">
                           <LeadDetailDialog
                             lead={lead}
