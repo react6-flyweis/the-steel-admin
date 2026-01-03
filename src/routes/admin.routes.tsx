@@ -4,15 +4,16 @@ import { NotFound } from "@/pages/not-found";
 import { AdminLayout } from "@/components/admin-layout";
 
 const SignIn = lazy(() => import("@/pages/sign-in"));
-const Dashboard = lazy(() => import("@/pages/dashboard"));
-const SalesTaxReporting = lazy(
-  () => import("@/pages/payments/sales-tax-reporting")
-);
+
+// Dashboard section
+const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const SalesTaxReportingLegacy = lazy(
-  () => import("@/pages/sales-tax-reporting")
+  () => import("@/pages/dashboard/sales-tax-reporting")
 );
-const SalesTaxFiling = lazy(() => import("@/pages/sales-tax-filing"));
-const PipelineStages = lazy(() => import("@/pages/pipeline-stages"));
+const SalesTaxFiling = lazy(() => import("@/pages/dashboard/sales-tax-filing"));
+const PipelineStages = lazy(() => import("@/pages/dashboard/pipeline-stages"));
+
+// customers section
 const Customers = lazy(() => import("@/pages/customers/customers"));
 const CustomerInsights = lazy(
   () => import("@/pages/customers/customer-insights")
@@ -32,33 +33,47 @@ const CustomerStatus = lazy(
 const CustomerOrder = lazy(
   () => import("@/pages/customers/customer-detail/customer-order")
 );
-
 const Contracts = lazy(() => import("@/pages/customers/contracts"));
 const ContractDetail = lazy(() => import("@/pages/customers/contract-detail"));
 const Meetings = lazy(() => import("@/pages/customers/meetings"));
 const ScheduleMeeting = lazy(
   () => import("@/pages/customers/schedule-meeting")
 );
-const Leads = lazy(() => import("@/pages/leads"));
-const AddNewLead = lazy(() => import("@/pages/add-new-lead"));
+
 const Notifications = lazy(() => import("@/pages/notifications"));
-const FollowUp = lazy(() => import("@/pages/follow-up"));
+
+// leads section
+const Leads = lazy(() => import("@/pages/leads/leads"));
+const AddNewLead = lazy(() => import("@/pages/leads/add-new-lead"));
+const FollowUp = lazy(() => import("@/pages/leads/follow-up"));
 const LeadCommunicationTimelinePage = lazy(
-  () => import("@/pages/lead-communication-timeline")
+  () => import("@/pages/leads/lead-communication-timeline")
 );
 const SingleLeadTimelinePage = lazy(
-  () => import("@/pages/single-lead-timeline")
+  () => import("@/pages/leads/single-lead-timeline")
 );
-const SingleLeadEmailsPage = lazy(() => import("@/pages/single-lead-emails"));
-const SingleLeadChatsPage = lazy(() => import("@/pages/single-lead-chats"));
-const SmartReminders = lazy(() => import("@/pages/smart-reminders"));
-const SmartReminderDetail = lazy(() => import("@/pages/single-reminder"));
-const SingleLeadNotesPage = lazy(() => import("@/pages/single-lead-notes"));
-const SingleLeadCallsPage = lazy(() => import("@/pages/single-lead-calls"));
-const AiScriptGeneratorPage = lazy(() => import("@/pages/ai-script-generator"));
-const LeadScoring = lazy(() => import("@/pages/lead-scoring"));
-const FollowUpKpis = lazy(() => import("@/pages/follow-up-kpis"));
-const AIMarketing = lazy(() => import("@/pages/employees/ai-marketing"));
+const SingleLeadEmailsPage = lazy(
+  () => import("@/pages/leads/single-lead-emails")
+);
+const SingleLeadChatsPage = lazy(
+  () => import("@/pages/leads/single-lead-chats")
+);
+const SmartReminders = lazy(() => import("@/pages/leads/smart-reminders"));
+const SmartReminderDetail = lazy(() => import("@/pages/leads/single-reminder"));
+const SingleLeadNotesPage = lazy(
+  () => import("@/pages/leads/single-lead-notes")
+);
+const SingleLeadCallsPage = lazy(
+  () => import("@/pages/leads/single-lead-calls")
+);
+const AiScriptGeneratorPage = lazy(
+  () => import("@/pages/leads/ai-script-generator")
+);
+const LeadScoring = lazy(() => import("@/pages/leads/lead-scoring"));
+const FollowUpKpis = lazy(() => import("@/pages/leads/follow-up-kpis"));
+const AIMarketing = lazy(() => import("@/pages/leads/ai-marketing"));
+
+// employees section
 const Employees = lazy(() => import("@/pages/employees/employees"));
 const EmployeeProfile = lazy(
   () => import("@/pages/employees/employee-profile")
@@ -68,6 +83,12 @@ const EmployeePerformance = lazy(
 );
 const EmployeeAuditLog = lazy(() => import("@/pages/employees/audit-log"));
 
+// Payments section
+const SalesTaxReporting = lazy(
+  () => import("@/pages/payments/sales-tax-reporting")
+);
+
+// plant management section
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
 const MaterialInventoryView = lazy(
   () =>
