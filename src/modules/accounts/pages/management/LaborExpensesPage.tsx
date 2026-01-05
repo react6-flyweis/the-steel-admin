@@ -10,7 +10,7 @@ import LaborExpenseRecordsCard from "../../components/management/LaborExpenseRec
 const LaborExpensesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
-  const openModal = () => setIsModalOpen(true);
+  // const openModal = () => setIsModalOpen(true);
 
   return (
     <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
@@ -24,7 +24,7 @@ const LaborExpensesPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Main Content - Expense Records */}
         <div className="xl:col-span-2 space-y-6">
-          <LaborExpenseRecordsCard onAddClick={openModal} />
+          <LaborExpenseRecordsCard />
         </div>
 
         {/* Sidebar - Summary & Alerts */}
