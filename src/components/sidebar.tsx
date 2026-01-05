@@ -262,7 +262,13 @@ const navigationGroups: NavigationGroup[] = [
     label: "Construction",
     color: "bg-[#dc2626]",
     link: "/construction",
-    items: [{ path: "/construction", label: "Construction" }],
+    items: [
+      { path: "/construction", label: "Construction Overview" },
+      { path: "/construction/projects", label: "Project & Calendar" },
+      { path: "/construction/tasks", label: "Tasks & Progress" },
+      { path: "/construction/materials", label: "Material Request" },
+      { path: "/construction/reports", label: "Construction Reports" },
+    ],
   },
   {
     id: "messages" as NavGroup,
