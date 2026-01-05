@@ -134,6 +134,43 @@ const UsageTrackingView = lazy(
 );
 const PlantDashboard = lazy(() => import("@/plant/PlantPage"));
 
+// Financial Accounts section
+
+const PaymentOverview = lazy(
+  () => import("@/modules/accounts/pages/PaymentOverview")
+);
+const OrdersAndPaymentsPage = lazy(
+  () => import("@/modules/accounts/pages/OrdersAndPaymentsPage")
+);
+const WipProfitPage = lazy(
+  () => import("@/modules/accounts/pages/analysis/WipProfitPage")
+);
+const CogsAnalysis = lazy(
+  () => import("@/modules/accounts/pages/analysis/CogsAnalysis")
+);
+const ExpensesPage = lazy(
+  () => import("@/modules/accounts/pages/management/ExpensesPage")
+);
+const IncomePage = lazy(
+  () => import("@/modules/accounts/pages/management/IncomePage")
+);
+const LaborExpensesPage = lazy(
+  () => import("@/modules/accounts/pages/management/LaborExpensesPage")
+);
+const AccountsDashboard = lazy(
+  () => import("@/modules/accounts/pages/Dashboard")
+);
+const NewInvoice = lazy(() => import("@/modules/accounts/pages/NewInvoice"));
+const InvoicePreview = lazy(
+  () => import("@/modules/accounts/pages/InvoicePreview")
+);
+const FinancialReportPage = lazy(
+  () => import("@/modules/accounts/pages/management/FinancialReportPage")
+);
+const TaxationPage = lazy(
+  () => import("@/modules/accounts/pages/management/TaxationPage")
+);
+
 export const adminRoutes: RouteObject[] = [
   {
     path: "/sign-in",
@@ -332,6 +369,63 @@ export const adminRoutes: RouteObject[] = [
           {
             path: "usage_tracking",
             element: <UsageTrackingView />,
+          },
+        ],
+      },
+
+      // Financial accounts routes
+      {
+        path: "/accounts",
+        children: [
+          { index: true, element: <AccountsDashboard /> },
+          {
+            path: "",
+            element: <AccountsDashboard />,
+          },
+          {
+            path: "payment_overview",
+            element: <PaymentOverview />,
+          },
+          {
+            path: "payments/new-invoice",
+            element: <NewInvoice />,
+          },
+          {
+            path: "payments/invoice/preview",
+            element: <InvoicePreview />,
+          },
+          {
+            path: "order_payments",
+            element: <OrdersAndPaymentsPage />,
+          },
+          {
+            path: "cogs_analysis",
+            element: <CogsAnalysis />,
+          },
+
+          {
+            path: "expenses",
+            element: <ExpensesPage />,
+          },
+          {
+            path: "wip_profit",
+            element: <WipProfitPage />,
+          },
+          {
+            path: "reports",
+            element: <FinancialReportPage />,
+          },
+          {
+            path: "taxation",
+            element: <TaxationPage />,
+          },
+          {
+            path: "income",
+            element: <IncomePage />,
+          },
+          {
+            path: "labor_expenses",
+            element: <LaborExpensesPage />,
           },
         ],
       },
