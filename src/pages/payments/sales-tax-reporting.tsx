@@ -9,6 +9,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import DateRangePicker from "@/components/ui/date-range-picker";
+import type { DateRange as RDateRange } from "react-day-picker";
 import {
   // ArrowLeft,
   Mail,
@@ -19,8 +21,8 @@ import {
   FileBarChart,
   Info,
 } from "lucide-react";
-import StateTaxCard from "@/components/sales-tax/StateTaxCard";
-import BuildingTypeTaxCard from "@/components/sales-tax/BuildingTypeTaxCard";
+import StateTaxSummary from "@/components/sales-tax/StateTaxSummary";
+import BuildingTypePieCard from "@/components/sales-tax/BuildingTypePieCard";
 import DetailedTaxReport from "@/components/sales-tax/DetailedTaxReport";
 import { cn } from "@/lib/utils";
 
@@ -79,9 +81,11 @@ import { cn } from "@/lib/utils";
 
 export default function SalesTaxReporting() {
   // const navigate = useNavigate();
-  const [reportPeriod, setReportPeriod] = useState("this-month");
-  const [stateFilter, setStateFilter] = useState("all");
-  const [reportType, setReportType] = useState("monthly");
+  const [reportPeriod, setReportPeriod] = useState<RDateRange | undefined>(
+    undefined
+  );
+  const [stateFilter, setStateFilter] = useState("tx");
+  const [reportType, setReportType] = useState("this-month");
 
   // Sample data
   const totalContracts = 6;
@@ -182,16 +186,12 @@ export default function SalesTaxReporting() {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <span className="text-sm text-gray-600">Report Period:</span>
-            <Select value={reportPeriod} onValueChange={setReportPeriod}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Select period" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="this-month">This Month</SelectItem>
-                <SelectItem value="last-month">Last Month</SelectItem>
-                <SelectItem value="this-quarter">This Quarter</SelectItem>
-              </SelectContent>
-            </Select>
+            <div className="relative">
+              <DateRangePicker
+                value={reportPeriod}
+                onChange={(v) => setReportPeriod(v)}
+              />
+            </div>
           </div>
 
           <div className="flex items-center gap-2">
@@ -201,12 +201,9 @@ export default function SalesTaxReporting() {
                 <SelectValue placeholder="Select state" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All States</SelectItem>
                 <SelectItem value="tx">Texas</SelectItem>
-                <SelectItem value="la">Louisiana</SelectItem>
+                <SelectItem value="los-angeles">Los Angeles</SelectItem>
                 <SelectItem value="ny">New York</SelectItem>
-                <SelectItem value="in">Indiana</SelectItem>
-                <SelectItem value="ok">Oklahoma</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -218,9 +215,9 @@ export default function SalesTaxReporting() {
                 <SelectValue placeholder="Select type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="monthly">Monthly Summary</SelectItem>
-                <SelectItem value="quarterly">Quarterly Summary</SelectItem>
-                <SelectItem value="annual">Annual Summary</SelectItem>
+                <SelectItem value="this-month">This Month</SelectItem>
+                <SelectItem value="last-month">Last Month</SelectItem>
+                <SelectItem value="this-quarter">This Quarter</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -245,9 +242,9 @@ export default function SalesTaxReporting() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-2 gap-6">
-          <StateTaxCard />
+          <StateTaxSummary />
 
-          <BuildingTypeTaxCard />
+          <BuildingTypePieCard />
         </div>
 
         {/* Detailed report table */}
