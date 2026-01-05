@@ -34,6 +34,7 @@ type NavGroup =
   | "documents"
   | "settings"
   | "links"
+  | "accounts"
   | "reports"
   | "construction"
   | "ai-marketing";
@@ -231,13 +232,29 @@ const navigationGroups: NavigationGroup[] = [
       },
     ],
   },
+  // {
+  //   id: "reports" as NavGroup,
+  //   icon: finance,
+  //   label: "Finance",
+  //   color: "bg-[#ca8a04]",
+  //   link: "/finance",
+  //   items: [{ path: "/finance", label: "Finance" }],
+  // },
   {
-    id: "reports" as NavGroup,
+    id: "accounts" as NavGroup,
     icon: finance,
-    label: "Finance",
-    color: "bg-[#ca8a04]",
-    link: "/finance",
-    items: [{ path: "/finance", label: "Finance" }],
+    label: "Financial Overview",
+    color: "bg-[#f97316]",
+    link: "/accounts",
+    items: [
+      { path: "/accounts", label: "Overview" },
+      { path: "/accounts/payment_overview", label: "Payment Overview" },
+      { path: "/accounts/order_payments", label: "Orders & Payments" },
+      { path: "/accounts/wip_profit", label: "WIP Profit" },
+      { path: "/accounts/cogs_analysis", label: "COGS Analysis" },
+      { path: "/accounts/expenses", label: "Expenses Management" },
+      { path: "/accounts/reports", label: "Reports Management" },
+    ],
   },
   {
     id: "construction" as NavGroup,
