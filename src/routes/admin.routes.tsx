@@ -4,6 +4,8 @@ import { NotFound } from "@/pages/not-found";
 import { AdminLayout } from "@/components/admin-layout";
 
 const SignIn = lazy(() => import("@/pages/sign-in"));
+const Notifications = lazy(() => import("@/pages/notifications"));
+const Communication = lazy(() => import("@/pages/communication"));
 
 // Dashboard section
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
@@ -39,8 +41,6 @@ const Meetings = lazy(() => import("@/pages/customers/meetings"));
 const ScheduleMeeting = lazy(
   () => import("@/pages/customers/schedule-meeting")
 );
-
-const Notifications = lazy(() => import("@/pages/notifications"));
 
 // leads section
 const Leads = lazy(() => import("@/pages/leads/leads"));
@@ -84,8 +84,16 @@ const EmployeePerformance = lazy(
 const EmployeeAuditLog = lazy(() => import("@/pages/employees/audit-log"));
 
 // Payments section
+const Payments = lazy(() => import("@/pages/payments/payments"));
 const SalesTaxReporting = lazy(
   () => import("@/pages/payments/sales-tax-reporting")
+);
+const DetailedTaxReportPage = lazy(
+  () => import("@/pages/payments/detailed-tax-report")
+);
+const PaymentTaxationPage = lazy(() => import("@/pages/payments/taxation"));
+const CustomerPaymentProfile = lazy(
+  () => import("@/pages/payments/customer-payment-profile")
 );
 
 // Invoice section
@@ -316,7 +324,11 @@ export const adminRoutes: RouteObject[] = [
       {
         path: "payments",
         children: [
+          { index: true, element: <Payments /> },
           { path: "sales-tax-reporting", element: <SalesTaxReporting /> },
+          { path: "detailed-tax-report", element: <DetailedTaxReportPage /> },
+          { path: "taxation", element: <PaymentTaxationPage /> },
+          { path: "customer/:customerId", element: <CustomerPaymentProfile /> },
         ],
       },
 
@@ -333,6 +345,10 @@ export const adminRoutes: RouteObject[] = [
 
       // global routes
       { path: "notifications", element: <Notifications /> },
+      {
+        path: "communication",
+        element: <Communication />,
+      },
 
       // invoice routes
       {
