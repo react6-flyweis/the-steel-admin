@@ -8,6 +8,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router";
 
 interface Row {
   date: string;
@@ -91,6 +93,7 @@ const rows: Row[] = [
 ];
 
 export default function DetailedTaxReport() {
+  const navigate = useNavigate();
   const totals = rows.reduce(
     (acc, r) => {
       acc.amount += r.amount;
@@ -103,7 +106,16 @@ export default function DetailedTaxReport() {
   return (
     <Card>
       <CardHeader className="border-b">
-        <CardTitle>Detailed Tax Report</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Detailed Tax Report</CardTitle>
+          <Button
+            variant="link"
+            size="sm"
+            onClick={() => navigate("/payments/detailed-tax-report")}
+          >
+            View More
+          </Button>
+        </div>
       </CardHeader>
       <CardContent className="max-w-full overflow-x-scroll">
         <Table>
