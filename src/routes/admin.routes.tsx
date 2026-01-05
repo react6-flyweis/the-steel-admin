@@ -171,6 +171,24 @@ const TaxationPage = lazy(
   () => import("@/modules/accounts/pages/management/TaxationPage")
 );
 
+// Construction Panel (lazy imports)
+const ConstructionDashboard = lazy(
+  () => import("@/modules/construction/pages/Dashboard")
+);
+const Projects = lazy(() => import("@/modules/construction/pages/Projects"));
+const Tasks = lazy(() => import("@/modules/construction/pages/Tasks"));
+const Materials = lazy(() => import("@/modules/construction/pages/Materials"));
+const Reports = lazy(() => import("@/modules/construction/pages/Reports"));
+const MaterialsViewPage = lazy(
+  () => import("@/modules/construction/pages/MaterialsViewPage")
+);
+const ProjectViewPage = lazy(
+  () => import("@/modules/construction/pages/ProjectViewPage")
+);
+const DrawingAttachment = lazy(
+  () => import("@/modules/construction/pages/DrawingAttachment")
+);
+
 export const adminRoutes: RouteObject[] = [
   {
     path: "/sign-in",
@@ -427,6 +445,21 @@ export const adminRoutes: RouteObject[] = [
             path: "labor_expenses",
             element: <LaborExpensesPage />,
           },
+        ],
+      },
+
+      // Construction Panel routes
+      {
+        path: "construction",
+        children: [
+          { index: true, element: <ConstructionDashboard /> },
+          { path: "projects", element: <Projects /> },
+          { path: "project-view-page", element: <ProjectViewPage /> },
+          { path: "drawing-attachment", element: <DrawingAttachment /> },
+          { path: "tasks", element: <Tasks /> },
+          { path: "materials", element: <Materials /> },
+          { path: "material-view-page", element: <MaterialsViewPage /> },
+          { path: "reports", element: <Reports /> },
         ],
       },
 
