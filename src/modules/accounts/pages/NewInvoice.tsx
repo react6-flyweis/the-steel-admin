@@ -3,7 +3,7 @@ import { Plus, Upload, UserPlus, List } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import logo from "@/assets/logo.svg";
+import logo from "@/assets/the-steel-logo.svg";
 
 // Types
 interface InvoiceItem {
