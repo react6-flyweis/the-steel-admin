@@ -191,7 +191,7 @@ export default function InvoiceListPage() {
       </div>
 
       {/* Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-white rounded-md p-4 shadow flex items-center gap-4 border border-green-200">
           <div className="w-10 h-10 flex items-center justify-center rounded-md bg-green-500 text-white">
             <DollarSign className="text-white" />
