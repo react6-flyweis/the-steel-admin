@@ -22,6 +22,11 @@ import SalesTaxFiling from "@/components/dashboard/sales-tax-filing";
 import TaxReportExport from "@/components/dashboard/tax-report-export";
 import ConstructionProgressOverview from "@/components/dashboard/construction-progress-overview";
 import FilterTabs from "@/components/FilterTabs";
+import PlantProductionStats from "@/components/dashboard/plant-production-stats";
+import PlantHighlightCards from "@/components/dashboard/plant-highlight-cards";
+import CustomerActivitiesApprovals from "@/components/dashboard/customer-activities-approvals";
+import TotalInvoicesGenerated from "@/components/dashboard/total-invoices-generated";
+import PlantSalesChart from "@/components/dashboard/plant-sales-chart";
 
 export default function Dashboard() {
   return (
@@ -29,7 +34,7 @@ export default function Dashboard() {
       {/* Tabs */}
       <FilterTabs />
 
-      <div className="pr-5 pt-5 p-5 lg:p-0 space-y-5">
+      <div className="lg:pr-5 lg:pt-5 p-5 lg:p-0 space-y-5">
         {/* Header */}
         <div className="">
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
@@ -143,6 +148,32 @@ export default function Dashboard() {
 
         {/* Construction Progress Overview */}
         <ConstructionProgressOverview />
+
+        {/* Plant Production Status Section */}
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Plant production status
+          </h2>
+
+          {/* Plant Stats Cards */}
+          <PlantProductionStats />
+
+          {/* Highlight Cards */}
+          <PlantHighlightCards />
+
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Customer Activities and Total Invoices Row */}
+            <div className="space-y-6 lg:col-span-3">
+              <CustomerActivitiesApprovals />
+              <TotalInvoicesGenerated />
+            </div>
+
+            {/* Sales Chart */}
+            <div className="lg:col-span-2">
+              <PlantSalesChart />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
