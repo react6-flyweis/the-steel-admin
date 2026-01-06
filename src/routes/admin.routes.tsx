@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/admin-layout";
 const SignIn = lazy(() => import("@/pages/sign-in"));
 const Notifications = lazy(() => import("@/pages/notifications"));
 const Communication = lazy(() => import("@/pages/communication"));
+const Analytics = lazy(() => import("@/pages/analytics"));
 
 // Dashboard section
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
@@ -348,6 +349,10 @@ export const adminRoutes: RouteObject[] = [
       {
         path: "communication",
         element: <Communication />,
+      },
+      {
+        path: "analytics",
+        element: <Analytics />,
       },
 
       // invoice routes
