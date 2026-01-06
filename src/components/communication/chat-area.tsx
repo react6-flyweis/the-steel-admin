@@ -39,24 +39,22 @@ export default function ChatArea({
 }: ChatAreaProps) {
   if (!selectedChat) {
     return (
-      <div className="flex-1 flex flex-col bg-[#FAFCFF]">
+      <div className="h-full w-full flex flex-col bg-[#FAFCFF]">
         <div className="flex-1">
           <EmptyChatState />
         </div>
 
-        <div className="border-t border-gray-200 p-4 bg-white">
-          <MessageInput
-            value={messageInput}
-            onChange={onMessageInputChange}
-            onSend={onSendMessage}
-          />
-        </div>
+        <MessageInput
+          value={messageInput}
+          onChange={onMessageInputChange}
+          onSend={onSendMessage}
+        />
       </div>
     );
   }
 
   return (
-    <div className="flex-1 flex flex-col bg-[#FAFCFF]">
+    <div className="h-full w-full flex flex-col bg-[#FAFCFF]">
       {/* Desktop Chat Header - Only for departments */}
       {selectedChat.type === "department" && (
         <div className="hidden md:block">
@@ -155,13 +153,11 @@ export default function ChatArea({
       </div>
 
       {/* Chat Input */}
-      <div className="border-t mt-auto border-gray-200 p-4 bg-white">
-        <MessageInput
-          value={messageInput}
-          onChange={onMessageInputChange}
-          onSend={onSendMessage}
-        />
-      </div>
+      <MessageInput
+        value={messageInput}
+        onChange={onMessageInputChange}
+        onSend={onSendMessage}
+      />
     </div>
   );
 }

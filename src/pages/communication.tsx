@@ -181,15 +181,9 @@ export default function Communication() {
   };
 
   return (
-    <div className="p-5 h-full min-h-0">
-      <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative h-full min-h-0">
-        <div
-          className={
-            showChat
-              ? "hidden md:block md:w-72 h-full min-h-0"
-              : "block md:w-72 h-full min-h-0"
-          }
-        >
+    <div className="p-5 h-[calc(100vh-80px)]">
+      <div className="flex flex-col md:flex-row bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden relative h-full">
+        <div className={showChat ? "hidden md:block md:w-72" : "block md:w-72"}>
           <CommunicationSidebar
             user={user}
             departments={departments}
@@ -206,8 +200,8 @@ export default function Communication() {
         <div
           className={
             showChat
-              ? "block w-full md:block md:flex-1 h-full min-h-0"
-              : "hidden md:block md:flex-1 h-full min-h-0"
+              ? "block absolute inset-0 md:relative md:flex-1 h-full w-full"
+              : "hidden md:block md:flex-1 h-full w-full"
           }
         >
           <ChatArea
@@ -223,7 +217,7 @@ export default function Communication() {
 
         {/* Department Info Sidebar (desktop only) */}
         {selectedChat?.type === "department" && (
-          <div className="hidden md:block md:w-80 h-full min-h-0">
+          <div className="hidden md:block md:w-80">
             <DepartmentInfoSidebar
               isOpen={showInfoSidebar}
               onClose={() => setShowInfoSidebar(false)}
