@@ -345,7 +345,30 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // Calculate padding based on active group index
   // Each icon with gap is approximately 48px (36px icon + 12px gap)
-  const menuPaddingTop = 10 + activeGroupIndex * 48;
+  const calculatedPadding = 10 + activeGroupIndex * 48;
+
+  // Calculate the height needed for active group items
+  const activeGroupItemsHeight = activeGroup.items.reduce((total, item) => {
+    let height = 40; // Base item height (py-2 + content)
+    if (
+      item.collapsible &&
+      item.subItems &&
+      !collapsedSections.has(item.path)
+    ) {
+      height += item.subItems.length * 36; // Sub-items are slightly smaller
+    }
+    return total + height;
+  }, 0);
+
+  // Top section height (header with UserMenu, buttons, border, padding)
+  const topSectionHeight = 120;
+
+  // Determine final padding: use calculated padding if content fits, otherwise use 5
+  const menuPaddingTop =
+    activeGroupItemsHeight + calculatedPadding + topSectionHeight <
+    window.innerHeight
+      ? calculatedPadding
+      : 10;
 
   const handleGroupChange = (group: (typeof navigationGroups)[0]) => {
     navigate(group.link);
