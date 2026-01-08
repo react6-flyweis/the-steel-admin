@@ -365,7 +365,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // Determine final padding: use calculated padding if content fits, otherwise use 5
   const menuPaddingTop =
-    activeGroupItemsHeight + calculatedPadding + topSectionHeight <
+    activeGroupItemsHeight + calculatedPadding + topSectionHeight + 20 <
     window.innerHeight
       ? calculatedPadding
       : 10;
