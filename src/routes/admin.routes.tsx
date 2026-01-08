@@ -7,6 +7,8 @@ const SignIn = lazy(() => import("@/pages/sign-in"));
 const Notifications = lazy(() => import("@/pages/notifications"));
 const Communication = lazy(() => import("@/pages/communication"));
 const Analytics = lazy(() => import("@/pages/analytics"));
+const Settings = lazy(() => import("@/pages/settings"));
+const Profile = lazy(() => import("@/pages/profile"));
 
 // Dashboard section
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
@@ -353,6 +355,14 @@ export const adminRoutes: RouteObject[] = [
       {
         path: "analytics",
         element: <Analytics />,
+      },
+      {
+        path: "settings",
+        element: <Settings />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
       },
 
       // invoice routes

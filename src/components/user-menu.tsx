@@ -10,7 +10,7 @@ import {
 export function UserMenu() {
   const navigate = useNavigate();
 
-  const goProfile = () => navigate("/settings/profile");
+  const goProfile = () => navigate("/profile");
   const goSettings = () => navigate("/settings");
   const signOut = () => {
     // Replace with real sign-out logic
