@@ -202,14 +202,16 @@ const DrawingAttachment = lazy(
 
 export const adminRoutes: RouteObject[] = [
   {
-    path: "/sign-in",
+    // path: "/sign-in",
+    path: "/",
     element: <SignIn />,
   },
   {
     path: "/",
     element: <AdminLayout />,
     children: [
-      { index: true, element: <Dashboard /> },
+      // { index: true, element: <Dashboard /> },
+      { path: "dashboard", element: <Dashboard /> },
       { path: "sales-tax-filing", element: <SalesTaxFiling /> },
       { path: "pipeline-stages", element: <PipelineStages /> },
       { path: "sales-tax", element: <SalesTaxReportingLegacy /> },

@@ -19,7 +19,8 @@ export default function SignIn() {
     // Add your authentication logic here
     console.log("Form submitted:", formData);
     // Navigate to dashboard after successful login
-    navigate("/");
+    // navigate("/");
+    navigate("/dashboard");
   };
 
   return (
