@@ -148,7 +148,7 @@ const EquipmentAllocationView = () => {
         </div>
         <div className="flex flex-col lg:flex-row gap-1 flex-wrap">
           <button
-            className="w-full sm:w-auto bg-(--button-bg-primary-color) text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
             onClick={() => setIsTransferModalOpen(true)}
           >
             <span className="text-lg leading-none">+</span> Create Transfer
@@ -156,7 +156,7 @@ const EquipmentAllocationView = () => {
           </button>
 
           <button
-            className="w-full sm:w-auto bg-(--button-bg-primary-color) text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
             onClick={() => setIsModalOpen(true)}
           >
             <span className="text-lg leading-none">+</span>Assign Equipment
@@ -215,7 +215,7 @@ const EquipmentAllocationView = () => {
               </svg>
               Export Excel
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-(--button-bg-primary-color) text-white rounded-lg text-sm hover:opacity-80">
+            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-sm hover:opacity-80">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"

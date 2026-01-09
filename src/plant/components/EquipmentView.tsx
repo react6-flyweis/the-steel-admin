@@ -6,6 +6,7 @@ import HammerIcon from "../assets/hammerIcon.svg";
 import CheckedShieldIcon from "../assets/checkedShieldIcon.svg";
 import YellowDollerIcon from "../assets/yellowDollerIcon.svg";
 import SalmonGraphIcon from "../assets/salmonGraphIcon.svg";
+import { Button } from "@/components/ui/button";
 const EquipmentView = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
@@ -224,12 +225,9 @@ const EquipmentView = () => {
             Here’s a summary of your ongoing steel building projects.
           </p>
         </div>
-        <button
-          onClick={openModal}
-          className="bg-(--button-bg-primary-color) text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center gap-2 text-sm"
-        >
+        <Button onClick={openModal}>
           <span>+</span> Add New Equipment
-        </button>
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
@@ -285,7 +283,7 @@ const EquipmentView = () => {
               </svg>
               Export Excel
             </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-(--button-bg-primary-color) text-white rounded-lg text-sm hover:opacity-80">
+            <Button>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -301,7 +299,7 @@ const EquipmentView = () => {
                 />
               </svg>
               Export PDF
-            </button>
+            </Button>
           </div>
         }
       />

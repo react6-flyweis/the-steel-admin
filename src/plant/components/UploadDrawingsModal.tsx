@@ -83,7 +83,7 @@ const UploadDrawingsModal: React.FC<UploadDrawingsModalProps> = ({
 
           <button
             onClick={handleButtonClick}
-            className="bg-(--button-bg-primary-color) text-white px-6 py-2 rounded-lg font-light text-sm hover:opacity-90 transition-opacity"
+            className="bg-primary text-white px-6 py-2 rounded-lg font-light text-sm hover:opacity-90 transition-opacity"
           >
             Choose file
           </button>
@@ -136,7 +136,7 @@ const UploadDrawingsModal: React.FC<UploadDrawingsModalProps> = ({
           </button>
           <button
             onClick={onClose}
-            className="w-full px-4 py-2.5 bg-(--button-bg-primary-color) text-white font-light rounded-lg hover:opacity-90 transition-opacity"
+            className="w-full px-4 py-2.5 bg-primary text-white font-light rounded-lg hover:opacity-90 transition-opacity"
           >
             Submit
           </button>

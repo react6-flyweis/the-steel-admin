@@ -60,7 +60,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ onBack }) => {
         <div className="flex items-start gap-4 flex-wrap">
           <button
             onClick={onBack}
-            className="flex items-center gap-2 px-4 py-2 bg-(--button-bg-primary-color) text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -87,7 +87,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ onBack }) => {
             </p>
           </div>
         </div>
-        <button className="md:px-6 py-2.5 bg-(--button-bg-primary-color) text-white rounded-lg hover:opacity-90 transition-opacity md:text-sm text-xs font-medium">
+        <button className="md:px-6 py-2.5 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity md:text-sm text-xs font-medium">
           Save All Changes
         </button>
       </div>

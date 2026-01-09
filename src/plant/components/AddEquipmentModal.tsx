@@ -163,7 +163,7 @@ const AddEquipmentModal: React.FC<AddEquipmentModalProps> = ({
           </button>
           <button
             type="submit"
-            className="px-6 py-2.5 rounded-lg bg-(--button-bg-primary-color) text-white font-medium hover:opacity-90 transition-colors shadow-sm"
+            className="px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-colors shadow-sm"
           >
             Add Equipment
           </button>

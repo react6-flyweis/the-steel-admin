@@ -212,7 +212,7 @@ const PlantPage = () => {
 
       {/* Render Machine Usage Table */}
       <InventoryTable
-        title="Machine usage & maintenance reminders"
+        title="Maintenance Due (This Week)"
         columns={machineColumns}
         data={mockMachineUsageData}
         onViewAll={() => console.log("View All Clicked")}

@@ -285,7 +285,7 @@ const NotificationsView = () => {
               className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors
                 ${
                   activeFilter === filter.value
-                    ? "bg-(--button-bg-primary-color) text-white shadow-md"
+                    ? "bg-primary text-white shadow-md"
                     : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 }
               `}

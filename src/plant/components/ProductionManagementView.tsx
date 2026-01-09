@@ -100,7 +100,7 @@ const ProductionManagementView = () => {
         </div>
         <button
           onClick={() => setIsUploadModalOpen(true)}
-          className="bg-(--button-bg-primary-color) text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center gap-2 text-sm"
+          className="bg-primary text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center gap-2 text-sm"
         >
           <span>+</span> Upload Drawings & Images
         </button>

@@ -142,7 +142,7 @@ const UpcomingScheduleView = () => {
         <div className="flex flex-col mt-2 lg:flex-row gap-1 flex-wrap">
           <button
             onClick={openModal}
-            className="w-full sm:w-auto bg-(--button-bg-primary-color) text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="md:text-lg leading-none">+</span> Add Service
             Provider
@@ -150,7 +150,7 @@ const UpcomingScheduleView = () => {
 
           <button
             onClick={openReportModal}
-            className="w-full sm:w-auto bg-(--button-bg-primary-color) text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="md:text-lg leading-none">+</span>
             Report Breakdown
@@ -158,7 +158,7 @@ const UpcomingScheduleView = () => {
 
           <button
             onClick={openLogModal}
-            className="w-full sm:w-auto bg-(--button-bg-primary-color) text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
           >
             <span className="md:text-lg leading-none">+</span>Log Maintenance
           </button>
