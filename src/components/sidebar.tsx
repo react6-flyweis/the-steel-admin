@@ -19,8 +19,6 @@ import payments from "@/assets/icons/sidebar/payments.svg";
 import plant from "@/assets/icons/sidebar/plant.svg";
 import reportsIcon from "@/assets/icons/sidebar/reports.svg";
 import { Button } from "./ui/button";
-import { UserMenu } from "@/components/user-menu";
-// import { Button } from "./ui/button";
 import activeBgImage from "@/assets/images/active-bg.png";
 import { cn } from "@/lib/utils";
 
@@ -449,7 +447,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             >
               <X className="h-5 w-5" />
             </button>
-            <UserMenu />
+            <div className="flex items-center gap-3">
+              <div>
+                <h2 className="text-lg font-bold text-gray-800">Admin Panel</h2>
+                <p className="text-xs text-gray-500">admin@steelpro.com</p>
+              </div>
+            </div>
             <div className="flex items-center justify-between mt-1 text-xs text-gray-400">
               <Button
                 className="rounded bg-gray-300 px-4 text-foreground hover:bg-gray-400"
