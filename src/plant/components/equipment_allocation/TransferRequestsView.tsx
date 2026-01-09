@@ -137,8 +137,7 @@ const TransferRequestsView = () => {
             Transfer Requests
           </h1>
           <p className="text-gray-500 text-sm mt-1">
-            Track, assign, transfer, and monitor equipment across all
-            construction sites and the central yard.
+            Here's a summary of your equipment transfer requests.
           </p>
         </div>
         <div className="flex flex-col lg:flex-row gap-1 flex-wrap">

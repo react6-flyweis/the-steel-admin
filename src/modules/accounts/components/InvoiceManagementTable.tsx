@@ -190,7 +190,7 @@ export default function InvoiceManagementTable() {
                   <div className="flex justify-end items-center gap-3 text-blue-800">
                     <button
                       className="p-1.5 hover:bg-blue-50 rounded-full transition-colors cursor-pointer"
-                      onClick={() => navigate("/payments/invoice/preview")}
+                      onClick={() => navigate("/invoice/preview")}
                     >
                       <Eye className="w-5 h-5" />
                     </button>

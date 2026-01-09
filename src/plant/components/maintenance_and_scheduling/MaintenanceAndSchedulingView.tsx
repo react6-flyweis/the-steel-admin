@@ -238,11 +238,10 @@ const MaintenanceAndSchedulingView = () => {
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
         <div className="">
           <h1 className="md:text-3xl text-lg font-normal text-gray-800 mb-2">
-            Maintenance And Scheduling
+            Maintenance Logs
           </h1>
           <p className="text-(--text-color-gray-2) text-sm">
-            Manage preventive maintenance, repair logs, vendor services, and
-            equipment health across all sites.
+            Here's a small summary of your ongoing steel building projects.
           </p>
         </div>
         <div className="flex flex-col mt-2 lg:flex-row gap-1 flex-wrap">
