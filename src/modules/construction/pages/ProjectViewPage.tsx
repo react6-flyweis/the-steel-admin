@@ -86,7 +86,7 @@ export default function ProjectViewPage() {
       <div className="flex lg:flex-row flex-col lg:items-center justify-between gap-2 mb-8">
         <div className="flex sm:flex-row flex-col sm:items-center justify-start gap-5">
           <button
-            onClick={() => navigate("/projects")}
+            onClick={() => navigate(-1)}
             className="
                 flex items-center gap-2
                 bg-[#3F63E1] text-white

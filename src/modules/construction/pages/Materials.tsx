@@ -4,7 +4,7 @@ import StatsOverview from "../components/cards/StatCard";
 import PlusIcon from "../assets/plusicon.svg";
 import type { StatItem } from "../components/cards/StatCard";
 import EyeIcon from "../assets/EyeIcon.svg";
-import CameraIcon from "../assets/cameraicon.svg";
+// import CameraIcon from "../assets/cameraicon.svg";
 import DoubleCheck from "../assets/tickdoubleicon.svg";
 import Dispatch from "../assets/dispatchicon.svg";
 import Alert from "../assets/alerticon.svg";
@@ -149,7 +149,7 @@ export default function Materials() {
               onChange={setStatus}
             />
 
-            <button
+            {/* <button
               onClick={() => setReportModel(true)}
               className="
               bg-[#4B5563] text-white
@@ -158,7 +158,7 @@ export default function Materials() {
             "
             >
               Issue Reporting
-            </button>
+            </button> */}
             <IssueReportingModal
               open={openReportModel}
               onClose={() => setReportModel(false)}
@@ -273,7 +273,7 @@ export default function Materials() {
                         >
                           <img src={EyeIcon} alt="" className="min-w-fit" />
                         </button>
-                        <button
+                        {/* <button
                           onClick={() => {
                             setSelectedRequestId(r.id);
                             setPhotoModel(true);
@@ -281,7 +281,7 @@ export default function Materials() {
                           className="hover:opacity-70"
                         >
                           <img src={CameraIcon} alt="" className="min-w-fit" />
-                        </button>
+                        </button> */}
                       </div>
                     </td>
                   </tr>
