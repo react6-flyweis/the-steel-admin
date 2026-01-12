@@ -1,4 +1,12 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import {
+  Select,
+  SelectTrigger,
+  SelectValue,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 type FunnelItem = {
   label: string;
@@ -17,7 +25,7 @@ type SalesFunnelProps = {
 
 export default function SalesFunnel({
   title = "Sales Conversion Funnel",
-  timeframeOptions = ["This Month"],
+  timeframeOptions = ["This Month", "Last Month", "This Quarter"],
   items,
 }: SalesFunnelProps) {
   const defaultItems: FunnelItem[] = [
@@ -53,15 +61,24 @@ export default function SalesFunnel({
 
   const rows = items ?? defaultItems;
 
+  const [timeframe, setTimeframe] = useState<string>(timeframeOptions[0]);
+
   return (
     <Card className="p-4 gap-0">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
-        <select className="px-3 py-1 border rounded-md text-sm">
-          {timeframeOptions.map((opt) => (
-            <option key={opt}>{opt}</option>
-          ))}
-        </select>
+        <Select value={timeframe} onValueChange={(v) => setTimeframe(v)}>
+          <SelectTrigger className="text-sm border-0 bg-blue-100 h-7! text-primary ">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {timeframeOptions.map((opt) => (
+              <SelectItem key={opt} value={opt}>
+                {opt}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-4">
