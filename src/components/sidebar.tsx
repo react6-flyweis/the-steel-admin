@@ -491,7 +491,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       <button
                         onClick={() => toggleSection(item.path)}
                         className={cn(
-                          "w-full flex items-center justify-between px-4 py-2 rounded-lg transition-colors bg-white",
+                          "w-full flex items-center justify-between text-sm px-4 py-2 rounded-lg transition-colors bg-white",
                           {
                             "ring shadow-lg": isAnySubItemActive,
                           }
@@ -545,7 +545,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     onClick={handleNavClick}
                     className={({ isActive }) =>
                       cn(
-                        "block px-4 py-2 rounded-lg transition-colors",
+                        "block px-4 py-2 rounded-lg transition-colors text-sm",
                         {
                           [`text-white ${activeGroup.color}`]:
                             isFirst || isActive,
@@ -553,7 +553,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         {
                           "bg-white shadow-lg": !isFirst && !isActive,
                         },
-                        { "w-4/5 mb-5": isFirst }
+                        { "w-[95%] mb-5": isFirst }
                       )
                     }
                   >
