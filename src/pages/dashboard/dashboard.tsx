@@ -1,3 +1,4 @@
+import { useState } from "react";
 import StatCard from "@/components/ui/stat-card";
 import SalesFunnel from "@/components/dashboard/sales-funnel";
 import DealSizeDistribution from "@/components/dashboard/deal-size-distribution";
@@ -28,11 +29,46 @@ import CustomerActivitiesApprovals from "@/components/dashboard/customer-activit
 import TotalInvoicesGenerated from "@/components/dashboard/total-invoices-generated";
 import PlantSalesChart from "@/components/dashboard/plant-sales-chart";
 
+type Period = "Today" | "Week" | "Month";
+
 export default function Dashboard() {
+  const [period, setPeriod] = useState<Period>("Today");
+
+  const statsByPeriod: Record<
+    Period,
+    {
+      totalLeads: string;
+      confirmedLeads: string;
+      pipelineValue: string;
+      monthlyRevenue: string;
+    }
+  > = {
+    Today: {
+      totalLeads: "12",
+      confirmedLeads: "5",
+      pipelineValue: "$1,500",
+      monthlyRevenue: "$3,200",
+    },
+    Week: {
+      totalLeads: "89",
+      confirmedLeads: "28",
+      pipelineValue: "$23,000",
+      monthlyRevenue: "$75,000",
+    },
+    Month: {
+      totalLeads: "247",
+      confirmedLeads: "89",
+      pipelineValue: "$63,500",
+      monthlyRevenue: "$221,000",
+    },
+  };
+
+  const currentStats = statsByPeriod[period];
+
   return (
     <div className="">
       {/* Tabs */}
-      <FilterTabs />
+      <FilterTabs initialPeriod={period} onPeriodChange={setPeriod} />
 
       <div className="lg:pr-5 lg:pt-5 p-5 lg:p-0 space-y-5">
         {/* Header */}
@@ -48,14 +84,14 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Leads"
-            value={"247"}
+            value={currentStats.totalLeads}
             icon={<img src={LeadsIcon} alt="leads" className="size-7" />}
             color="bg-blue-500"
           />
 
           <StatCard
             title="Confirmed Leads"
-            value={"89"}
+            value={currentStats.confirmedLeads}
             icon={
               <img src={ConfirmedIcon} alt="confirmed" className="size-7" />
             }
@@ -64,14 +100,14 @@ export default function Dashboard() {
 
           <StatCard
             title="Pipeline Value"
-            value={"$63,500"}
+            value={currentStats.pipelineValue}
             icon={<img src={ValueIcon} alt="value" className="size-7" />}
             color="bg-yellow-500"
           />
 
           <StatCard
             title="Monthly Revenue"
-            value={"$221,000"}
+            value={currentStats.monthlyRevenue}
             icon={<img src={RevenueIcon} alt="revenue" className="size-7" />}
             color="bg-orange-500"
           />
