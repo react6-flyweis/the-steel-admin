@@ -28,7 +28,9 @@ const overviewChartConfig = {
   },
 } satisfies ChartConfig;
 
-const overviewData = [
+type Period = "Today" | "Week" | "Month";
+
+const overviewDataBase = [
   { day: "Mon", customers: 12, revenue: 18, income: 15, expense: 7 },
   { day: "Tue", customers: 18, revenue: 24, income: 17, expense: 9 },
   { day: "Wed", customers: 28, revenue: 32, income: 23, expense: 14 },
@@ -38,10 +40,10 @@ const overviewData = [
   { day: "Sun", customers: 26, revenue: 28, income: 21, expense: 15 },
 ];
 
-const summaryStats = [
+const summaryStatsBase = [
   {
     label: "Customers",
-    value: "240",
+    value: 240,
     emphasis: "Customers",
     accentClass: "text-blue-600",
     highlight: true,
@@ -49,7 +51,7 @@ const summaryStats = [
   },
   {
     label: "Revenue",
-    value: "250k",
+    value: 250000,
     emphasis: "Revenue",
     accentClass: "text-orange-500",
     highlight: false,
@@ -57,7 +59,7 @@ const summaryStats = [
   },
   {
     label: "Income",
-    value: "190k",
+    value: 190000,
     emphasis: "Income",
     accentClass: "text-emerald-500",
     highlight: false,
@@ -65,7 +67,7 @@ const summaryStats = [
   },
   {
     label: "Expense",
-    value: "160k",
+    value: 160000,
     emphasis: "Expense",
     accentClass: "text-rose-500",
     highlight: false,
@@ -73,8 +75,26 @@ const summaryStats = [
   },
 ];
 
-export default function ReportsOverview() {
+export default function ReportsOverview({ period }: { period?: Period }) {
   const [selected, setSelected] = useState<string | null>(null);
+
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.5 : 1;
+
+  const overviewData = overviewDataBase.map((d) => ({
+    ...d,
+    customers: Math.max(1, Math.round(d.customers * scale)),
+    revenue: Math.max(1, Math.round(d.revenue * scale)),
+    income: Math.max(1, Math.round(d.income * scale)),
+    expense: Math.max(1, Math.round(d.expense * scale)),
+  }));
+
+  const summaryStats = summaryStatsBase.map((s) => ({
+    ...s,
+    value:
+      s.label === "Customers"
+        ? Math.max(1, Math.round(s.value * scale))
+        : Math.max(1, Math.round(s.value * scale)),
+  }));
 
   const handleToggle = (key: string) => {
     setSelected((s) => (s === key ? null : key));
