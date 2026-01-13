@@ -20,7 +20,7 @@ import {
   TableHead,
   TableCell,
 } from "@/components/ui/table";
-import Pagination from "@/plant/components/Pagination";
+import Pagination from "@/components/Pagination";
 
 type Invoice = {
   id: string;

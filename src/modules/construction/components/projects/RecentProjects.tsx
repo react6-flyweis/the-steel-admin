@@ -72,8 +72,7 @@ export default function RecentProjects({
   project,
   manager,
 }: any) {
-  const activeDate = "month";
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const navigate = useNavigate();
   const getFilteredProjects = () => {
     const today = dayjs();
@@ -82,14 +81,8 @@ export default function RecentProjects({
       const projectDate = dayjs(p.projectDate, "DD/MM/YYYY");
       const daysDifference = today.diff(projectDate, "day");
 
-      let tabFilter = true;
-      if (activeDate === "today") {
-        tabFilter = today.isSame(projectDate, "day");
-      } else if (activeDate === "week") {
-        tabFilter = daysDifference <= 7;
-      } else if (activeDate === "month") {
-        tabFilter = daysDifference <= 30;
-      }
+      // Always filter by month by default
+      const tabFilter = daysDifference <= 30;
 
       const matchProject =
         project === "all" || p.code === project || p.name === project;

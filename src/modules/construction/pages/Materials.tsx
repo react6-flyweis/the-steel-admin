@@ -122,7 +122,7 @@ export default function Materials() {
       supplier: "Tile Masters",
     },
   ]);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [status, setStatus] = useState("all");
   const navigate = useNavigate();
   const [openReportModel, setReportModel] = useState(false);

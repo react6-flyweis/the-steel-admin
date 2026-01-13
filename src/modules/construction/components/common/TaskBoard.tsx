@@ -86,7 +86,7 @@ export default function TaskBoard() {
   const [openDailyLogModel, setDailyLogModel] = useState(false);
   const [openNewTaskModel, setNewTaskModel] = useState(false);
   const [tasks, setTasks] = useState(initialTasks);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const filterTasksBySearch = (list: Task[]) => {
     if (!search.trim()) return list;
 

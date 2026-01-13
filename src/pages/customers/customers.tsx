@@ -23,8 +23,17 @@ import { useNavigate } from "react-router";
 import AddCustomerDialog from "@/components/customers/add-customer-dialog";
 import FilterTabs from "@/components/FilterTabs";
 
+type Customer = {
+  id: string;
+  customerName: string;
+  phone?: string;
+  email?: string;
+  inquiryFor?: string;
+  status?: string;
+};
+
 // Helper: generate a random customer
-function generateRandomCustomer() {
+function generateRandomCustomer(): Customer {
   const names = [
     "Luca Moretti",
     "Maria Rossi",
@@ -64,7 +73,7 @@ export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   // Seed state with a few random customers plus the initial seeds
-  const [customers, setCustomers] = useState(() => {
+  const [customers, setCustomers] = useState<Customer[]>(() => {
     const customers = Array.from({ length: 8 }).map(() =>
       generateRandomCustomer()
     );
@@ -76,7 +85,7 @@ export default function CustomersPage() {
     const q = searchQuery.trim().toLowerCase();
     return customers.filter((c) => {
       // Status filter
-      if (statusFilter !== "all" && c.status.toLowerCase() !== statusFilter) {
+      if (statusFilter !== "all" && c.status?.toLowerCase() !== statusFilter) {
         return false;
       }
 

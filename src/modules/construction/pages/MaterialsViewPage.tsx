@@ -17,7 +17,7 @@ export default function MaterialsViewPage() {
   const [openPhotoModel, setPhotoModel] = useState(false);
   const initialPhotos = [UploadImg, UploadImg, UploadImg, UploadImg, UploadImg];
   const [photos, setPhotos] = useState<string[]>(initialPhotos);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
 
   const [requestedMaterials, setRequestedMaterials] = useState<
     RequestedMaterial[]

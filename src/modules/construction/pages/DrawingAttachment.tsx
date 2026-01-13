@@ -124,9 +124,9 @@ const statusStyle: Record<string, string> = {
 export default function DrawingAttachment() {
   const [openDrawingModel, setDrawingModel] = useState(false);
   const [openDrawingPreviewModel, setDrawingPreviewModel] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<any>(null);
+  const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
+  const [search] = useState("");
   const [localSearch, setLocalSearch] = useState("");
   const [projects, setProjects] = useState<Project[]>(initialDummyProjects);
 
