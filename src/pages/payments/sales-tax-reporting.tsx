@@ -166,6 +166,7 @@ export default function SalesTaxReporting() {
           <Button
             variant="default"
             className="bg-green-600 hover:bg-green-700 text-white px-4"
+            onClick={() => alert("Report will be emailed shortly.")}
           >
             <Mail className="w-4 h-4" />
             Email Report
@@ -242,14 +243,26 @@ export default function SalesTaxReporting() {
 
         {/* Main Content Grid */}
         <div className="grid grid-cols-2 gap-6">
-          <StateTaxSummary />
+          <StateTaxSummary
+            stateFilter={stateFilter}
+            reportPeriod={reportPeriod}
+            reportType={reportType}
+          />
 
-          <BuildingTypePieCard />
+          <BuildingTypePieCard
+            stateFilter={stateFilter}
+            reportPeriod={reportPeriod}
+            reportType={reportType}
+          />
         </div>
 
         {/* Detailed report table */}
         <div className="mt-6">
-          <DetailedTaxReport />
+          <DetailedTaxReport
+            stateFilter={stateFilter}
+            reportPeriod={reportPeriod}
+            reportType={reportType}
+          />
         </div>
 
         {/* Export & Automation Card */}
