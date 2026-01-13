@@ -75,6 +75,9 @@ const taxData = [
 
 const TaxationPage = () => {
   const [isAddNewTaxModalOpen, setIsAddNewTaxModalOpen] = useState(false);
+  const [dateRange, setDateRange] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [frequencyFilter, setFrequencyFilter] = useState("monthly");
 
   const handleOpenAddNewTaxModal = () => {
     setIsAddNewTaxModalOpen(true);
@@ -121,6 +124,8 @@ const TaxationPage = () => {
                   type="text"
                   placeholder="mm/dd/yyyy"
                   className="pl-3 pr-10 border-gray-200 h-9.5"
+                  value={dateRange}
+                  onChange={(e) => setDateRange(e.target.value)}
                 />
                 <Calendar className="absolute right-3 top-2.5 w-4 h-4 text-gray-500" />
               </div>
@@ -129,7 +134,7 @@ const TaxationPage = () => {
               <label className="text-sm font-medium text-gray-600">
                 Status
               </label>
-              <Select defaultValue="all">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
                 <SelectTrigger className="w-full bg-white border-gray-200">
                   <SelectValue placeholder="All" />
                 </SelectTrigger>
@@ -144,11 +149,15 @@ const TaxationPage = () => {
               <label className="text-sm font-medium text-gray-600">
                 Filing Frequency
               </label>
-              <Select defaultValue="monthly">
+              <Select
+                value={frequencyFilter}
+                onValueChange={setFrequencyFilter}
+              >
                 <SelectTrigger className="w-full bg-white border-gray-200">
                   <SelectValue placeholder="Monthly" />
                 </SelectTrigger>
                 <SelectContent>
+                  <SelectItem value="all">All</SelectItem>
                   <SelectItem value="monthly">Monthly</SelectItem>
                   <SelectItem value="quarterly">Quarterly</SelectItem>
                 </SelectContent>
@@ -160,7 +169,7 @@ const TaxationPage = () => {
         {/* Table */}
         <div className="bg-white rounded-lg shadow-sm mb-6 overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[1000px]">
+            <table className="w-full min-w-250">
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
                   <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
@@ -184,40 +193,53 @@ const TaxationPage = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-50">
-                {taxData.map((row, idx) => (
-                  <tr
-                    key={idx}
-                    className="hover:bg-gray-50/50 transition-colors"
-                  >
-                    <td className="py-4 px-6 text-sm text-gray-900">
-                      {row.state}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-900">
-                      {row.filingFrequency}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-900">
-                      {row.dueDate}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-900">
-                      {row.threshold}
-                    </td>
-                    <td className="py-4 px-6 text-sm text-gray-900 underline cursor-pointer">
-                      {row.website}
-                    </td>
-                    <td className="py-4 px-6 text-sm">
-                      <span
-                        className={cn(
-                          "px-3 py-1 rounded-full text-xs font-medium",
-                          row.status === "Paid"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
-                        )}
-                      >
-                        {row.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
+                {taxData
+                  .filter((row) => {
+                    const sf = statusFilter?.toLowerCase();
+                    const ff = frequencyFilter?.toLowerCase();
+                    if (sf && sf !== "all") {
+                      if (row.status.toLowerCase() !== sf) return false;
+                    }
+                    if (ff && ff !== "all") {
+                      if (row.filingFrequency.toLowerCase() !== ff)
+                        return false;
+                    }
+                    return true;
+                  })
+                  .map((row, idx) => (
+                    <tr
+                      key={idx}
+                      className="hover:bg-gray-50/50 transition-colors"
+                    >
+                      <td className="py-4 px-6 text-sm text-gray-900">
+                        {row.state}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-900">
+                        {row.filingFrequency}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-900">
+                        {row.dueDate}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-900">
+                        {row.threshold}
+                      </td>
+                      <td className="py-4 px-6 text-sm text-gray-900 underline cursor-pointer">
+                        {row.website}
+                      </td>
+                      <td className="py-4 px-6 text-sm">
+                        <span
+                          className={cn(
+                            "px-3 py-1 rounded-full text-xs font-medium",
+                            row.status === "Paid"
+                              ? "bg-green-100 text-green-700"
+                              : "bg-yellow-100 text-yellow-700"
+                          )}
+                        >
+                          {row.status}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
             <Pagination
