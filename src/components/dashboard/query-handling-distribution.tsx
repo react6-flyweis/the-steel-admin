@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { ChartContainer } from "@/components/ui/chart";
 import { Pie, PieChart, Cell } from "recharts";
 
-const data = [
+const baseData = [
   { name: "Employee handled", value: 156, key: "employee" },
   { name: "AI Handled", value: 312, key: "ai" },
 ];
@@ -12,7 +12,18 @@ const chartConfig = {
   employee: { color: "#06B981", label: "Employee handled" },
 } as const;
 
-export default function QueryHandlingDistribution() {
+type Period = "Today" | "Week" | "Month";
+
+export default function QueryHandlingDistribution({
+  period,
+}: {
+  period?: Period;
+}) {
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.45 : 1;
+  const data = baseData.map((d) => ({
+    ...d,
+    value: Math.max(1, Math.round(d.value * scale)),
+  }));
   return (
     <Card className="h-full bg-white rounded-2xl p-4 gap-0 shadow-lg">
       <div className="flex flex-col gap-1">
