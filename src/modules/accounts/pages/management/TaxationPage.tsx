@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Input from "@/components/common_components/Input";
+import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Calendar,
@@ -19,9 +19,9 @@ import {
   FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import AddNewTaxModal from "@/components/management/AddNewTaxModal";
-import { taxData } from "@/data/mockData";
-import Pagination from "@/components/common_components/Pagination";
+import AddNewTaxModal from "../../components/management/AddNewTaxModal";
+import { taxData } from "../../data/mockData";
+import Pagination from "@/components/Pagination";
 
 const TaxationPage = () => {
   const [isAddNewTaxModalOpen, setIsAddNewTaxModalOpen] = useState(false);
@@ -172,9 +172,10 @@ const TaxationPage = () => {
             </table>
             <Pagination
               totalItems={2}
-              itemsPerPage={2}
+              rowsPerPage={2}
               currentPage={1}
               onPageChange={() => {}}
+              onRowsPerPageChange={() => {}}
             />
           </div>
         </div>

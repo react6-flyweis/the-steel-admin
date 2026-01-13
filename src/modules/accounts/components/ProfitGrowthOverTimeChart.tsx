@@ -15,13 +15,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartConfig } from "@/components/ui/chart";
-import type { TabType } from "@/pages/Dashboard";
+import type { TabType } from "../pages/Dashboard";
 
 export const chartDataByFilter: Record<
   TabType,
   { label: string; profit: number }[]
 > = {
-  today: [
+  Today: [
     { label: "9 AM", profit: 4_500 },
     { label: "11 AM", profit: 7_200 },
     { label: "1 PM", profit: 12_800 },
@@ -30,7 +30,7 @@ export const chartDataByFilter: Record<
     { label: "7 PM", profit: 11_900 },
   ],
 
-  week: [
+  Week: [
     { label: "Mon", profit: 45_000 },
     { label: "Tue", profit: 52_000 },
     { label: "Wed", profit: 48_000 },
@@ -40,7 +40,7 @@ export const chartDataByFilter: Record<
     { label: "Sun", profit: 85_000 },
   ],
 
-  month: [
+  Month: [
     { label: "Jan", profit: 45_000 },
     { label: "Feb", profit: 52_000 },
     { label: "Mar", profit: 48_000 },
@@ -56,7 +56,6 @@ export const chartDataByFilter: Record<
   ],
 };
 
-
 const chartConfig = {
   profit: {
     label: "Monthly Profit",
@@ -64,23 +63,27 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const CustomLegend = ({activeTab}: {activeTab: TabType}) => {
+const CustomLegend = ({ activeTab }: { activeTab: TabType }) => {
   const profitTitleMap: Record<TabType, string> = {
-  today: "Today's Profit",
-  week: "Weekly Profit",
-  month: "Monthly Profit",
-};
+    Today: "Today's Profit",
+    Week: "Weekly Profit",
+    Month: "Monthly Profit",
+  };
   return (
     <div className="flex justify-end gap-6 mb-4">
       <div className="flex items-center gap-2 text-sm font-medium text-gray-600 capitalize">
         <div className="w-3 h-3 rounded-full bg-[#3B82F6]"></div>
-       {profitTitleMap[activeTab]}
+        {profitTitleMap[activeTab]}
       </div>
     </div>
   );
 };
 
-export function ProfitGrowthOverTimeChart({activeTab}: {activeTab: TabType}) {
+export function ProfitGrowthOverTimeChart({
+  activeTab,
+}: {
+  activeTab: TabType;
+}) {
   const chartData = chartDataByFilter[activeTab];
   return (
     <Card className="flex flex-col h-full border-none shadow-sm bg-white p-6 rounded-md">
@@ -88,7 +91,7 @@ export function ProfitGrowthOverTimeChart({activeTab}: {activeTab: TabType}) {
         <h3 className="text-lg font-bold text-gray-900 tracking-tight">
           Profit Growth Over Time
         </h3>
-        <CustomLegend activeTab={activeTab}/>
+        <CustomLegend activeTab={activeTab} />
       </CardHeader>
       <CardContent className="flex-1 p-0">
         <ChartContainer config={chartConfig} className="h-[300px] w-full">

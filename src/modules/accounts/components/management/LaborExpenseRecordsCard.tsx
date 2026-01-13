@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import Input from "@/components/common_components/Input";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,

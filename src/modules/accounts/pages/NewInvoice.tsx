@@ -2,17 +2,17 @@ import { useState } from "react";
 import { Plus, Upload, List } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import Input from "@/components/ui/Input";
-import logo from "@/assets/logo.svg";
-import AddClientIcon from "@/assets/icon/AddClientIcon.svg";
+import { Input } from "@/components/ui/input";
+import logo from "@/assets/the-steel-logo.svg";
+import AddClientIcon from "../assets/icon/AddClientIcon.svg";
 import AddClientModal from "../components/modals/AddClientModal";
 import UploadImageModal from "../components/modals/UploadImageModal";
 import ItemListModal from "../components/modals/ItemListModal";
 import TaxModal, { type TaxRate } from "../components/modals/TaxModal";
-import InvoiceActionModal from "@/components/modals/InvoiceActionModal";
+import InvoiceActionModal from "../components/modals/InvoiceActionModal";
 import PaymentScheduleModal, {
   type PaymentEntry,
-} from "@/components/modals/PaymentScheduleModal";
+} from "../components/modals/PaymentScheduleModal";
 
 // Types
 interface InvoiceItem {

@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import type { TabType } from "@/pages/Dashboard";
+import type { TabType } from "../pages/Dashboard";
 import dummyPDF from "../assets/dummy-pdf_2.pdf";
 
 interface ProjectRow {
@@ -41,7 +41,7 @@ type SortDirection = "asc" | "desc";
 /* -------------------- DATA -------------------- */
 
 const projectTableByFilter: Record<TabType, ProjectRow[]> = {
-  today: [
+  Today: [
     {
       id: 1,
       name: "Downtown Office Complex",
@@ -66,7 +66,7 @@ const projectTableByFilter: Record<TabType, ProjectRow[]> = {
     },
   ],
 
-  week: [
+  Week: [
     {
       id: 1,
       name: "Shopping Mall Renovation",
@@ -102,7 +102,7 @@ const projectTableByFilter: Record<TabType, ProjectRow[]> = {
     },
   ],
 
-  month: [
+  Month: [
     {
       id: 1,
       name: "Hospital Wing",

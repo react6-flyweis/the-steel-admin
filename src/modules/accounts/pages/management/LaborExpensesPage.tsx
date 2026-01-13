@@ -1,11 +1,11 @@
 import { DollarSign, Info } from "lucide-react";
 import TitleSubtitle from "@/components/TitleSubtitle";
-import BudgetVsActualCard from "@/components/management/BudgetVsActualCard";
-import BudgetAlertCard from "@/components/management/BudgetAlertCard";
-import AddExpenseModal from "@/components/management/AddExpenseModal";
+import BudgetVsActualCard from "../../components/management/BudgetVsActualCard";
+import BudgetAlertCard from "../../components/management/BudgetAlertCard";
+import AddExpenseModal from "../../components/management/AddExpenseModal";
 import { useState } from "react";
-import SummaryCard from "@/components/management/SummaryCard";
-import LaborExpenseRecordsCard from "@/components/management/LaborExpenseRecordsCard";
+import SummaryCard from "../../components/management/SummaryCard";
+import LaborExpenseRecordsCard from "../../components/management/LaborExpenseRecordsCard";
 
 const LaborExpensesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);

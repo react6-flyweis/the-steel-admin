@@ -1,7 +1,7 @@
 import React from "react";
 import Modal from "../common_components/Modal";
 import SearchableSelect from "../common_components/SearchableSelect";
-import { vendors } from "@/data/mockData";
+import { vendors } from "../../data/mockData";
 
 interface AddNewTaxModalProps {
   isOpen: boolean;
