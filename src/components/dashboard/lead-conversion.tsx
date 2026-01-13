@@ -15,8 +15,9 @@ type Item = {
   bgClass?: string; // pastel background for icon
   iconSrc?: string;
 };
+type Period = "Today" | "Week" | "Month";
 
-const rows: Item[] = [
+const rowsBase: Item[] = [
   {
     label: "New Leads",
     percent: 52,
@@ -43,7 +44,7 @@ const rows: Item[] = [
   },
   {
     label: "Negotiation",
-    percent: 74,
+    percent: 50,
     subtitle: "",
     colorClass: "bg-red-500",
     bgClass: "bg-red-50",
@@ -51,7 +52,7 @@ const rows: Item[] = [
   },
   {
     label: "Closed win",
-    percent: 74,
+    percent: 36,
     subtitle: "",
     colorClass: "bg-purple-500",
     bgClass: "bg-purple-50",
@@ -59,7 +60,7 @@ const rows: Item[] = [
   },
   {
     label: "Closed lost",
-    percent: 74,
+    percent: 14,
     subtitle: "",
     colorClass: "bg-red-400",
     bgClass: "bg-red-50",
@@ -70,10 +71,17 @@ const rows: Item[] = [
 export default function LeadConversion({
   className,
   title = "Lead Conversion",
+  period,
 }: {
   className?: string;
   title?: string;
+  period?: Period;
 }) {
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.5 : 1;
+  const rows = rowsBase.map((r) => ({
+    ...r,
+    percent: Math.max(1, Math.round(r.percent * scale)),
+  }));
   return (
     <Card className={cn("w-full p-6 gap-0 ", className)}>
       <h2 className="text-xl font-semibold text-gray-900 mb-2">{title}</h2>
