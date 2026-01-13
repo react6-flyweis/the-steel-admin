@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Search, Eye, CheckCircle, XCircle } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,69 +15,79 @@ import {
 } from "@/components/ui/select";
 
 // Mock data - replace with actual API calls
-const mockContracts = [
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    status: "Active",
-  },
+const NAMES = [
+  "Luca Moretti",
+  "Maria Rossi",
+  "Giulia Bianchi",
+  "Marco Romano",
+  "Elena Greco",
+  "Antonio Russo",
+  "Francesca Gallo",
+  "Davide Ferrari",
+  "Sara Conti",
+  "Matteo Ricci",
 ];
+
+function randomFrom(arr: string[]) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+const mockContracts = Array.from({ length: 8 }).map((_, i) => {
+  const name = randomFrom(NAMES);
+  const email =
+    name
+      .toLowerCase()
+      .replace(/[^a-z\s]/g, "")
+      .trim()
+      .replace(/\s+/g, ".") + "@example.com";
+  const phone = `+39 02 ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(
+    100 + Math.random() * 900
+  )}`;
+  const statuses = ["Active", "Pending", "Rejected"];
+  const status = randomFrom(statuses);
+  const id = `ID-2025-${1047 + i}`;
+  return {
+    id,
+    customerName: name,
+    phone,
+    email,
+    status,
+  };
+});
+
+const STATUS_COLOR_MAP: Record<string, string> = {
+  active: "bg-green-50 text-green-700 border-green-200",
+  pending: "bg-yellow-50 text-yellow-700 border-yellow-200",
+  rejected: "bg-red-50 text-red-700 border-red-200",
+  default: "bg-gray-50 text-gray-700 border-gray-200",
+};
+
+function getStatusClasses(status?: string) {
+  if (!status) return STATUS_COLOR_MAP.default;
+  return STATUS_COLOR_MAP[status.toLowerCase()] || STATUS_COLOR_MAP.default;
+}
 
 export default function ContractsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const navigate = useNavigate();
+
+  const filteredContracts = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return mockContracts.filter((c) => {
+      if (statusFilter !== "all" && c.status.toLowerCase() !== statusFilter) {
+        return false;
+      }
+      if (!q) return true;
+
+      return (
+        (c.id && c.id.toLowerCase().includes(q)) ||
+        (c.customerName && c.customerName.toLowerCase().includes(q)) ||
+        (c.phone && c.phone.toLowerCase().includes(q)) ||
+        (c.email && c.email.toLowerCase().includes(q))
+      );
+    });
+  }, [searchQuery, statusFilter]);
 
   return (
     <div className="p-6 space-y-6">
@@ -173,8 +183,11 @@ export default function ContractsPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {mockContracts.map((contract, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
+                {filteredContracts.map((contract, index) => (
+                  <tr
+                    key={`${contract.id}-${index}`}
+                    className="hover:bg-gray-50"
+                  >
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       {contract.id}
                     </td>
@@ -190,7 +203,7 @@ export default function ContractsPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <Badge
                         variant="outline"
-                        className="bg-green-50 text-green-700 border-green-200"
+                        className={getStatusClasses(contract.status)}
                       >
                         {contract.status}
                       </Badge>
