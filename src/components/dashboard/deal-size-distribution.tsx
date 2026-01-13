@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 type DealItem = {
   label: string;
-  deals: string;
+  deals: string | number;
   percentLabel?: string;
   // tailwind color for the square and filled bar (e.g. 'bg-green-500')
   colorClass?: string;
@@ -18,42 +18,59 @@ type Props = {
   className?: string;
 };
 
+type Period = "Today" | "Week" | "Month";
+
 export default function DealSizeDistribution({
   title = "Deal Size Distribution",
   items,
   averageDealSize = "$67,500",
   className,
-}: Props) {
-  const defaultItems: DealItem[] = [
+  period,
+}: Props & { period?: Period }) {
+  const baseItems: DealItem[] = [
     {
       label: "$0 - $50K",
-      deals: "45 deals",
+      deals: 45,
       percentLabel: "51%",
       colorClass: "bg-green-500",
       fillPercent: 51,
     },
     {
       label: "$50K - $100K",
-      deals: "28 deals",
+      deals: 28,
       percentLabel: "31%",
       colorClass: "bg-blue-500",
       fillPercent: 31,
     },
     {
       label: "$100K - $200K",
-      deals: "12 deals",
+      deals: 12,
       percentLabel: "13%",
       colorClass: "bg-purple-500",
       fillPercent: 13,
     },
     {
       label: "$200K+",
-      deals: "4 deals",
+      deals: 4,
       percentLabel: "5%",
       colorClass: "bg-orange-500",
       fillPercent: 5,
     },
   ];
+
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.45 : 1;
+
+  const defaultItems: DealItem[] = baseItems.map((it) => ({
+    ...it,
+    deals:
+      typeof it.deals === "number"
+        ? `${Math.max(1, Math.round(it.deals * scale))} deals`
+        : it.deals,
+    fillPercent:
+      typeof it.fillPercent === "number"
+        ? Math.max(5, Math.round(Number(it.fillPercent) * scale))
+        : it.fillPercent,
+  }));
 
   const rows = items ?? defaultItems;
 
