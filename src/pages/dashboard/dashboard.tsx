@@ -118,23 +118,23 @@ export default function Dashboard() {
           <div className="lg:col-span-2">
             <SalesFunnel />
           </div>
-          <DealSizeDistribution />
+          <DealSizeDistribution period={period} />
         </div>
 
         {/* Chart Row 2 */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3">
-            <ReportsOverview />
+            <ReportsOverview period={period} />
           </div>
           <div className="lg:col-span-2">
-            <LeadSourcesChart />
+            <LeadSourcesChart period={period} />
           </div>
         </div>
 
         {/* Chart Row 3: Requested charts below */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3">
-            <LeadConversion />
+            <LeadConversion period={period} />
           </div>
           <div className="lg:col-span-2">
             <TonnageSold />
@@ -144,27 +144,27 @@ export default function Dashboard() {
         {/* Chart Row 4: Pipeline stage and Query distribution */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
           <div className="lg:col-span-3">
-            <PipelineStageOverview />
+            <PipelineStageOverview period={period} />
           </div>
           <div className="lg:col-span-2">
-            <QueryHandlingDistribution />
+            <QueryHandlingDistribution period={period} />
           </div>
         </div>
 
         {/* Active Pipeline Stages and Recent Closed Deals */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
-            <ActivePipelineStages />
+            <ActivePipelineStages period={period} />
           </div>
           <div className="lg:col-span-1">
-            <RecentClosedDeals />
+            <RecentClosedDeals period={period} />
           </div>
         </div>
 
         {/* Recent Sales Activity and Top Sales Performers */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <RecentSalesActivity />
-          <TopSalesPerformers />
+          <RecentSalesActivity period={period} />
+          <TopSalesPerformers period={period} />
         </div>
 
         {/* Tax Cards Row */}
@@ -183,7 +183,7 @@ export default function Dashboard() {
         </div>
 
         {/* Construction Progress Overview */}
-        <ConstructionProgressOverview />
+        <ConstructionProgressOverview period={period} />
 
         {/* Plant Production Status Section */}
         <div className="space-y-4">
@@ -192,21 +192,21 @@ export default function Dashboard() {
           </h2>
 
           {/* Plant Stats Cards */}
-          <PlantProductionStats />
+          <PlantProductionStats period={period} />
 
           {/* Highlight Cards */}
-          <PlantHighlightCards />
+          <PlantHighlightCards period={period} />
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
             {/* Customer Activities and Total Invoices Row */}
             <div className="space-y-6 lg:col-span-3">
-              <CustomerActivitiesApprovals />
-              <TotalInvoicesGenerated />
+              <CustomerActivitiesApprovals period={period} />
+              <TotalInvoicesGenerated period={period} />
             </div>
 
             {/* Sales Chart */}
             <div className="lg:col-span-2">
-              <PlantSalesChart />
+              <PlantSalesChart period={period} />
             </div>
           </div>
         </div>
