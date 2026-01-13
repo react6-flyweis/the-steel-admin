@@ -310,8 +310,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   useEffect(() => {
     activeGroup?.items.forEach((item) => {
       if (item.collapsible && item.subItems) {
-        const isAnySubItemActive = item.subItems.some((subItem) =>
-          location.pathname.startsWith(subItem.path)
+        const fullPath = location.pathname + location.search;
+        const isAnySubItemActive = item.subItems.some(
+          (subItem) => fullPath === subItem.path
         );
         if (isAnySubItemActive) {
           setCollapsedSections((prev) => {
@@ -482,8 +483,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                 if (item.collapsible && item.subItems) {
                   const isExpanded = !collapsedSections.has(item.path);
-                  const isAnySubItemActive = item.subItems.some((subItem) =>
-                    location.pathname.startsWith(subItem.path)
+                  const fullPath = location.pathname + location.search;
+                  const isAnySubItemActive = item.subItems.some(
+                    (subItem) => fullPath === subItem.path
                   );
 
                   return (
@@ -506,32 +508,32 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                       </button>
                       {isExpanded && (
                         <div className="mt-2 mb-1 space-y-2">
-                          {item.subItems.map((subItem) => (
-                            <NavLink
-                              key={subItem.path}
-                              to={subItem.path}
-                              onClick={handleNavClick}
-                              className={({ isActive }) =>
-                                cn(
-                                  "block px-4 py-2 rounded-lg transition-colors text-sm",
-                                  {
-                                    [`text-white ${activeGroup.color}`]:
-                                      isActive,
-                                    "bg-white shadow": !isActive,
-                                  }
-                                )
-                              }
-                            >
-                              <div className="flex items-center justify-between">
-                                <span>{subItem.label}</span>
-                                {/* {subItem.badge != null && (
-                                <span className="ml-3 inline-flex items-center justify-center text-xs font-medium text-white bg-[#fb923c] rounded-full px-2 py-0.5">
-                                  {subItem.badge}
-                                </span>
-                              )} */}
-                              </div>
-                            </NavLink>
-                          ))}
+                          {item.subItems.map((subItem) => {
+                            const fullSubPath =
+                              location.pathname + location.search;
+                            const isActiveExact = fullSubPath === subItem.path;
+                            return (
+                              <NavLink
+                                key={subItem.path}
+                                to={subItem.path}
+                                onClick={handleNavClick}
+                                className={() =>
+                                  cn(
+                                    "block px-4 py-2 rounded-lg transition-colors text-sm",
+                                    {
+                                      [`text-white ${activeGroup.color}`]:
+                                        isActiveExact,
+                                      "bg-white shadow": !isActiveExact,
+                                    }
+                                  )
+                                }
+                              >
+                                <div className="flex items-center justify-between">
+                                  <span>{subItem.label}</span>
+                                </div>
+                              </NavLink>
+                            );
+                          })}
                         </div>
                       )}
                     </div>
