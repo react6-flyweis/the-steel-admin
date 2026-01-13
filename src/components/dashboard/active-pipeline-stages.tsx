@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
 interface PipelineStage {
   id: string;
@@ -13,7 +14,7 @@ interface PipelineStage {
   }[];
 }
 
-const stages: PipelineStage[] = [
+const baseStages: PipelineStage[] = [
   {
     id: "qualified",
     name: "Qualified",
@@ -47,12 +48,26 @@ const stages: PipelineStage[] = [
   },
 ];
 
-export default function ActivePipelineStages() {
+type Period = "Today" | "Week" | "Month";
+
+export default function ActivePipelineStages({ period }: { period?: Period }) {
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.45 : 1;
+  const stages = baseStages.map((s) => ({
+    ...s,
+    count: Math.max(1, Math.round(s.count * scale)),
+    deals: s.deals.slice(
+      0,
+      Math.max(1, Math.round(s.deals.length * Math.max(0.4, scale)))
+    ),
+  }));
+
   return (
     <Card>
       <CardHeader className="flex justify-between items-center border-b">
         <CardTitle>Active Pipeline Stages</CardTitle>
-        <Button variant="link">Manage Stages</Button>
+        <Link to="/pipeline-stages" className="self-start">
+          <Button variant="link">Manage Stages</Button>
+        </Link>
       </CardHeader>
 
       <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-4">
