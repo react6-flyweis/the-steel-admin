@@ -9,6 +9,7 @@ import AddClientDialog from "@/components/add-client-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import steelLogo from "@/assets/the-steel-logo-dark.svg";
+import { useNavigate } from "react-router";
 
 export interface LineItem {
   id: string;
@@ -81,6 +82,8 @@ export default function InvoiceForm() {
         ],
       },
     });
+
+  const navigate = useNavigate();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -158,6 +161,7 @@ export default function InvoiceForm() {
 
   const onSubmit = (data: InvoiceFormValues) => {
     console.log("submit", data);
+    navigate("/invoice/list");
   };
 
   return (
