@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import type { DateRange as RDateRange } from "react-day-picker";
 
 interface BuildingTypeData {
   type: string;
@@ -19,7 +20,13 @@ const totalTaxByBuilding = buildingTypeData.reduce(
   0
 );
 
-export default function BuildingTypePieCard() {
+interface Props {
+  stateFilter?: string;
+  reportPeriod?: RDateRange;
+  reportType?: string;
+}
+
+export default function BuildingTypePieCard(_props?: Props) {
   return (
     <Card className="bg-white">
       <CardHeader className="border-b">

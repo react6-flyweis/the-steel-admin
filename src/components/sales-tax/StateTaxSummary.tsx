@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import type { DateRange as RDateRange } from "react-day-picker";
 
 interface StateData {
   state: string;
@@ -37,8 +38,26 @@ const currency = new Intl.NumberFormat("en-US", {
   currency: "USD",
   maximumFractionDigits: 2,
 });
+interface Props {
+  stateFilter?: string;
+  reportPeriod?: RDateRange;
+  reportType?: string;
+}
 
-export default function StateTaxSummary() {
+export default function StateTaxSummary({ stateFilter }: Props) {
+  const filterKey = stateFilter?.toLowerCase().trim();
+
+  const filtered = stateData.filter((s) => {
+    if (!filterKey || filterKey.length === 0) return true;
+    if (filterKey.length <= 2) {
+      return s.abbreviation.toLowerCase() === filterKey;
+    }
+    return (
+      s.state.toLowerCase().includes(filterKey) ||
+      s.abbreviation.toLowerCase() === filterKey
+    );
+  });
+
   return (
     <Card className="bg-white">
       <CardHeader className="border-b">
@@ -49,7 +68,7 @@ export default function StateTaxSummary() {
 
       <CardContent>
         <div className="space-y-4">
-          {stateData.map((s) => (
+          {filtered.map((s) => (
             <div
               key={s.abbreviation}
               className="flex items-center justify-between bg-gray-50 rounded-lg p-4"

@@ -10,6 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router";
+import type { DateRange as RDateRange } from "react-day-picker";
 
 interface Row {
   date: string;
@@ -92,9 +93,44 @@ const rows: Row[] = [
   },
 ];
 
-export default function DetailedTaxReport() {
+interface Props {
+  stateFilter?: string;
+  reportPeriod?: RDateRange;
+  reportType?: string;
+}
+
+export default function DetailedTaxReport({
+  stateFilter,
+  reportPeriod,
+}: Props) {
   const navigate = useNavigate();
-  const totals = rows.reduce(
+
+  const filterKey = stateFilter?.toLowerCase().trim();
+
+  const filteredRows = rows.filter((r) => {
+    if (filterKey && filterKey.length > 0) {
+      if (filterKey.length <= 2) {
+        if (r.state.toLowerCase() !== filterKey) return false;
+      } else {
+        const match =
+          r.state.toLowerCase().includes(filterKey) ||
+          r.city.toLowerCase().includes(filterKey) ||
+          r.customer.toLowerCase().includes(filterKey) ||
+          r.jobId.toLowerCase().includes(filterKey);
+        if (!match) return false;
+      }
+    }
+
+    if (reportPeriod?.from || reportPeriod?.to) {
+      const d = new Date(r.date);
+      if (reportPeriod?.from && d < reportPeriod.from) return false;
+      if (reportPeriod?.to && d > reportPeriod.to) return false;
+    }
+
+    return true;
+  });
+
+  const totals = filteredRows.reduce(
     (acc, r) => {
       acc.amount += r.amount;
       acc.tax += r.taxDue;
@@ -133,7 +169,7 @@ export default function DetailedTaxReport() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.map((r) => (
+            {filteredRows.map((r) => (
               <TableRow key={r.jobId}>
                 <TableCell>
                   {new Date(r.date).toLocaleDateString("en-US")}
