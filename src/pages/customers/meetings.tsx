@@ -22,90 +22,65 @@ interface Meeting {
   type: "Online" | "In-person";
   status: "Scheduled" | "Cancelled" | "Completed";
 }
+// Generate randomized mock meetings for development/demo
+function generateMockMeetings(count: number): Meeting[] {
+  const titles = [
+    "Project Review",
+    "Kickoff",
+    "Client Demo",
+    "Sprint Planning",
+    "Retrospective",
+    "Design Sync",
+    "Budget Review",
+    "QA Review",
+  ];
+  const organizers = [
+    "John Smith",
+    "Jane Doe",
+    "Aisha Khan",
+    "Carlos Ruiz",
+    "Priya Patel",
+    "Liam Brown",
+  ];
+  const types: Meeting["type"][] = ["Online", "In-person"];
+  const statuses: Meeting["status"][] = ["Scheduled", "Completed", "Cancelled"];
 
-const mockMeetings: Meeting[] = [
-  {
-    id: "1",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "2",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "3",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "4",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "5",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "6",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "7",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "8",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-  {
-    id: "9",
-    title: "Project Review",
-    organizer: "John Smith",
-    date: "2024-01-15",
-    time: "10:00",
-    type: "Online",
-    status: "Scheduled",
-  },
-];
+  const rand = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
+  const pad = (n: number) => n.toString().padStart(2, "0");
+
+  const today = new Date();
+  const makeDate = (offsetDays: number) => {
+    const d = new Date(today);
+    d.setDate(d.getDate() + offsetDays);
+    return d.toISOString().split("T")[0];
+  };
+
+  const items: Meeting[] = [];
+  for (let i = 0; i < count; i++) {
+    const offset = Math.floor(Math.random() * 60) - 15; // dates -15..+44 days
+    const hour = 8 + Math.floor(Math.random() * 9); // 8..16
+    const minute = Math.random() < 0.5 ? "00" : "30";
+    items.push({
+      id: `${Date.now().toString(36)}-${i}-${Math.floor(Math.random() * 1000)}`,
+      title: rand(titles),
+      organizer: rand(organizers),
+      date: makeDate(offset),
+      time: `${pad(hour)}:${minute}`,
+      type: rand(types),
+      status: rand(statuses),
+    });
+  }
+
+  // sort by date then time
+  items.sort((a, b) => {
+    if (a.date === b.date) return a.time.localeCompare(b.time);
+    return a.date.localeCompare(b.date);
+  });
+
+  return items;
+}
+
+const mockMeetings: Meeting[] = generateMockMeetings(9);
 
 export default function Meetings() {
   const navigate = useNavigate();
@@ -113,9 +88,13 @@ export default function Meetings() {
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredMeetings = mockMeetings.filter((meeting) => {
+    const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
-      meeting.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      meeting.organizer.toLowerCase().includes(searchQuery.toLowerCase());
+      q === "" ||
+      meeting.title.toLowerCase().includes(q) ||
+      meeting.organizer.toLowerCase().includes(q) ||
+      meeting.date.toLowerCase().includes(q) ||
+      meeting.type.toLowerCase().includes(q);
     const matchesStatus =
       statusFilter === "all" ||
       meeting.status.toLowerCase() === statusFilter.toLowerCase();
@@ -161,6 +140,7 @@ export default function Meetings() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
+              <SelectItem value="scheduled">Scheduled</SelectItem>
               <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
             </SelectContent>
