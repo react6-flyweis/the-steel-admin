@@ -71,6 +71,7 @@ export default function AllProjectsTable({ projects }: Props) {
     setCurrentYear(today.getFullYear());
     setSelectedDate(today.getDate());
   };
+
   return (
     <div>
       <div className="flex flex-wrap items-center justify-between gap-6 mb-5 mt-11">
@@ -202,13 +203,29 @@ export default function AllProjectsTable({ projects }: Props) {
                       <div className="flex gap-4 text-[#2563EB]">
                         <button
                           onClick={() =>
-                            navigate("/construction/project-view-page")
+                            navigate("/construction/project-view-page", {
+                              state: {
+                                projectCode: project.code,
+                                projectName: project.name,
+                              },
+                            })
                           }
                           className="hover:opacity-70"
                         >
                           <img src={EyeIcon} alt="" className="w-fit" />
                         </button>
-                        <button className="hover:opacity-70">
+
+                        <button
+                          onClick={() =>
+                            navigate("/project-view-page", {
+                              state: {
+                                projectCode: project.code,
+                                projectName: project.name,
+                              },
+                            })
+                          }
+                          className="hover:opacity-70"
+                        >
                           <img src={EditIcon} alt="" className="w-fit" />
                         </button>
                       </div>
@@ -217,6 +234,11 @@ export default function AllProjectsTable({ projects }: Props) {
                 ))}
               </tbody>
             </table>
+            {projects.length === 0 && (
+              <p className="text-center text-sm text-[#6B7280] py-8 w-full">
+                No projects found
+              </p>
+            )}
           </div>
         </div>
       )}

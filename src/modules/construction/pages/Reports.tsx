@@ -46,27 +46,31 @@ const rows = [
     actual: 65,
     planned: 70,
     status: "On Track",
+    createdDate: "2026-01-13",
   },
   {
     id: 2,
-    project: "Downtown Office Complex",
+    project: "Residential Tower A",
     actual: 35,
     planned: 40,
     status: "Delayed",
+    createdDate: "2025-12-20",
   },
   {
     id: 3,
-    project: "Downtown Office Complex",
+    project: "Shopping Mall Renovation",
     actual: 0,
     planned: 0,
     status: "Not Started",
+    createdDate: "2026-01-01",
   },
   {
     id: 4,
-    project: "Downtown Office Complex",
+    project: "Industrial Warehouse",
     actual: 100,
     planned: 100,
     status: "Completed",
+    createdDate: "2025-11-20",
   },
 ];
 
@@ -88,6 +92,7 @@ const projectFilterOptions = [
 ];
 
 const timeFilterOptions = [
+  { label: "All", value: "all" },
   { label: "This week", value: "this_week" },
   { label: "Last 3 weeks", value: "last_3_weeks" },
   { label: "This month", value: "this_month" },
@@ -130,21 +135,21 @@ const reports = [
   {
     title: "Safety & Compliance",
     project: "PRJ-001",
-    date: "2025-02-10",
+    date: "2026-01-10",
     status: "Passed",
     score: "98%",
   },
   {
     title: "Compliance Check",
     project: "PRJ-002",
-    date: "2025-02-08",
+    date: "2025-12-08",
     status: "Passed",
     score: "95%",
   },
   {
     title: "Equipment Check",
     project: "PRJ-001",
-    date: "2025-02-05",
+    date: "2025-12-05",
     status: "Warning",
     score: "95%",
   },
@@ -157,8 +162,59 @@ const reports = [
   },
 ];
 
+const projectNameMap: Record<string, string> = {
+  "PRJ-001": "Downtown Office Complex",
+  "PRJ-002": "Residential Tower A",
+  "PRJ-003": "Shopping Mall Renovation",
+  "PRJ-004": "Industrial Warehouse",
+};
+
+const isWithinTimeFilter = (date: string, time: string) => {
+  if (time === "all") return true;
+
+  const d = new Date(date);
+  const now = new Date();
+  const diff = (now.getTime() - d.getTime()) / (1000 * 60 * 60 * 24);
+
+  switch (time) {
+    case "this_week":
+      return diff <= 7;
+    case "last_3_weeks":
+      return diff <= 21;
+    case "this_month":
+      return diff <= 30;
+    case "last_6_months":
+      return diff <= 180;
+    case "this_year":
+      return diff <= 365;
+    default:
+      return true;
+  }
+};
+
 export default function Reports() {
-  const [status, setStatus] = useState("all");
+  const [time, setTime] = useState("all");
+  const [projectName, setProjectName] = useState("all");
+
+  const filteredRows = rows.filter((row) => {
+    const projectMatch =
+      projectName === "all"
+        ? true
+        : row.project === projectNameMap[projectName];
+
+    const timeMatch = isWithinTimeFilter(row.createdDate, time);
+
+    return projectMatch && timeMatch;
+  });
+
+  const filteredReports = reports.filter(
+    (r) =>
+      (projectName === "all" || r.project === projectName) &&
+      isWithinTimeFilter(r.date, time)
+  );
+
+  const filteredMaterials =
+    projectName === "all" ? materials : materials.slice(0, 2);
 
   return (
     <div className="space-y-6 p-5">
@@ -173,15 +229,15 @@ export default function Reports() {
             <CustomSelect
               title="This Week"
               options={timeFilterOptions}
-              value={status}
-              onChange={setStatus}
+              value={time}
+              onChange={setTime}
             />
 
             <CustomSelect
               title="All Projects"
               options={projectFilterOptions}
-              value={status}
-              onChange={setStatus}
+              value={projectName}
+              onChange={setProjectName}
               width="250px"
             />
 
@@ -191,6 +247,7 @@ export default function Reports() {
             </button>
           </div>
         </div>
+
         <StatsOverview stats={stats} showProgress />
 
         <div className="rounded-[8px] bg-white border border-[#F3F4F6] shadow overflow-hidden mt-6">
@@ -199,27 +256,11 @@ export default function Reports() {
               Project Progress vs Plan
             </h2>
           </div>
+
           <div className="overflow-x-auto scroll-hide w-[calc(100vw-26px)] lg:w-[calc(100vw-324px)]">
             <table className="min-w-[900px] w-full border-collapse rounded-[8px]">
-              <thead>
-                <tr className="text-left text-[12px] text-[#6B7280] border-b">
-                  <th className="lg:px-6 px-3 lg:py-4 py-3 font-normal min-w-[150px]">
-                    Project
-                  </th>
-                  <th className="lg:px-6 px-3 lg:py-4 py-3 font-normal">
-                    Actual Progress
-                  </th>
-                  <th className="lg:px-6 px-3 lg:py-4 py-3 font-normal">
-                    Planned Progress
-                  </th>
-                  <th className="lg:px-6 px-3 lg:py-4 py-3 font-normal">
-                    Status
-                  </th>
-                </tr>
-              </thead>
-
               <tbody>
-                {rows.map((row) => (
+                {filteredRows.map((row) => (
                   <tr
                     key={row.id}
                     className="border-b last:border-b-0 even:bg-[#F9FAFB]"
@@ -227,7 +268,6 @@ export default function Reports() {
                     <td className="lg:px-6 px-3 lg:py-6 py-3 text-[13px] text-[#111827]">
                       {row.project}
                     </td>
-
                     <td className="lg:px-6 px-3 lg:py-6 py-3">
                       <div className="flex items-center gap-4">
                         <div className="w-[160px] lg:w-[260px] h-2 bg-[#D9D9D9] rounded-full">
@@ -236,12 +276,9 @@ export default function Reports() {
                             style={{ width: `${row.actual}%` }}
                           />
                         </div>
-                        <span className="text-[13px] text-[#111827]">
-                          {row.actual}%
-                        </span>
+                        <span className="text-[13px]">{row.actual}%</span>
                       </div>
                     </td>
-
                     <td className="lg:px-6 px-3 lg:py-6 py-3">
                       <div className="flex items-center gap-4">
                         <div className="w-[160px] lg:w-[260px] h-2 bg-[#D9D9D9] rounded-full">
@@ -250,15 +287,12 @@ export default function Reports() {
                             style={{ width: `${row.planned}%` }}
                           />
                         </div>
-                        <span className="text-[13px] text-[#111827]">
-                          {row.planned}%
-                        </span>
+                        <span className="text-[13px]">{row.planned}%</span>
                       </div>
                     </td>
-
                     <td className="lg:px-6 px-3 lg:py-6 py-3">
                       <span
-                        className={`px-4 py-2 rounded-full min-w-max inline-block text-[13px] ${
+                        className={`px-4 py-2 rounded-full text-[13px] ${
                           statusStyles[row.status]
                         }`}
                       >
@@ -267,86 +301,75 @@ export default function Reports() {
                     </td>
                   </tr>
                 ))}
+                {filteredRows.length === 0 && (
+                  <p className="text-center text-sm text-[#6B7280] py-8">
+                    No projects found
+                  </p>
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
         <div className="flex md:flex-row flex-col gap-6 mt-6">
-          <div
-            className="flex-1 
-                rounded-[8px] lg:p-6 p-3 border !bg-white border-[#F3F4F6]
-                !shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.1),_0px_4px_6px_-1px_rgba(0,0,0,0.1)]
-              "
-          >
-            <h2 className="text-[20px] font-medium text-[#111827] mb-6">
+          <div className="flex-1 rounded-[8px] lg:p-6 p-3 border bg-white">
+            <h2 className="text-[20px] font-medium mb-6">
               Material Usage Efficiency
             </h2>
 
-            <div className="space-y-6">
-              {materials.map((m) => (
-                <div key={m.name}>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-[13px] text-[#111827] font-medium">
-                      {m.name}
-                    </span>
-                    <span className="text-[13px] text-[#111827] font-medium">
-                      {m.percent}%
-                    </span>
-                  </div>
-
-                  <div className="h-[8px] bg-[#E5E7EB] rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full ${m.color}`}
-                      style={{ width: `${m.percent}%` }}
-                    />
-                  </div>
-
-                  <div className="flex justify-between text-[12px] text-[#6B7280] mt-2">
-                    <span>Used:{m.used}</span>
-                    <span>Planned: {m.planned}</span>
-                  </div>
+            {filteredMaterials.map((m) => (
+              <div key={m.name} className="mb-6">
+                <div className="flex justify-between mb-2">
+                  <span className="text-[13px] font-medium">{m.name}</span>
+                  <span className="text-[13px] font-medium">{m.percent}%</span>
                 </div>
-              ))}
-            </div>
+                <div className="h-[8px] bg-[#E5E7EB] rounded-full">
+                  <div
+                    className={`h-full rounded-full ${m.color}`}
+                    style={{ width: `${m.percent}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+            {filteredMaterials.length === 0 && (
+              <p className="text-center text-sm text-[#6B7280] py-8">
+                No materials found
+              </p>
+            )}
           </div>
-          <div
-            className="flex-1
-                  rounded-[8px] lg:p-6 p-3 border !bg-white border-[#F3F4F6]
-                  !shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.1),_0px_4px_6px_-1px_rgba(0,0,0,0.1)]
-                "
-          >
-            <h2 className="text-[20px] font-medium text-[#111827] mb-6">
+
+          <div className="flex-1 rounded-[8px] lg:p-6 p-3 border bg-white">
+            <h2 className="text-[20px] font-medium mb-6">
               Safety & Compliance Report
             </h2>
 
-            <div className="space-y-8">
-              {reports.map((item, idx) => (
-                <div key={idx} className="flex items-start justify-between">
-                  <div>
-                    <p className="text-[13px] font-semibold text-[#111827]">
-                      {item.title}
-                    </p>
-                    <p className="text-[12px] text-[#6B7280] mt-1">
-                      {item.project}, {item.date}
-                    </p>
-                  </div>
-
-                  <div className="text-right">
-                    <span
-                      className={`inline-block px-4 py-1 rounded-full text-[13px] ${
-                        statusStyles[item.status]
-                      }`}
-                    >
-                      {item.status}
-                    </span>
-                    <p className="text-[12px] text-[#6B7280] mt-2">
-                      Score-{item.score}
-                    </p>
-                  </div>
+            {filteredReports.map((item, idx) => (
+              <div key={idx} className="flex justify-between mb-6 last:mb-0">
+                <div>
+                  <p className="text-[13px] font-semibold">{item.title}</p>
+                  <p className="text-[12px] text-[#6B7280]">
+                    {item.project}, {item.date}
+                  </p>
                 </div>
-              ))}
-            </div>
+                <div className="text-right">
+                  <span
+                    className={`px-4 py-1 rounded-full text-[13px] ${
+                      statusStyles[item.status]
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                  <p className="text-[12px] text-[#6B7280] mt-1">
+                    Score-{item.score}
+                  </p>
+                </div>
+              </div>
+            ))}
+            {filteredReports.length === 0 && (
+              <p className="text-center text-sm text-[#6B7280] py-8">
+                No reports found
+              </p>
+            )}
           </div>
         </div>
       </div>

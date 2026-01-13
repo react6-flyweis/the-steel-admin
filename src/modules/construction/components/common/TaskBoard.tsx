@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import DailyLogModel from "../dailyLogModel";
 import NewTaskModel from "../newTaskModel";
 import RightCheckIcon from "../../assets/RightTickIcon";
+
 type TaskPriority = "High" | "Medium" | "Low";
 
 type Task = {
@@ -13,9 +14,10 @@ type Task = {
   due?: string;
   assignee: string;
   progress?: number;
+  status?: "todo" | "inProgress" | "done"; // ✅ add status field
 };
 
-const tasks: {
+const initialTasks: {
   todo: Task[];
   inProgress: Task[];
   done: Task[];
@@ -29,6 +31,7 @@ const tasks: {
       priority: "High",
       due: "2024-02-15",
       assignee: "Sarah Wilson",
+      status: "todo",
     },
   ],
 
@@ -43,6 +46,7 @@ const tasks: {
       due: "2024-02-15",
       assignee: "Sarah Wilson",
       progress: 75,
+      status: "inProgress",
     },
     {
       id: "3",
@@ -53,6 +57,7 @@ const tasks: {
       due: "2024-02-15",
       assignee: "Sarah Wilson",
       progress: 75,
+      status: "inProgress",
     },
   ],
 
@@ -66,6 +71,7 @@ const tasks: {
       priority: "Low",
       due: "NA",
       assignee: "Robert Chen",
+      status: "done",
     },
   ],
 };
@@ -77,27 +83,98 @@ const priorityStyles: Record<TaskPriority, string> = {
 };
 
 export default function TaskBoard() {
-    const [openDailyLogModel, setDailyLogModel] = useState(false);
-    const [openNewTaskModel, setNewTaskModel] = useState(false);
-  
+  const [openDailyLogModel, setDailyLogModel] = useState(false);
+  const [openNewTaskModel, setNewTaskModel] = useState(false);
+  const [tasks, setTasks] = useState(initialTasks);
+  const [search, setSearch] = useState("");
+  const filterTasksBySearch = (list: Task[]) => {
+    if (!search.trim()) return list;
+
+    const q = search.toLowerCase();
+
+    return list.filter((task) =>
+      `${task.title}
+     ${task.project}
+     ${task.description}
+     ${task.assignee}
+     ${task.priority}`
+        .toLowerCase()
+        .includes(q)
+    );
+  };
+
+  const handleNewTask = (data: any) => {
+    const newTask: Task = {
+      id: Date.now().toString(), // simple unique id
+      title: data.taskName,
+      project: data.project,
+      description: data.description,
+      priority: capitalizeFirstLetter(data.priority) as TaskPriority,
+      due: data.deadline || "NA",
+      assignee: data.assignedTo,
+      status: data.status, // todo / inProgress / done
+    };
+
+    setTasks((prev) => {
+      const updated = { ...prev };
+      if (newTask.status === "todo") updated.todo = [newTask, ...prev.todo];
+      else if (newTask.status === "inProgress")
+        updated.inProgress = [newTask, ...prev.inProgress];
+      else if (newTask.status === "done")
+        updated.done = [newTask, ...prev.done];
+      return updated;
+    });
+  };
+  const handleDailyLogSubmit = (data: any) => {
+    const newTask: Task = {
+      id: Date.now().toString(),
+      title: data.task, // Task name
+      project: data.project, // Project
+      description: data.description, // Work description
+      progress: Number(data.progress), // % progress
+      priority: "Medium", // default
+      due: "NA", // In progress task
+      assignee: "You", // current user
+    };
+
+    setTasks((prev) => ({
+      ...prev,
+      inProgress: [newTask, ...prev.inProgress], // 🔥 sirf inProgress
+    }));
+  };
+
   return (
-    <div className="bg-white rounded-[8px] lg:p-6 p-3 border border-[#F3F4F6]
-      shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.1),_0px_4px_6px_-1px_rgba(0,0,0,0.1)]">
+    <div
+      className="bg-white rounded-[8px] lg:p-6 p-3 border border-[#F3F4F6]
+      shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.1),_0px_4px_6px_-1px_rgba(0,0,0,0.1)]"
+    >
       <div className="flex sm:flex-row flex-col gap-3 sm:justify-between sm:items-center mb-6">
         <h2 className="text-[17px] font-semibold">Task Board</h2>
         <div className="flex gap-4">
-          <button onClick={() => setDailyLogModel(true)} className="bg-[#3AB449] text-white px-6 py-2 rounded-[8px] text-[16px] font-normal">
+          <button
+            onClick={() => setDailyLogModel(true)}
+            className="bg-[#3AB449] text-white px-6 py-2 rounded-[8px] text-[16px] font-normal"
+          >
             Daily Work Log
           </button>
-          <button onClick={() => setNewTaskModel(true)} className="bg-[#2563EB] text-white px-6 py-2 rounded-[8px] text-[16px] font-normal">
+          <button
+            onClick={() => setNewTaskModel(true)}
+            className="bg-[#2563EB] text-white px-6 py-2 rounded-[8px] text-[16px] font-normal"
+          >
             Add Task
           </button>
+
           <DailyLogModel
             open={openDailyLogModel}
             onClose={() => setDailyLogModel(false)}
+            onSubmit={(data) => {
+              handleDailyLogSubmit(data);
+            }}
           />
+
           <NewTaskModel
             open={openNewTaskModel}
+            onSubmit={handleNewTask}
             onClose={() => setNewTaskModel(false)}
           />
         </div>
@@ -105,19 +182,27 @@ export default function TaskBoard() {
 
       <div className="overflow-auto scroll-hide w-[calc(100vw-50px)] lg:w-[calc(100vw-388px)]">
         <div className="grid grid-cols-3 lg:gap-6 gap-3 min-w-[800px]">
-          <Column title={`To Do (${tasks.todo.length})`} bg="bg-[#F9FAFB]">
-            {tasks.todo.map(renderTask)}
+          <Column
+            title={`To Do (${filterTasksBySearch(tasks.todo).length})`}
+            bg="bg-[#F9FAFB]"
+          >
+            {filterTasksBySearch(tasks.todo).map(renderTask)}
           </Column>
 
           <Column
-            title={`In Progress (${tasks.inProgress.length})`}
+            title={`In Progress (${
+              filterTasksBySearch(tasks.inProgress).length
+            })`}
             bg="bg-[#EFF6FF]"
           >
-            {tasks.inProgress.map(renderTask)}
+            {filterTasksBySearch(tasks.inProgress).map(renderTask)}
           </Column>
 
-          <Column title={`Done (${tasks.done.length})`} bg="bg-[#F0FDF4]">
-            {tasks.done.map(renderTask)}
+          <Column
+            title={`Done (${filterTasksBySearch(tasks.done).length})`}
+            bg="bg-[#F0FDF4]"
+          >
+            {filterTasksBySearch(tasks.done).map(renderTask)}
           </Column>
         </div>
       </div>
@@ -125,22 +210,26 @@ export default function TaskBoard() {
   );
 }
 
+function capitalizeFirstLetter(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function renderTask(task: Task) {
   return (
     <div key={task.id} className="bg-white rounded-xl p-4 shadow-sm mb-4">
       <div className="flex justify-between items-start mb-2">
         <h3 className="font-bold text-[14px] text-[#111827]">{task.title}</h3>
-        {
-          task.due !== "NA" ?
+        {task.status === "done" ? (
+          <RightCheckIcon />
+        ) : (
           <span
-            className={`px-3 py-1 rounded-full text-sm ${priorityStyles[task.priority]}`}
+            className={`px-3 py-1 rounded-full text-sm ${
+              priorityStyles[task.priority]
+            }`}
           >
             {task.priority}
-          </span> :
-          <>
-            <RightCheckIcon />
-          </>
-        }
+          </span>
+        )}
       </div>
 
       <p className="text-[#6B7280] text-xs mb-2">{task.project}</p>
@@ -182,7 +271,9 @@ function Column({
   children: React.ReactNode;
 }) {
   return (
-    <div className={`${bg} rounded-[8px] p-4 min-h-[600px]`}>
+    <div
+      className={`${bg} rounded-[8px] p-4 min-h-[600px] max-h-[80vh] overflow-auto scroll-hide`}
+    >
       <h3 className="font-semibold mb-4 text-sm text-[#111827]">{title}</h3>
       {children}
     </div>

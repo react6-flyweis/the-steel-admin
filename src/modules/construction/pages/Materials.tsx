@@ -4,7 +4,7 @@ import StatsOverview from "../components/cards/StatCard";
 import PlusIcon from "../assets/plusicon.svg";
 import type { StatItem } from "../components/cards/StatCard";
 import EyeIcon from "../assets/EyeIcon.svg";
-// import CameraIcon from "../assets/cameraicon.svg";
+import CameraIcon from "../assets/cameraicon.svg";
 import DoubleCheck from "../assets/tickdoubleicon.svg";
 import Dispatch from "../assets/dispatchicon.svg";
 import Alert from "../assets/alerticon.svg";
@@ -48,65 +48,6 @@ const stats: StatItem[] = [
   },
 ];
 
-const requests = [
-  {
-    id: "1",
-    requestNo: "MR-001",
-    requestedBy: "John Smith",
-    projectName: "Downtown Office Complex",
-    projectCode: "PRJ-001",
-    material: "Steel Beams",
-    quantity: "50 units",
-    spec: "Grade A steel required",
-    needBy: "2025-02-02",
-    delivery: "2025-02-18",
-    status: "Approved",
-    supplier: "Steel Corp Ltd",
-  },
-  {
-    id: "2",
-    requestNo: "MR-002",
-    requestedBy: "Sarah Wilson",
-    projectName: "Residential Tower A",
-    projectCode: "PRJ-002",
-    material: "Concrete Mix",
-    quantity: "200 cubic meters",
-    spec: "High strength concrete",
-    needBy: "2025-02-15",
-    delivery: "2025-02-14",
-    status: "Dispatched",
-    supplier: "Concrete Solutions",
-  },
-  {
-    id: "3",
-    requestNo: "MR-003",
-    requestedBy: "Mike Johnson",
-    projectName: "Downtown Office Complex",
-    projectCode: "PRJ-001",
-    material: "Electrical Cables",
-    quantity: "500 units",
-    spec: "Fire-resistant cable",
-    needBy: "2025-02-25",
-    delivery: "TBD",
-    status: "Pending",
-    supplier: "Electro Tech",
-  },
-  {
-    id: "4",
-    requestNo: "MR-004",
-    requestedBy: "Tom Brown",
-    projectName: "Residential Tower A",
-    projectCode: "PRJ-002",
-    material: "Ceramic Tiles",
-    quantity: "1000 sq ft",
-    spec: "Premium quality tiles",
-    needBy: "2025-03-01",
-    delivery: "2025-02-10",
-    status: "Delivered",
-    supplier: "Tile Masters",
-  },
-];
-
 const statusStyle: Record<string, string> = {
   Approved: "bg-[#F1E1FF] text-[#9333EA]",
   Dispatched: "bg-[#D0E2FF] text-[#1D51A4]",
@@ -123,6 +64,65 @@ const options = [
 ];
 
 export default function Materials() {
+  const [requests, setRequests] = useState([
+    {
+      id: "1",
+      requestNo: "MR-001",
+      requestedBy: "John Smith",
+      projectName: "Downtown Office Complex",
+      projectCode: "PRJ-001",
+      material: "Steel Beams",
+      quantity: "50 units",
+      spec: "Grade A steel required",
+      needBy: "2025-02-02",
+      delivery: "2025-02-18",
+      status: "Approved",
+      supplier: "Steel Corp Ltd",
+    },
+    {
+      id: "2",
+      requestNo: "MR-002",
+      requestedBy: "Sarah Wilson",
+      projectName: "Residential Tower A",
+      projectCode: "PRJ-002",
+      material: "Concrete Mix",
+      quantity: "200 cubic meters",
+      spec: "High strength concrete",
+      needBy: "2025-02-15",
+      delivery: "2025-02-14",
+      status: "Dispatched",
+      supplier: "Concrete Solutions",
+    },
+    {
+      id: "3",
+      requestNo: "MR-003",
+      requestedBy: "Mike Johnson",
+      projectName: "Downtown Office Complex",
+      projectCode: "PRJ-001",
+      material: "Electrical Cables",
+      quantity: "500 units",
+      spec: "Fire-resistant cable",
+      needBy: "2025-02-25",
+      delivery: "TBD",
+      status: "Pending",
+      supplier: "Electro Tech",
+    },
+    {
+      id: "4",
+      requestNo: "MR-004",
+      requestedBy: "Tom Brown",
+      projectName: "Residential Tower A",
+      projectCode: "PRJ-002",
+      material: "Ceramic Tiles",
+      quantity: "1000 sq ft",
+      spec: "Premium quality tiles",
+      needBy: "2025-03-01",
+      delivery: "2025-02-10",
+      status: "Delivered",
+      supplier: "Tile Masters",
+    },
+  ]);
+  const [search, setSearch] = useState("");
   const [status, setStatus] = useState("all");
   const navigate = useNavigate();
   const [openReportModel, setReportModel] = useState(false);
@@ -131,6 +131,27 @@ export default function Materials() {
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null
   );
+
+  const filteredRequests = requests.filter((r) => {
+    // 🟣 status filter
+    const matchStatus = status === "all" || r.status.toLowerCase() === status;
+
+    const matchSearch = search
+      ? `${r.requestNo}
+       ${r.requestedBy}
+       ${r.projectName}
+       ${r.projectCode}
+       ${r.material}
+       ${r.quantity}
+       ${r.spec}
+       ${r.supplier}
+       ${r.status}`
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      : true;
+
+    return matchStatus && matchSearch;
+  });
 
   return (
     <div className="space-y-6 p-5">
@@ -149,7 +170,7 @@ export default function Materials() {
               onChange={setStatus}
             />
 
-            {/* <button
+            <button
               onClick={() => setReportModel(true)}
               className="
               bg-[#4B5563] text-white
@@ -158,10 +179,13 @@ export default function Materials() {
             "
             >
               Issue Reporting
-            </button> */}
+            </button>
             <IssueReportingModal
               open={openReportModel}
               onClose={() => setReportModel(false)}
+              onCreate={(newRequest) =>
+                setRequests((prev) => [newRequest, ...prev])
+              }
             />
 
             <button
@@ -174,6 +198,9 @@ export default function Materials() {
             <RequestMaterialModel
               open={openRequestModel}
               onClose={() => setRequestModel(false)}
+              onCreate={(newRequest) =>
+                setRequests((prev) => [newRequest, ...prev])
+              }
             />
           </div>
         </div>
@@ -209,7 +236,7 @@ export default function Materials() {
               </thead>
 
               <tbody>
-                {requests.map((r) => (
+                {filteredRequests.map((r) => (
                   <tr
                     key={r.id}
                     className="border-b last:border-b-0 even:bg-[#F9FAFB]"
@@ -266,14 +293,12 @@ export default function Materials() {
                     <td className="lg:px-6 px-3 lg:py-6 py-3">
                       <div className="flex gap-4 text-[#2563EB]">
                         <button
-                          onClick={() =>
-                            navigate("/construction/material-view-page")
-                          }
+                          onClick={() => navigate("/material-view-page")}
                           className="hover:opacity-70"
                         >
                           <img src={EyeIcon} alt="" className="min-w-fit" />
                         </button>
-                        {/* <button
+                        <button
                           onClick={() => {
                             setSelectedRequestId(r.id);
                             setPhotoModel(true);
@@ -281,13 +306,18 @@ export default function Materials() {
                           className="hover:opacity-70"
                         >
                           <img src={CameraIcon} alt="" className="min-w-fit" />
-                        </button> */}
+                        </button>
                       </div>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            {filteredRequests.length === 0 && (
+              <p className="text-center text-sm text-[#6B7280] py-8">
+                No projects found
+              </p>
+            )}
           </div>
         </div>
 
@@ -297,6 +327,10 @@ export default function Materials() {
           onClose={() => {
             setPhotoModel(false);
             setSelectedRequestId(null);
+          }}
+          onUpload={(file, requestId) => {
+            console.log("Uploaded file:", file);
+            console.log("Request ID:", requestId);
           }}
         />
 

@@ -6,13 +6,13 @@ import EyeIcon from "../assets/EyeIcon.svg";
 import DownloadIcon from "../assets/downloadicon.svg";
 import DrawingModel from "../components/drawingModel";
 import DrawingPreviewModal from "../components/drawingPreviewModel";
-const projects = [
+const initialDummyProjects = [
   {
     name: "ABC Logistics Warehouse",
     code: "PEB-1021",
     uploadedBy: "Rahul Sharma",
     location: "Pune, Maharashtra",
-    updatedOn: "25-April-2025",
+    updatedOn: "25-January-2026",
     files: [
       {
         id: "PEB-1021-1",
@@ -98,6 +98,23 @@ const projects = [
   },
 ];
 
+type UploadedFile = {
+  id: string;
+  name: string;
+  size: string;
+  status: string;
+  key?: string;
+};
+
+type Project = {
+  name: string;
+  code: string;
+  uploadedBy: string;
+  location: string;
+  updatedOn: string;
+  files: UploadedFile[];
+};
+
 const statusStyle: Record<string, string> = {
   "Pending Review": "bg-yellow-100 text-yellow-700",
   Approved: "bg-green-100 text-green-700",
@@ -109,6 +126,90 @@ export default function DrawingAttachment() {
   const [openDrawingPreviewModel, setDrawingPreviewModel] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>(null);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [localSearch, setLocalSearch] = useState("");
+  const [projects, setProjects] = useState<Project[]>(initialDummyProjects);
+
+  const filteredProjects = projects
+    .map((project) => {
+      const query = `${search} ${localSearch}`.trim().toLowerCase();
+
+      if (!query) return project;
+
+      // 🔹 project level match
+      const projectMatch =
+        project.name.toLowerCase().includes(query) ||
+        project.code.toLowerCase().includes(query) ||
+        project.uploadedBy.toLowerCase().includes(query) ||
+        project.location.toLowerCase().includes(query) ||
+        project.updatedOn.toLowerCase().includes(query);
+
+      // 🔹 file level match
+      const matchedFiles = project.files.filter((file) =>
+        file.name.toLowerCase().includes(query)
+      );
+
+      if (projectMatch) return project;
+
+      if (matchedFiles.length > 0) {
+        return {
+          ...project,
+          files: matchedFiles,
+        };
+      }
+
+      return null;
+    })
+    .filter(Boolean) as Project[];
+
+  const handleUpload = ({
+    file,
+    projectName,
+    projectCode,
+  }: {
+    file: File;
+    projectName: string;
+    projectCode: string;
+  }) => {
+    const newFile: UploadedFile = {
+      id: crypto.randomUUID(),
+      name: file.name,
+      size: `${(file.size / 1024 / 1024).toFixed(2)} MB`,
+      status: "Pending Review",
+      key: URL.createObjectURL(file),
+    };
+
+    setProjects((prev) => {
+      const projectExists = prev.find(
+        (project) => project.code === projectCode
+      );
+
+      // ✅ If project already exists → file add karo (top me)
+      if (projectExists) {
+        return prev.map((project) =>
+          project.code === projectCode
+            ? {
+                ...project,
+                updatedOn: new Date().toLocaleDateString("en-GB"),
+                files: [newFile, ...project.files], // 🔥 top me
+              }
+            : project
+        );
+      }
+
+      // ✅ If new project → pura card upar add hoga
+      const newProject: Project = {
+        name: projectName,
+        code: projectCode,
+        uploadedBy: "Rahul Sharma",
+        location: "—",
+        updatedOn: new Date().toLocaleDateString("en-GB"),
+        files: [newFile],
+      };
+
+      return [newProject, ...prev];
+    });
+  };
 
   return (
     <>
@@ -143,13 +244,15 @@ export default function DrawingAttachment() {
                 <input
                   type="text"
                   placeholder="Search leads, projects..."
+                  value={localSearch}
+                  onChange={(e) => setLocalSearch(e.target.value)}
                   className="text-[14px] outline-none lg:min-w-[256px] w-[150px]"
                 />
               </div>
             </div>
           </div>
           <div className="space-y-6 lg:px-6 px-3 py-4">
-            {projects.map((project, idx) => (
+            {filteredProjects.map((project, idx) => (
               <div
                 key={idx}
                 className="
@@ -206,12 +309,15 @@ export default function DrawingAttachment() {
                       className="relative flex items-center justify-between gap-2 rounded-xl border border-[#E5E7EB] px-5 py-4"
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center">
+                        <div className="min-w-10 w-10 h-10 rounded-lg bg-pink-100 flex items-center justify-center">
                           <img src={PdfIcon} alt="" />
                         </div>
 
                         <div>
-                          <p className="text-sm font-medium text-[#111827]">
+                          <p
+                            className="text-sm font-medium text-[#111827]"
+                            style={{ wordBreak: "break-all" }}
+                          >
                             {file.name}
                           </p>
                           <p className="text-sm text-[#6B7280] mt-1">
@@ -220,7 +326,7 @@ export default function DrawingAttachment() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-4 min-w-[80px]">
                         <button className="hover:opacity-70">
                           <img
                             src={DownloadIcon}
@@ -253,11 +359,17 @@ export default function DrawingAttachment() {
                 </div>
               </div>
             ))}
+            {filteredProjects.length === 0 && (
+              <p className="text-center text-sm text-[#6B7280] py-8">
+                No projects found
+              </p>
+            )}
           </div>
         </div>
       </div>
       <DrawingModel
         open={openDrawingModel}
+        onSubmit={(data) => handleUpload(data)}
         onClose={() => {
           setDrawingModel(false);
         }}
