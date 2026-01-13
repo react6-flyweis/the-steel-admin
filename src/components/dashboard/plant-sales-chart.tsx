@@ -1,11 +1,19 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function PlantSalesChart() {
-  const salesData = [
+type Period = "Today" | "Week" | "Month";
+
+export default function PlantSalesChart({ period }: { period?: Period }) {
+  const salesBase = [
     { name: "Option A", value: 60, color: "bg-blue-600" },
     { name: "Option B", value: 20, color: "bg-orange-400" },
     { name: "OptionC", value: 20, color: "bg-orange-300" },
   ];
+
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.6 : 1;
+  const salesData = salesBase.map((s) => ({
+    ...s,
+    value: Math.max(1, Math.round(s.value * scale)),
+  }));
 
   // Calculate total for percentage calculation
   //   const total = salesData.reduce((sum, item) => sum + item.value, 0);
