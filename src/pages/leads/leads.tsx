@@ -48,9 +48,9 @@ const initialLeads = [
     chatCount: 2,
   },
   {
-    id: "ID-2025-1047",
-    name: "John Doe",
-    workshop: "Workshop",
+    id: "ID-2025-1048",
+    name: "Jane Smith",
+    workshop: "Garage",
     category: "Texas",
     assignedTo: "Sarah Lee",
     assignedToName: "Sarah Lee",
@@ -59,12 +59,12 @@ const initialLeads = [
     progressStep: "Step 4/7",
     status: "Quotation Sent",
     statusColor: "orange",
-    quoteValue: "$12,500",
+    quoteValue: "$125,000",
     chatCount: 4,
   },
   {
-    id: "ID-2025-1047",
-    name: "John Doe",
+    id: "ID-2025-1049",
+    name: "Bob Johnson",
     workshop: "Workshop",
     category: "Texas",
     assignedTo: "Sarah Lee",
@@ -74,22 +74,22 @@ const initialLeads = [
     progressStep: "Step 4/7",
     status: "Proposal sent",
     statusColor: "purple",
-    quoteValue: "$12,500",
+    quoteValue: "$220,000",
     chatCount: 2,
   },
   {
-    id: "ID-2025-1047",
-    name: "John Doe",
-    workshop: "Workshop",
+    id: "ID-2025-1050",
+    name: "Alice Green",
+    workshop: "Commercial",
     category: "Texas",
     assignedTo: "Sarah Lee",
     assignedToName: "Sarah Lee",
     assignmentStatus: "1 person assigned",
     progress: 3,
     progressStep: "Step 4/7",
-    status: "Proposal sent",
-    statusColor: "purple",
-    quoteValue: "$12,500",
+    status: "Closed",
+    statusColor: "green",
+    quoteValue: "$45,000",
     chatCount: 2,
   },
 ];
@@ -101,10 +101,11 @@ export default function LeadsPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [leads] = useState(initialLeads);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
+  // const [searchQuery, setSearchQuery] = useState("");
 
-  const handleSelectAll = (checked: boolean) => {
+  const handleSelectAll = (checked: boolean, listToSelect: typeof leads) => {
     if (checked) {
-      setSelectedLeads(leads.map((lead) => lead.id));
+      setSelectedLeads(listToSelect.map((lead) => lead.id));
     } else {
       setSelectedLeads([]);
     }
@@ -112,9 +113,9 @@ export default function LeadsPage() {
 
   const handleSelectLead = (id: string, checked: boolean) => {
     if (checked) {
-      setSelectedLeads([...selectedLeads, id]);
+      setSelectedLeads((s) => [...s, id]);
     } else {
-      setSelectedLeads(selectedLeads.filter((leadId) => leadId !== id));
+      setSelectedLeads((s) => s.filter((leadId) => leadId !== id));
     }
   };
 
@@ -143,6 +144,57 @@ export default function LeadsPage() {
     return colors[color] || "bg-gray-100 text-gray-700";
   };
 
+  // Helper to parse numeric quote value
+  const parseQuoteValue = (q?: string) =>
+    Number((q || "").replace(/[^\d]/g, "") || 0);
+
+  // Compute filtered leads based on search + filters
+  const filteredLeads = leads.filter((lead) => {
+    // Search
+    // const q = searchQuery.trim().toLowerCase();
+    // if (q) {
+    //   const hay =
+    //     `${lead.name} ${lead.id} ${lead.workshop} ${lead.category} ${lead.assignedToName}`.toLowerCase();
+    //   if (!hay.includes(q)) return false;
+    // }
+
+    // Building type filter (normalize)
+    if (buildingType !== "all") {
+      const normalized = buildingType.replace(/-/g, " ").replace(/s$/, "");
+      if (
+        !lead.workshop.toLowerCase().includes(normalized.toLowerCase().trim())
+      ) {
+        return false;
+      }
+    }
+
+    // Project value filter
+    if (projectValue !== "all") {
+      const value = parseQuoteValue(lead.quoteValue);
+      if (projectValue === "small" && !(value < 50000)) return false;
+      if (projectValue === "medium" && !(value >= 50000 && value <= 200000))
+        return false;
+      if (projectValue === "large" && !(value > 200000)) return false;
+    }
+
+    // Assignments filter
+    if (assignments !== "all") {
+      if (assignments === "assigned" && !lead.assignedTo) return false;
+      if (assignments === "unassigned" && lead.assignedTo) return false;
+    }
+
+    // Status filter
+    if (statusFilter !== "all") {
+      const s = lead.status.toLowerCase();
+      if (statusFilter === "proposal" && !s.includes("proposal")) return false;
+      if (statusFilter === "quotation" && !s.includes("quotation"))
+        return false;
+      if (statusFilter === "closed" && !s.includes("closed")) return false;
+    }
+
+    return true;
+  });
+
   return (
     <>
       <FilterTabs />
@@ -157,25 +209,27 @@ export default function LeadsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Leads"
-            value="7"
+            value={String(leads.length)}
             color="bg-blue-600"
             icon={<Users className="h-5 w-5 text-blue-600" />}
           />
           <StatCard
             title="Assigned"
-            value="5"
+            value={String(leads.filter((l) => l.assignedTo).length)}
             color="bg-green-600"
             icon={<UserCheck className="h-5 w-5 text-green-600" />}
           />
           <StatCard
             title="Unassigned"
-            value="2"
+            value={String(leads.filter((l) => !l.assignedTo).length)}
             color="bg-yellow-500"
             icon={<UserX className="h-5 w-5 text-yellow-600" />}
           />
           <StatCard
             title="Unopened Message"
-            value="7"
+            value={String(
+              leads.reduce((acc, l) => acc + (l.chatCount > 0 ? 1 : 0), 0)
+            )}
             color="bg-orange-500"
             icon={<Mail className="h-5 w-5 text-orange-600" />}
           />
@@ -264,8 +318,13 @@ export default function LeadsPage() {
                     <th className="px-4 py-3 text-left">
                       <input
                         type="checkbox"
-                        checked={selectedLeads.length === leads.length}
-                        onChange={(e) => handleSelectAll(e.target.checked)}
+                        checked={
+                          filteredLeads.length > 0 &&
+                          selectedLeads.length === filteredLeads.length
+                        }
+                        onChange={(e) =>
+                          handleSelectAll(e.target.checked, filteredLeads)
+                        }
                         className="rounded border-gray-300"
                       />
                     </th>
@@ -293,8 +352,8 @@ export default function LeadsPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {leads.map((lead, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
+                  {filteredLeads.map((lead, index) => (
+                    <tr key={lead.id + index} className="hover:bg-gray-50">
                       <td className="px-3 py-2 sm:px-4 sm:py-4">
                         <input
                           type="checkbox"
@@ -434,6 +493,16 @@ export default function LeadsPage() {
                       </td>
                     </tr>
                   ))}
+                  {filteredLeads.length === 0 && (
+                    <tr>
+                      <td
+                        colSpan={8}
+                        className="px-6 py-8 text-center text-sm text-gray-500"
+                      >
+                        No leads match your search or filters.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
