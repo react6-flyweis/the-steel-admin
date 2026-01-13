@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Search,
   Eye,
@@ -23,79 +23,75 @@ import { useNavigate } from "react-router";
 import AddCustomerDialog from "@/components/customers/add-customer-dialog";
 import FilterTabs from "@/components/FilterTabs";
 
-// Mock data - replace with actual API calls
-const initialCustomers = [
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-  {
-    id: "ID-2025-1047",
-    customerName: "John Doe",
-    phone: "+39 02 8945 2231",
-    email: "luca.moretti@eurobuild.it",
-    inquiryFor: "Garage",
-    status: "Active",
-  },
-];
+// Helper: generate a random customer
+function generateRandomCustomer() {
+  const names = [
+    "Luca Moretti",
+    "Maria Rossi",
+    "Giovanni Bianchi",
+    "Elena Ferri",
+    "Marco Conti",
+    "Sofia Romano",
+    "Paolo Greco",
+  ];
+  const inquiries = ["Garage", "Roof", "Extension", "Kitchen", "Bathroom"];
+  const statuses = ["Active", "inactive"];
+
+  const name = names[Math.floor(Math.random() * names.length)];
+  const id = `ID-${new Date().getFullYear()}-${
+    Math.floor(Math.random() * 9000) + 1000
+  }`;
+  const phone = `+39 0${Math.floor(2000 + Math.random() * 8000)} ${Math.floor(
+    100 + Math.random() * 900
+  )} ${Math.floor(1000 + Math.random() * 9000)}`;
+  const email = `${name.toLowerCase().replace(/\s+/g, ".")}${Math.floor(
+    Math.random() * 100
+  )}@example.com`;
+  const inquiryFor = inquiries[Math.floor(Math.random() * inquiries.length)];
+  const status = statuses[Math.floor(Math.random() * statuses.length)];
+
+  return {
+    id,
+    customerName: name,
+    phone,
+    email,
+    inquiryFor,
+    status,
+  };
+}
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [customers] = useState(initialCustomers);
+  // Seed state with a few random customers plus the initial seeds
+  const [customers, setCustomers] = useState(() => {
+    const customers = Array.from({ length: 8 }).map(() =>
+      generateRandomCustomer()
+    );
+    return customers;
+  });
   const navigate = useNavigate();
+
+  const filteredCustomers = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return customers.filter((c) => {
+      // Status filter
+      if (statusFilter !== "all" && c.status.toLowerCase() !== statusFilter) {
+        return false;
+      }
+
+      // Search across several fields
+      if (!q) return true;
+
+      return (
+        (c.id && c.id.toLowerCase().includes(q)) ||
+        (c.customerName && c.customerName.toLowerCase().includes(q)) ||
+        (c.phone && c.phone.toLowerCase().includes(q)) ||
+        (c.email && c.email.toLowerCase().includes(q)) ||
+        (c.inquiryFor && c.inquiryFor.toLowerCase().includes(q))
+      );
+    });
+  }, [customers, searchQuery, statusFilter]);
 
   return (
     <>
@@ -118,7 +114,10 @@ export default function CustomersPage() {
               Recent Signed Contracts
             </Button>
             <AddCustomerDialog
-              onAdd={(c) => console.log("Added customer:", c)}
+              onAdd={(c) => {
+                const newCustomer = c ?? generateRandomCustomer();
+                setCustomers((prev) => [newCustomer, ...prev]);
+              }}
               trigger={
                 <Button size="lg" className="">
                   Add New Customer
@@ -211,8 +210,11 @@ export default function CustomersPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {customers.map((customer, index) => (
-                    <tr key={index} className="hover:bg-gray-50">
+                  {filteredCustomers.map((customer, index) => (
+                    <tr
+                      key={`${customer.id}-${index}`}
+                      className="hover:bg-gray-50"
+                    >
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {customer.id}
                       </td>
@@ -231,7 +233,12 @@ export default function CustomersPage() {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <Badge
                           variant="outline"
-                          className="bg-green-50 text-green-700 border-green-200"
+                          className={
+                            customer.status &&
+                            customer.status.toLowerCase() === "active"
+                              ? "bg-green-50 text-green-700 border-green-200"
+                              : "bg-red-50 text-red-700 border-red-200"
+                          }
                         >
                           {customer.status}
                         </Badge>
