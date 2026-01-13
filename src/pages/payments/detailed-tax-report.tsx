@@ -111,12 +111,75 @@ const rows: Row[] = [
 
 export default function DetailedTaxReportPage() {
   const navigate = useNavigate();
-  const [reportPeriod, setReportPeriod] = useState("1/15/2024");
-  const [stateFilter, setStateFilter] = useState("Houston");
+  const [reportPeriod, setReportPeriod] = useState("");
+  const [stateFilter, setStateFilter] = useState("");
   const [reportType, setReportType] = useState("Monthly Summary");
   const [searchQuery, setSearchQuery] = useState("");
+  const parseDateLoose = (s: string) => {
+    if (!s) return null;
+    const d = new Date(s);
+    if (!isNaN(d.getTime())) return d;
+    const parts = s.split("/").map((p) => Number(p));
+    if (parts.length === 3) {
+      const [m, day, y] = parts;
+      const dd = new Date(y, m - 1, day);
+      if (!isNaN(dd.getTime())) return dd;
+    }
+    return null;
+  };
 
-  const totals = rows.reduce(
+  const parseRange = (s: string) => {
+    if (!s) return null;
+    const parts = s.split("-").map((p) => p.trim());
+    if (parts.length === 2) {
+      const from = parseDateLoose(parts[0]);
+      const to = parseDateLoose(parts[1]);
+      if (from && to) return { from, to };
+    }
+    const single = parseDateLoose(s.trim());
+    if (single) return { from: single, to: single };
+    return null;
+  };
+
+  const range = parseRange(reportPeriod);
+
+  const filteredRows = rows.filter((row) => {
+    // search filter (customer, city, jobId)
+    const q = searchQuery.trim().toLowerCase();
+    if (q) {
+      const matchesSearch =
+        row.customer.toLowerCase().includes(q) ||
+        row.city.toLowerCase().includes(q) ||
+        row.jobId.toLowerCase().includes(q);
+      if (!matchesSearch) return false;
+    }
+
+    // state filter: allow abbreviation (TX) or city/name matches
+    const sf = stateFilter.trim().toLowerCase();
+    if (sf) {
+      if (sf.length <= 2) {
+        if (row.state.toLowerCase() !== sf) return false;
+      } else {
+        const match =
+          row.city.toLowerCase().includes(sf) ||
+          row.customer.toLowerCase().includes(sf) ||
+          row.state.toLowerCase().includes(sf);
+        if (!match) return false;
+      }
+    }
+
+    // date range filter
+    if (range) {
+      const d = new Date(row.date);
+      if (range.from && d < range.from) return false;
+      if (range.to && d > range.to) return false;
+    }
+
+    // reportType is currently not used for filtering; placeholder for future logic
+    return true;
+  });
+
+  const totals = filteredRows.reduce(
     (acc, r) => {
       acc.amount += r.amount;
       acc.tax += r.taxDue;
@@ -124,15 +187,6 @@ export default function DetailedTaxReportPage() {
     },
     { amount: 0, tax: 0 }
   );
-
-  const filteredRows = rows.filter((row) => {
-    const matchesSearch =
-      searchQuery === "" ||
-      row.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      row.jobId.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesSearch;
-  });
 
   return (
     <div className="p-6 space-y-6">
