@@ -14,8 +14,12 @@ interface ActivityItem {
   icon: React.ReactNode;
 }
 
-export default function RecentSalesActivity() {
-  const items: ActivityItem[] = [
+export default function RecentSalesActivity({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const baseItems: ActivityItem[] = [
     {
       id: "1",
       title: "Deal closed with Global Industries - $300,000",
@@ -47,6 +51,12 @@ export default function RecentSalesActivity() {
       icon: <FileText className="w-5 h-5 text-orange-400" />,
     },
   ];
+
+  const scale = period === "Today" ? 0.25 : period === "Week" ? 0.7 : 1;
+  const items = baseItems.slice(
+    0,
+    Math.max(1, Math.round(baseItems.length * scale))
+  );
 
   return (
     <Card>
