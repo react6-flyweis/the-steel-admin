@@ -6,7 +6,7 @@ import {
 } from "@/components/ui/chart";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
-const data = [
+const baseData = [
   { stage: "New", value: 45 },
   { stage: "Contacted", value: 37 },
   { stage: "Proposal Sent", value: 31 },
@@ -19,7 +19,14 @@ const chartConfig = {
   stages: { color: "#2B82F6", label: "Leads" },
 } as const;
 
-export default function PipelineStageOverview() {
+type Period = "Today" | "Week" | "Month";
+
+export default function PipelineStageOverview({ period }: { period?: Period }) {
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.45 : 1;
+  const data = baseData.map((d) => ({
+    ...d,
+    value: Math.max(1, Math.round(d.value * scale)),
+  }));
   return (
     <Card className="h-full border border-slate-100 p-6 shadow-sm">
       <div className="flex flex-col gap-1">
