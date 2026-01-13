@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useSearchParams } from "react-router";
 import { EmployeeStatsGrid } from "@/components/employees/employee-stats-grid";
 import {
   EmployeeTable,
@@ -79,17 +80,30 @@ const initialEmployees: Employee[] = [
 export default function EmployeesPage() {
   const [employees] = useState<Employee[]>(initialEmployees);
 
-  const activeEmployees = employees.filter((emp) => emp.status === "active");
-  const inactiveEmployees = employees.filter(
+  const [searchParams] = useSearchParams();
+  const teamFilter = searchParams.get("team") ?? undefined;
+
+  const filteredEmployees = teamFilter
+    ? employees.filter(
+        (emp) => emp.team?.toLowerCase() === teamFilter.toLowerCase()
+      )
+    : employees;
+
+  const activeEmployees = filteredEmployees.filter(
+    (emp) => emp.status === "active"
+  );
+  const inactiveEmployees = filteredEmployees.filter(
     (emp) => emp.status === "inactive"
   );
 
-  const topPerformer = [...employees].sort((a, b) => b.leads - a.leads)[0];
+  const topPerformer = [...filteredEmployees].sort(
+    (a, b) => b.leads - a.leads
+  )[0];
 
-  const teams = [...new Set(employees.map((emp) => emp.team))];
+  const teams = [...new Set(filteredEmployees.map((emp) => emp.team))];
 
   const stats = {
-    totalEmployees: employees.length,
+    totalEmployees: filteredEmployees.length,
     inactiveEmployees: inactiveEmployees.length,
     activeEmployees: activeEmployees.length,
     totalTeams: teams.length,
@@ -116,7 +130,7 @@ export default function EmployeesPage() {
       <EmployeeStatsGrid stats={stats} />
 
       {/* Employee Table */}
-      <EmployeeTable employees={employees} />
+      <EmployeeTable employees={filteredEmployees} />
     </div>
   );
 }
