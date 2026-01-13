@@ -1,85 +1,148 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import Input from "../common_components/Input";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import SearchableSelect from "../common_components/SearchableSelect";
+import { vendors } from "../../data/mockData";
+import { useMemo, useState } from "react";
+import type { TabType } from "../../pages/Dashboard";
 
-const vendors = [
-  { label: "Marilyn Culhane", value: "marilyn" },
-  { label: "Mike Johnson", value: "mike" },
-  { label: "Kaylynn Siphron", value: "kaylynn" },
-  { label: "Gustavo Arcand", value: "gustavo" },
-];
+/* -------------------- MOCK DATA BY TAB -------------------- */
 
-const expenseData = [
-  {
-    id: "EXP-001",
-    category: "Vendor Payments",
-    vendor: "ABC Supplies",
-    amount: "$2500.00",
-    date: "2024-01-15",
-    status: "Paid",
-    statusColor: "bg-green-50 text-green-600",
-  },
-  {
-    id: "EXP-002",
-    category: "Maintenance",
-    vendor: "Tech Solutions",
-    amount: "$850.00",
-    date: "2024-01-14",
-    status: "Pending",
-    statusColor: "bg-yellow-50 text-yellow-600",
-  },
-  {
-    id: "EXP-003",
-    category: "Logistics",
-    vendor: "Fast Delivery",
-    amount: "$320.00",
-    date: "2024-01-13",
-    status: "Paid",
-    statusColor: "bg-green-50 text-green-600",
-  },
-  {
-    id: "EXP-004",
-    category: "Labour",
-    vendor: "Workforce Inc",
-    amount: "$4200.00",
-    date: "2024-01-12",
-    status: "Paid",
-    statusColor: "bg-green-50 text-green-600",
-  },
-  {
-    id: "EXP-005",
-    category: "Vendor Payments",
-    vendor: "Office Depot",
-    amount: "$675.00",
-    date: "2024-01-11",
-    status: "Pending",
-    statusColor: "bg-yellow-50 text-yellow-600",
-  },
-  {
-    id: "EXP-006",
-    category: "Maintenance",
-    vendor: "Clean Pro",
-    amount: "$450.00",
-    date: "2024-01-10",
-    status: "Paid",
-    statusColor: "bg-green-50 text-green-600",
-  },
-];
+type ExpenseItem = {
+  id: string;
+  category: string;
+  vendor: string;
+  amount: string;
+  date: string;
+  status: string;
+  statusColor: string;
+};
+
+const expenseDataByTab: Record<TabType, ExpenseItem[]> = {
+  Today: [
+    {
+      id: "EXP-001",
+      category: "Vendor Payments",
+      vendor: "ABC Supplies",
+      amount: "$2,500.00",
+      date: "2026-01-13",
+      status: "Paid",
+      statusColor: "bg-green-50 text-green-600",
+    },
+    {
+      id: "EXP-002",
+      category: "Maintenance",
+      vendor: "Tech Solutions",
+      amount: "$850.00",
+      date: "2026-01-13",
+      status: "Pending",
+      statusColor: "bg-yellow-50 text-yellow-600",
+    },
+  ],
+
+  Week: [
+    {
+      id: "EXP-003",
+      category: "Logistics",
+      vendor: "Fast Delivery",
+      amount: "$3,200.00",
+      date: "2026-01-10",
+      status: "Paid",
+      statusColor: "bg-green-50 text-green-600",
+    },
+    {
+      id: "EXP-004",
+      category: "Labour",
+      vendor: "Workforce Inc",
+      amount: "$4,200.00",
+      date: "2026-01-09",
+      status: "Paid",
+      statusColor: "bg-green-50 text-green-600",
+    },
+    {
+      id: "EXP-005",
+      category: "Vendor Payments",
+      vendor: "Office Depot",
+      amount: "$675.00",
+      date: "2026-01-08",
+      status: "Pending",
+      statusColor: "bg-yellow-50 text-yellow-600",
+    },
+  ],
+
+  Month: [
+    {
+      id: "EXP-006",
+      category: "Maintenance",
+      vendor: "Clean Pro",
+      amount: "$1,450.00",
+      date: "2026-01-05",
+      status: "Paid",
+      statusColor: "bg-green-50 text-green-600",
+    },
+    {
+      id: "EXP-007",
+      category: "Labour",
+      vendor: "Build Corp",
+      amount: "$6,800.00",
+      date: "2026-01-03",
+      status: "Paid",
+      statusColor: "bg-green-50 text-green-600",
+    },
+    {
+      id: "EXP-008",
+      category: "Logistics",
+      vendor: "Swift Movers",
+      amount: "$2,950.00",
+      date: "2026-01-01",
+      status: "Pending",
+      statusColor: "bg-yellow-50 text-yellow-600",
+    },
+  ],
+};
+
+/* -------------------- PROPS -------------------- */
 
 interface ExpenseRecordsCardProps {
+  activeTab: TabType;
   onAddClick?: () => void;
 }
 
+/* -------------------- COMPONENT -------------------- */
+
 export default function ExpenseRecordsCard({
+  activeTab,
   onAddClick,
 }: ExpenseRecordsCardProps) {
+  const [selectedCategory, setSelectedCategory] = useState<any>(null);
+  const [selectedVendor, setSelectedVendor] = useState<any>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+
+  const expenseData = expenseDataByTab[activeTab];
+
+  const filteredExpenses = useMemo(() => {
+    return expenseData.filter((expense) => {
+      const matchCategory = selectedCategory
+        ? expense.category === selectedCategory.value
+        : true;
+
+      const matchVendor = selectedVendor
+        ? expense.vendor === selectedVendor.value
+        : true;
+
+      const matchDate = selectedDate ? expense.date === selectedDate : true;
+
+      return matchCategory && matchVendor && matchDate;
+    });
+  }, [expenseData, selectedCategory, selectedVendor, selectedDate]);
+
   return (
     <Card className="p-6 bg-white rounded-md border-none shadow-sm h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <h3 className="text-lg font-normal text-gray-900">Expense Records</h3>
+
         <Button
           className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
           onClick={onAddClick}
@@ -94,9 +157,14 @@ export default function ExpenseRecordsCard({
         <div className="relative">
           <SearchableSelect
             label="Category"
-            options={vendors}
-            value={null}
-            onChange={() => {}}
+            options={[
+              { value: "Vendor Payments", label: "Vendor Payments" },
+              { value: "Maintenance", label: "Maintenance" },
+              { value: "Logistics", label: "Logistics" },
+              { value: "Labour", label: "Labour" },
+            ]}
+            value={selectedCategory}
+            onChange={setSelectedCategory}
             inputClassName="py-2"
           />
         </div>
@@ -105,8 +173,8 @@ export default function ExpenseRecordsCard({
           <SearchableSelect
             label="Vendor"
             options={vendors}
-            value={null}
-            onChange={() => {}}
+            value={selectedVendor}
+            onChange={setSelectedVendor}
             inputClassName="py-2"
           />
         </div>
@@ -118,6 +186,8 @@ export default function ExpenseRecordsCard({
           <div className="relative">
             <Input
               type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
               className="bg-gray-50/50 border-gray-200 block w-full pl-3 pr-10 h-9"
             />
           </div>
@@ -149,8 +219,9 @@ export default function ExpenseRecordsCard({
               </th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-gray-50">
-            {expenseData.map((expense) => (
+            {filteredExpenses.map((expense) => (
               <tr
                 key={expense.id}
                 className="hover:bg-gray-50/50 transition-colors"
@@ -158,18 +229,23 @@ export default function ExpenseRecordsCard({
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {expense.id}
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-900 font-medium">
                   {expense.category}
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {expense.vendor}
                 </td>
+
                 <td className="py-4 px-4 text-sm font-bold text-gray-900">
                   {expense.amount}
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {expense.date}
                 </td>
+
                 <td className="py-4 px-4 text-sm">
                   <span
                     className={cn(
@@ -182,6 +258,17 @@ export default function ExpenseRecordsCard({
                 </td>
               </tr>
             ))}
+
+            {filteredExpenses.length === 0 && (
+              <tr>
+                <td
+                  colSpan={6}
+                  className="text-center py-6 text-sm text-gray-400"
+                >
+                  No expenses found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>

@@ -20,24 +20,26 @@ const chartConfig = {
   },
   labour: {
     label: "Labour",
-    color: "#10B981",
+    color: "#22C55E",
   },
   logistics: {
     label: "Logistics",
-    color: "#F59E0B",
+    color: "#EAB308",
   },
 } satisfies ChartConfig;
 
 const CustomLegend = () => {
   return (
-    <div className="flex flex-col gap-4 mt-8">
+    <div className="flex flex-col gap-10 mt-4">
       {data.map((item) => (
         <div key={item.name} className="flex items-center gap-3">
           <div
             className="w-4 h-4 rounded-full"
             style={{ backgroundColor: item.fill }}
           ></div>
-          <span className="text-sm font-medium text-gray-600">{item.name}</span>
+          <span className="text-sm font-normal text-[#374151]">
+            {item.name}
+          </span>
         </div>
       ))}
     </div>
@@ -53,7 +55,7 @@ export function CostBreakdown() {
         </h3>
       </CardHeader>
       <CardContent className="flex flex-col flex-1 p-0">
-        <div className="relative h-[250px] w-full">
+        <div className="relative h-[320px] w-full">
           <ChartContainer config={chartConfig} className="h-full w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
@@ -65,10 +67,10 @@ export function CostBreakdown() {
                   data={data}
                   dataKey="value"
                   nameKey="name"
-                  innerRadius={65}
-                  outerRadius={90}
-                  strokeWidth={20}
-                  stroke="#fff"
+                  innerRadius={70}
+                  outerRadius={120}
+                  paddingAngle={2}
+                  stroke="none"
                 >
                   {data.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.fill} />
@@ -78,10 +80,10 @@ export function CostBreakdown() {
             </ResponsiveContainer>
           </ChartContainer>
           <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-            <span className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <span className="text-lg font-medium text-[#374151] uppercase tracking-wider mb-1">
               Total Cost
             </span>
-            <span className="text-2xl font-bold text-gray-900">$1680K</span>
+            <span className="text-3xl font-medium text-[#374151]">$1680K</span>
           </div>
         </div>
         <CustomLegend />

@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import Input from "../common_components/Input";
+import Input from "@/components/common_components/Input";
 import {
   Select,
   SelectContent,
@@ -66,7 +66,11 @@ const expenseData = [
   },
 ];
 
-export default function LaborExpenseRecordsCard() {
+interface LaborExpenseRecordsCardProps {
+  onAddClick?: () => void;
+}
+
+export default function LaborExpenseRecordsCard({}: LaborExpenseRecordsCardProps) {
   return (
     <Card className="p-6 bg-white rounded-md border-none shadow-sm h-full">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center pb-6 gap-4 border-b">

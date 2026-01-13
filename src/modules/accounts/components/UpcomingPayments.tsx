@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import SectionHeaderWithAction from "./common_components/SectionHeaderWithAction";
+import { useNavigate } from "react-router";
 
 interface PaymentItemProps {
   company: string;
@@ -22,8 +23,8 @@ function PaymentItem({
   priority,
 }: PaymentItemProps) {
   return (
-    <div className="p-4 md:p-6 rounded-md border border-gray-200 bg-white mb-4 last:mb-0">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div className="p-4 md:p-6 rounded-md border border-gray-200 bg-white mb-4 last:mb-0 w-full overflow-x-auto">
+      <div className="flex flex-row md:items-center justify-between gap-6">
         {/* Company Info */}
         <div className="md:flex-1 min-w-[150px]">
           <h4 className="font-semibold text-gray-900 text-sm md:text-base mb-1">
@@ -33,9 +34,9 @@ function PaymentItem({
         </div>
 
         {/* Details Grid for Mobile / Flex for Desktop */}
-        <div className="grid grid-cols-2 md:flex md:flex-4 gap-y-4 md:gap-4 items-start md:items-center">
+        <div className="flex flex-4 gap-y-4 md:gap-4 items-start md:items-center">
           {/* Amount */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-[100px]">
             <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
               Amount
             </p>
@@ -45,7 +46,7 @@ function PaymentItem({
           </div>
 
           {/* Date */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-[100px]">
             <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
               Date
             </p>
@@ -55,7 +56,7 @@ function PaymentItem({
           </div>
 
           {/* Sales Rep */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-[100px]">
             <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
               Sales Rep
             </p>
@@ -65,7 +66,7 @@ function PaymentItem({
           </div>
 
           {/* Invoice */}
-          <div className="flex-1 min-w-0">
+          <div className="flex-1 min-w-[100px]">
             <p className="text-[10px] text-gray-400 uppercase tracking-wider mb-1">
               Invoice
             </p>
@@ -133,6 +134,8 @@ export default function UpcomingPayments() {
     },
   ];
 
+  const navigate = useNavigate();
+
   return (
     <div className="bg-white rounded-md xl:p-6 p-4  border border-gray-100/50">
       <SectionHeaderWithAction
@@ -140,7 +143,7 @@ export default function UpcomingPayments() {
         subtitle="From Sales Team"
         actionLabel="View All"
         showIcon={true}
-        onActionClick={() => console.log("View all payments clicked")}
+        onActionClick={() => navigate("/payment_overview")}
         containerClassName="mb-6"
       />
       <div className="space-y-4 overflow-y-auto border-t border-gray-300 pt-4">

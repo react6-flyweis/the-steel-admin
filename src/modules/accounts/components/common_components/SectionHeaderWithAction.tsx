@@ -16,12 +16,12 @@ const SectionHeaderWithAction: React.FC<SectionHeaderWithActionProps> = ({
   actionLabel = "View Details",
   onActionClick,
   showIcon = true,
-  containerClassName = "",
+  containerClassName = "flex-1 justify-between items-start flex-wrap w-full",
 }) => {
   return (
     <div className={containerClassName}>
       <div className="flex justify-between items-start flex-wrap">
-        <p className="md:text-xl text-md font-semibold text-black tracking-tight">
+        <p className="lg:text-xl sm:text-base text-md font-semibold text-black tracking-tight">
           {title}
         </p>
 
@@ -29,7 +29,7 @@ const SectionHeaderWithAction: React.FC<SectionHeaderWithActionProps> = ({
           <Button
             variant="link"
             onClick={onActionClick}
-            className="text-[#1D51A4] md:text-sm text-xs font-normal flex items-center gap-1 p-0 h-auto hover:no-underline ml-auto"
+            className="text-[#1D51A4] text-xs font-normal flex items-center gap-1 p-0 h-auto hover:no-underline ml-auto"
           >
             {showIcon && <ArrowUpRight className="w-4 h-4" />}
             {actionLabel}
@@ -38,7 +38,7 @@ const SectionHeaderWithAction: React.FC<SectionHeaderWithActionProps> = ({
       </div>
 
       {subtitle && (
-        <p className="md:text-sm text-[12px] text-gray-400 mt-2 mb-3 font-regular">
+        <p className="lg:text-sm text-[12px] text-gray-400 mt-2 mb-3 font-regular">
           {subtitle}
         </p>
       )}

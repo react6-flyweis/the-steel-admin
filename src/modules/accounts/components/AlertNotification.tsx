@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import SectionHeaderWithAction from "./common_components/SectionHeaderWithAction";
+import { useNavigate } from "react-router";
 
 interface AlertItemProps {
   title: string;
@@ -41,6 +42,7 @@ function AlertItem({ title, priority }: AlertItemProps) {
 }
 
 export function AlertNotification() {
+  const navigate = useNavigate();
   return (
     <div className="xl:p-6 p-4 border-none h-full bg-white rounded-md">
       <SectionHeaderWithAction
@@ -48,6 +50,7 @@ export function AlertNotification() {
         actionLabel="View All"
         showIcon={true}
         subtitle="Important Financial reminders"
+        onActionClick={() => navigate("/notification")}
       />
       <div className="space-y-4 pt-3 border-t border-gray-300">
         <AlertItem

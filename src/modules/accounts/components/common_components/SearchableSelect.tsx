@@ -11,8 +11,8 @@ type SearchableSelectProps = {
   label?: string;
   placeholder?: string;
   options: Option[];
-  value?: Option | null;
-  onChange: (option: Option) => void;
+  value?: Option | null | any;
+  onChange: any;
   className?: string;
   inputClassName?: string;
 };

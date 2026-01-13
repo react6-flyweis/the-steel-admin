@@ -2,34 +2,18 @@ import TitleSubtitle from "../components/common_components/TitleSubtitle";
 import { PaymentStatCard } from "../components/PaymentStatCard";
 import InvoiceManagementTable from "../components/InvoiceManagementTable";
 import ClientPaymentBreakdown from "../components/ClientPaymentBreakdown";
-
-const paymentStats = [
-  {
-    title: "Deposit Payments",
-    percentage: "85.9%",
-    totalAmount: "$1,56,000",
-    receivedAmount: "$1,34,000",
-    pendingAmount: "$22,000",
-  },
-  {
-    title: "Progress Payments",
-    percentage: "82.2%",
-    totalAmount: "$1,56,000",
-    receivedAmount: "$1,34,000",
-    pendingAmount: "$22,000",
-  },
-  {
-    title: "Final Payments",
-    percentage: "88.2%",
-    totalAmount: "$1,56,000",
-    receivedAmount: "$1,34,000",
-    pendingAmount: "$22,000",
-  },
-];
+import type { TabType } from "./Dashboard";
+import { paymentStatsByFilter } from "../data/mockData";
+import { useState } from "react";
+import FilterTabs from "@/components/FilterTabs";
 
 const PaymentOverview = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("Today");
+
+  const paymentStats = paymentStatsByFilter[activeTab];
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
+      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
       <TitleSubtitle
         title="Payment Overview"
         subtitle="Financial performance tracking and management"
@@ -41,8 +25,8 @@ const PaymentOverview = () => {
         ))}
       </div>
 
-      <InvoiceManagementTable />
-      <ClientPaymentBreakdown />
+      <InvoiceManagementTable activeTab={activeTab} />
+      <ClientPaymentBreakdown activeTab={activeTab} />
     </div>
   );
 };

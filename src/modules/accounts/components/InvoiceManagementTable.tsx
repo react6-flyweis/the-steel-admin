@@ -10,8 +10,15 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import type { TabType } from "../pages/Dashboard";
+import { invoiceDataByFilter } from "../data/mockData";
+import { useState } from "react";
 
-interface InvoiceRecord {
+export type StatusFilter = "all" | "confirmed" | "pending";
+
+export type PaymentStatus = "Confirmed" | "Pending";
+
+export interface InvoiceRow {
   client: string;
   projectId: string;
   projectType: string;
@@ -20,62 +27,39 @@ interface InvoiceRecord {
   dueAmount: string;
   paymentDate: string;
   salesPerson: string;
-  status: "Confirmed" | "Pending";
+  status: PaymentStatus;
 }
 
-const tableData: InvoiceRecord[] = [
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    projectType: "Workshop . Texas",
-    invoiceNo: "INV 2024-001",
-    amount: "$12,500",
-    dueAmount: "Due $12,500",
-    paymentDate: "25-01-2025",
-    salesPerson: "john doe",
-    status: "Confirmed",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    projectType: "Workshop . Texas",
-    invoiceNo: "INV 2024-001",
-    amount: "$12,500",
-    dueAmount: "Due $12,500",
-    paymentDate: "------",
-    salesPerson: "john doe",
-    status: "Pending",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    projectType: "Workshop . Texas",
-    invoiceNo: "INV 2024-001",
-    amount: "$12,500",
-    dueAmount: "Due $12,500",
-    paymentDate: "25-01-2025",
-    salesPerson: "john doe",
-    status: "Pending",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    projectType: "Workshop . Texas",
-    invoiceNo: "INV 2024-001",
-    amount: "$12,500",
-    dueAmount: "Due $12,500",
-    paymentDate: "25-01-2025",
-    salesPerson: "john doe",
-    status: "Pending",
-  },
-];
+export type InvoiceByFilter = Record<TabType, readonly InvoiceRow[]>;
 
-export default function InvoiceManagementTable() {
+export default function InvoiceManagementTable({
+  activeTab,
+}: {
+  activeTab: TabType;
+}) {
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const rawData = invoiceDataByFilter[activeTab];
+  const tableData = rawData.filter((row) => {
+    const matchesStatus =
+      statusFilter === "all" ? true : row.status.toLowerCase() === statusFilter;
+
+    const query = searchQuery.toLowerCase();
+
+    const matchesSearch =
+      row.client.toLowerCase().includes(query) ||
+      row.projectId.toLowerCase().includes(query) ||
+      row.projectType.toLowerCase().includes(query) ||
+      row.invoiceNo.toLowerCase().includes(query) ||
+      row.salesPerson.toLowerCase().includes(query);
+
+    return matchesStatus && matchesSearch;
+  });
   return (
     <div className="bg-white rounded-md xl:p-6 p-4 shadow-sm border border-gray-100/50">
       <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center gap-4 mb-8">
-        <h2 className="md:text-lg text-md font-bold text-black tracking-tight">
+        <h2 className="md:text-xl font-normal text-black tracking-tight self-start md:self-center">
           Invoice Managements
         </h2>
 
@@ -93,14 +77,20 @@ export default function InvoiceManagementTable() {
             <input
               type="text"
               placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="bg-transparent border-none outline-none text-sm w-full text-gray-700 placeholder-gray-400"
             />
           </div>
 
-          <Select defaultValue="all">
-            <SelectTrigger className="w-fit sm:w-[130px] bg-white border-gray-200 rounded-md h-10 text-gray-600 focus:ring-1 focus:ring-blue-500">
+          <Select
+            value={statusFilter}
+            onValueChange={(value) => setStatusFilter(value as StatusFilter)}
+          >
+            <SelectTrigger className="w-fit sm:w-[130px] bg-white border-gray-200 rounded-md h-10 text-gray-600">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="confirmed">Confirmed</SelectItem>
@@ -190,7 +180,7 @@ export default function InvoiceManagementTable() {
                   <div className="flex justify-end items-center gap-3 text-blue-800">
                     <button
                       className="p-1.5 hover:bg-blue-50 rounded-full transition-colors cursor-pointer"
-                      onClick={() => navigate("/invoice/preview")}
+                      onClick={() => navigate("/payments/invoice/preview")}
                     >
                       <Eye className="w-5 h-5" />
                     </button>

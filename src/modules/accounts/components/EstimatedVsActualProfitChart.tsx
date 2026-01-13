@@ -15,14 +15,36 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartConfig } from "@/components/ui/chart";
+import type { TabType } from "@/pages/Dashboard";
 
-const chartData = [
-  { project: "Project A", estimated: 85000, actual: 92000 },
-  { project: "Project B", estimated: 65000, actual: 58000 },
-  { project: "Project C", estimated: 120000, actual: 135000 },
-  { project: "Project D", estimated: 95000, actual: 88000 },
-  { project: "Project E", estimated: 75000, actual: 82000 },
-];
+export const projectCostChartByFilter: Record<
+  TabType,
+  { project: string; estimated: number; actual: number }[]
+> = {
+  today: [
+    { project: "Project A", estimated: 8_500, actual: 9_200 },
+    { project: "Project B", estimated: 6_500, actual: 5_800 },
+    { project: "Project C", estimated: 12_000, actual: 13_500 },
+    { project: "Project D", estimated: 9_500, actual: 8_800 },
+    { project: "Project E", estimated: 7_500, actual: 8_200 },
+  ],
+
+  week: [
+    { project: "Project A", estimated: 5_000, actual: 6_000 },
+    { project: "Project B", estimated: 6_500, actual: 10_800 },
+    { project: "Project C", estimated: 12_000, actual: 13_500 },
+    { project: "Project D", estimated: 9_500, actual: 8_800 },
+    { project: "Project E", estimated: 7_500, actual: 8_200 },
+  ],
+
+  month: [
+    { project: "Project A", estimated: 285_000, actual: 310_000 },
+    { project: "Project B", estimated: 210_000, actual: 198_000 },
+    { project: "Project C", estimated: 420_000, actual: 465_000 },
+    { project: "Project D", estimated: 350_000, actual: 332_000 },
+    { project: "Project E", estimated: 290_000, actual: 315_000 },
+  ],
+};
 
 const chartConfig = {
   estimated: {
@@ -50,7 +72,8 @@ const CustomLegend = () => {
   );
 };
 
-export default function EstimatedVsActualProfitChart() {
+export default function EstimatedVsActualProfitChart({activeTab}: {activeTab: TabType}) {
+  const chartData = projectCostChartByFilter[activeTab];
   return (
     <Card className="flex flex-col h-full border-none shadow-sm bg-white p-6 rounded-md">
       <CardHeader className="flex flex-row items-center justify-between p-0 mb-8">
@@ -70,12 +93,12 @@ export default function EstimatedVsActualProfitChart() {
             >
               <CartesianGrid vertical={false} stroke="#f0f0f0" />
               <XAxis
-                dataKey="project" // Or just "project" if we want "Project A" etc. but image shows "Project" repeatedly? Actually image shows "Project" repeatedly which is odd. Likely generic names.
+                dataKey="project" 
                 tickLine={false}
                 axisLine={false}
                 tick={{ fill: "#94a3b8", fontSize: 12 }}
                 tickMargin={12}
-                tickFormatter={() => "Project"}
+               tickFormatter={(value) => value}
               />
               <YAxis
                 tickLine={false}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
+import TitleSubtitle from "@/components/TitleSubtitle";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import Input from "../../components/common_components/Input";
+import Input from "@/components/common_components/Input";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Calendar,
@@ -19,59 +19,9 @@ import {
   FileText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import AddNewTaxModal from "../../components/management/AddNewTaxModal";
-import Pagination from "../../components/common_components/Pagination";
-
-const taxData = [
-  {
-    state: "Alabama",
-    filingFrequency: "Monthly",
-    dueDate: "20th",
-    threshold: "> $2,500/mo",
-    website: "https://myalabamataxes.alabama.gov",
-    status: "Paid",
-  },
-  {
-    state: "Alaska",
-    filingFrequency: "Local only",
-    dueDate: "Varies",
-    threshold: "Local borough/city only",
-    website: "https://arsstc.org",
-    status: "Pending",
-  },
-  {
-    state: "Arizona",
-    filingFrequency: "Monthly",
-    dueDate: "20th",
-    threshold: "> $8,000 tax/yr",
-    website: "https://aztaxes.gov",
-    status: "Paid",
-  },
-  {
-    state: "Arkansas",
-    filingFrequency: "Monthly",
-    dueDate: "20th",
-    threshold: "> $100/mo",
-    website: "https://atap.arkansas.gov",
-    status: "Paid",
-  },
-  {
-    state: "California",
-    filingFrequency: "Monthly",
-    dueDate: "Last day",
-    threshold: "> $17,000/yr",
-    website: "https://onlineservices.cdtfa.ca.gov",
-    status: "Pending",
-  },
-  {
-    state: "Colorado",
-    filingFrequency: "Monthly",
-    dueDate: "20th",
-    threshold: "> $300/mo",
-    website: "https://mybiz.colorado.gov",
-    status: "Paid",
-  },
-];
+import AddNewTaxModal from "@/components/management/AddNewTaxModal";
+import { taxData } from "@/data/mockData";
+import Pagination from "@/components/common_components/Pagination";
 
 const TaxationPage = () => {
   const [isAddNewTaxModalOpen, setIsAddNewTaxModalOpen] = useState(false);
@@ -85,7 +35,7 @@ const TaxationPage = () => {
   };
 
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10 mb-6">
         <TitleSubtitle
           title="Expenses Management"
@@ -163,22 +113,22 @@ const TaxationPage = () => {
             <table className="w-full min-w-[1000px]">
               <thead>
                 <tr className="bg-gray-50/50 border-b border-gray-100">
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     STATE
                   </th>
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     FILING FREQUENCY
                   </th>
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     DUE DATE
                   </th>
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     THRESHOLD / PARAMETERS
                   </th>
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     WEBSITE TO FILE
                   </th>
-                  <th className="text-left py-4 px-6 text-xs font-bold text-gray-500 uppercase tracking-wider">
+                  <th className="text-left py-4 px-6 text-xs font-normal text-[#6B7280] uppercase tracking-wider">
                     STATUS
                   </th>
                 </tr>
@@ -207,10 +157,10 @@ const TaxationPage = () => {
                     <td className="py-4 px-6 text-sm">
                       <span
                         className={cn(
-                          "px-3 py-1 rounded-full text-xs font-medium",
+                          "px-3 py-1 rounded-full text-xs font-normal",
                           row.status === "Paid"
                             ? "bg-green-100 text-green-700"
-                            : "bg-yellow-100 text-yellow-700"
+                            : "bg-[#FEF9C3] text-[#854D0E]"
                         )}
                       >
                         {row.status}
@@ -220,7 +170,12 @@ const TaxationPage = () => {
                 ))}
               </tbody>
             </table>
-            <Pagination />
+            <Pagination
+              totalItems={2}
+              itemsPerPage={2}
+              currentPage={1}
+              onPageChange={() => {}}
+            />
           </div>
         </div>
 

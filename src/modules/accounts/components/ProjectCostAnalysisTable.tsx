@@ -1,6 +1,24 @@
 import { ArrowUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Pagination from "./common_components/Pagination";
+import { costAnalysisByFilter } from "../data/mockData";
+import { useState } from "react";
+import type { TabType } from "../pages/Dashboard";
+
+/* -------------------- TYPES -------------------- */
+
+type SortKey =
+  | "project"
+  | "category"
+  | "estimated"
+  | "actual"
+  | "variance"
+  | "date"
+  | "department";
+
+type SortDirection = "asc" | "desc";
+
+/* -------------------- HELPERS -------------------- */
 
 const getCategoryColor = (category: string) => {
   switch (category) {
@@ -15,120 +33,84 @@ const getCategoryColor = (category: string) => {
   }
 };
 
-const mockCostAnalysisData = [
-  {
-    id: 1,
-    project: "HR Management System",
-    category: "Labour",
-    estimated: "$210,000",
-    actual: "$198,000",
-    variance: "-5.7%",
-    varianceColor: "green",
-    date: "4/8/2024",
-    department: "Human Resources",
-  },
-  {
-    id: 2,
-    project: "Marketing Automation Setup",
-    category: "Material",
-    estimated: "$125,000",
-    actual: "$135,000",
-    variance: "+8.0%",
-    varianceColor: "red",
-    date: "4/2/2024",
-    department: "Marketing",
-  },
-  {
-    id: 3,
-    project: "Quality Assurance Framework",
-    category: "Labour",
-    estimated: "$165,000",
-    actual: "$158,000",
-    variance: "-4.2%",
-    varianceColor: "green",
-    date: "3/25/2024",
-    department: "Quality Assurance",
-  },
-  {
-    id: 4,
-    project: "CRM System Integration",
-    category: "Material",
-    estimated: "$195,000",
-    actual: "$210,000",
-    variance: "+7.7%",
-    varianceColor: "red",
-    date: "3/18/2024",
-    department: "Sales",
-  },
-  {
-    id: 5,
-    project: "Warehouse Automation",
-    category: "Logistics",
-    estimated: "$450,000",
-    actual: "$425,000",
-    variance: "-5.6%",
-    varianceColor: "green",
-    date: "3/12/2024",
-    department: "Operations",
-  },
-  {
-    id: 6,
-    project: "E-commerce Platform Enhancement",
-    category: "Labour",
-    estimated: "$320,000",
-    actual: "$345,000",
-    variance: "+7.8%",
-    varianceColor: "red",
-    date: "3/5/2024",
-    department: "E-commerce",
-  },
-  {
-    id: 7,
-    project: "Security Infrastructure Upgrade",
-    category: "Material",
-    estimated: "$180,000",
-    actual: "$175,000",
-    variance: "-2.8%",
-    varianceColor: "green",
-    date: "3/1/2024",
-    department: "IT Security",
-  },
-  {
-    id: 8,
-    project: "Data Analytics Platform",
-    category: "Labour",
-    estimated: "$245,000",
-    actual: "$234,000",
-    variance: "-4.5%",
-    varianceColor: "green",
-    date: "2/15/2024",
-    department: "Business Intelligence",
-  },
-  {
-    id: 9,
-    project: "Customer Portal Redesign",
-    category: "Material",
-    estimated: "$238,000",
-    actual: "$267,000",
-    variance: "+12.2%",
-    varianceColor: "red",
-    date: "2/10/2024",
-    department: "Digital Marketing",
-  },
-  {
-    id: 10,
-    project: "Supply Chain Optimization",
-    category: "Logistics",
-    estimated: "$274,000",
-    actual: "$298,000",
-    variance: "+8.8%",
-    varianceColor: "red",
-    date: "2/1/2024",
-    department: "Operations",
-  },
-];
+const parseCurrency = (value: string) =>
+  Number(value.replace(/[^0-9.-]+/g, ""));
 
-export default function ProjectCostAnalysisTable() {
+const parsePercentage = (value: string) =>
+  Number(value.replace("%", "").replace("+", ""));
+
+export default function ProjectCostAnalysisTable({
+  activeTab,
+}: {
+  activeTab: TabType;
+}) {
+  const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+
+  const rawRows = costAnalysisByFilter[activeTab] ?? [];
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) {
+      setSortDirection((prev) => (prev === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDirection("asc");
+    }
+  };
+
+  const rows = [...rawRows].sort((a, b) => {
+    if (!sortKey) return 0;
+
+    let aValue: number | string = "";
+    let bValue: number | string = "";
+
+    switch (sortKey) {
+      case "project":
+        aValue = a.project;
+        bValue = b.project;
+        break;
+
+      case "category":
+        aValue = a.category;
+        bValue = b.category;
+        break;
+
+      case "estimated":
+        aValue = parseCurrency(a.estimated);
+        bValue = parseCurrency(b.estimated);
+        break;
+
+      case "actual":
+        aValue = parseCurrency(a.actual);
+        bValue = parseCurrency(b.actual);
+        break;
+
+      case "variance":
+        aValue = parsePercentage(a.variance);
+        bValue = parsePercentage(b.variance);
+        break;
+
+      case "date":
+        aValue = new Date(a.date).getTime();
+        bValue = new Date(b.date).getTime();
+        break;
+
+      case "department":
+        aValue = a.department;
+        bValue = b.department;
+        break;
+    }
+
+    if (aValue < bValue) return sortDirection === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortDirection === "asc" ? 1 : -1;
+    return 0;
+  });
+  const ITEMS_PER_PAGE = 4;
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+
+  const paginatedRows = rows.slice(startIndex, endIndex);
   return (
     <div className="bg-white rounded-lg xl:p-6 p-4 shadow-sm border border-gray-100">
       <div className="mb-6">
@@ -145,51 +127,79 @@ export default function ProjectCostAnalysisTable() {
           <thead>
             <tr className="bg-gray-50/50 border-b border-gray-100">
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("project")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Project
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("category")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Category
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("estimated")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Estimated
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("actual")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Actual
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("variance")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Variance
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("date")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Date
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
+
               <th className="py-3 px-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                <div className="flex items-center gap-1 cursor-pointer hover:text-gray-700">
+                <div
+                  onClick={() => handleSort("department")}
+                  className="flex items-center gap-1 cursor-pointer hover:text-gray-700"
+                >
                   Department
                   <ArrowUpDown className="w-3 h-3" />
                 </div>
               </th>
             </tr>
           </thead>
+
           <tbody className="divide-y divide-gray-50">
-            {mockCostAnalysisData.map((row) => (
+            {paginatedRows.map((row) => (
               <tr
                 key={row.id}
                 className="hover:bg-gray-50/50 transition-colors"
@@ -197,6 +207,7 @@ export default function ProjectCostAnalysisTable() {
                 <td className="py-4 px-4 text-sm font-medium text-gray-900">
                   {row.project}
                 </td>
+
                 <td className="py-4 px-4 text-sm">
                   <span
                     className={cn(
@@ -207,12 +218,15 @@ export default function ProjectCostAnalysisTable() {
                     {row.category}
                   </span>
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {row.estimated}
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {row.actual}
                 </td>
+
                 <td className="py-4 px-4 text-sm">
                   <span
                     className={cn(
@@ -225,7 +239,9 @@ export default function ProjectCostAnalysisTable() {
                     {row.variance}
                   </span>
                 </td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">{row.date}</td>
+
                 <td className="py-4 px-4 text-sm text-gray-600">
                   {row.department}
                 </td>
@@ -233,7 +249,13 @@ export default function ProjectCostAnalysisTable() {
             ))}
           </tbody>
         </table>
-        <Pagination />
+
+        <Pagination
+          totalItems={rows.length}
+          itemsPerPage={ITEMS_PER_PAGE}
+          currentPage={currentPage}
+          onPageChange={setCurrentPage}
+        />
       </div>
     </div>
   );

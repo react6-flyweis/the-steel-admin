@@ -1,11 +1,11 @@
 import { DollarSign, Info } from "lucide-react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
-import BudgetVsActualCard from "../../components/management/BudgetVsActualCard";
-import BudgetAlertCard from "../../components/management/BudgetAlertCard";
-import AddExpenseModal from "../../components/management/AddExpenseModal";
+import TitleSubtitle from "@/components/TitleSubtitle";
+import BudgetVsActualCard from "@/components/management/BudgetVsActualCard";
+import BudgetAlertCard from "@/components/management/BudgetAlertCard";
+import AddExpenseModal from "@/components/management/AddExpenseModal";
 import { useState } from "react";
-import IncomeRecordsCard from "../../components/management/IncomeRecordsCard";
-import SummaryCard from "../../components/management/SummaryCard";
+import IncomeRecordsCard from "@/components/management/IncomeRecordsCard";
+import SummaryCard from "@/components/management/SummaryCard";
 
 const IncomePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -13,7 +13,7 @@ const IncomePage = () => {
   const openModal = () => setIsModalOpen(true);
 
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10 mb-6">
         <TitleSubtitle
           title="Income Management"

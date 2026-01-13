@@ -1,4 +1,5 @@
-import SectionHeaderWithAction from "./common_components/SectionHeaderWithAction";
+import { clientBreakdownByFilter } from "../data/mockData";
+import type { TabType } from "../pages/Dashboard";
 
 interface ClientBreakdownItemProps {
   company: string;
@@ -60,50 +61,20 @@ function ClientBreakdownItem({
   );
 }
 
-export default function ClientPaymentBreakdown() {
-  const data: ClientBreakdownItemProps[] = [
-    {
-      company: "ABC Industries",
-      totalInvoiced: "$3,45,000",
-      received: "$2,90,000",
-      outstanding: "$55,000",
-    },
-    {
-      company: "ABC Industries",
-      totalInvoiced: "$3,45,000",
-      received: "$2,90,000",
-      outstanding: "$55,000",
-    },
-    {
-      company: "ABC Industries",
-      totalInvoiced: "$3,45,000",
-      received: "$2,90,000",
-      outstanding: "$55,000",
-    },
-    {
-      company: "ABC Industries",
-      totalInvoiced: "$3,45,000",
-      received: "$2,90,000",
-      outstanding: "$55,000",
-    },
-    {
-      company: "ABC Industries",
-      totalInvoiced: "$3,45,000",
-      received: "$2,90,000",
-      outstanding: "$55,000",
-    },
-  ];
+export default function ClientPaymentBreakdown({
+  activeTab,
+}: {
+  activeTab: TabType;
+}) {
+  const breakdownData = clientBreakdownByFilter[activeTab];
 
   return (
     <div className="bg-white rounded-md xl:p-6 p-4 shadow-sm border border-gray-100/50">
-      <SectionHeaderWithAction
-        title="Client-wise Payment Breakdown"
-        showIcon={false}
-        containerClassName="mb-6"
-        actionLabel=""
-      />
-      <div className="space-y-4 overflow-y-auto border-t border-gray-300 pt-6">
-        {data.map((item, index) => (
+      <h2 className="md:text-xl font-normal text-black tracking-tight self-start md:self-center">
+        Client-wise Payment Breakdown
+      </h2>
+      <div className="space-y-4 overflow-y-auto border-t border-gray-300 pt-6 mt-6">
+        {breakdownData.map((item: any, index: number) => (
           <ClientBreakdownItem key={index} {...item} />
         ))}
       </div>

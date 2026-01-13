@@ -1,5 +1,5 @@
 import { DollarSign, Info } from "lucide-react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
+import TitleSubtitle from "@/components/TitleSubtitle";
 import ExpenseRecordsCard from "../../components/management/ExpenseRecordsCard";
 import BudgetVsActualCard from "../../components/management/BudgetVsActualCard";
 import BudgetAlertCard from "../../components/management/BudgetAlertCard";
@@ -13,7 +13,7 @@ const ExpensesPage = () => {
   const openModal = () => setIsModalOpen(true);
 
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10 mb-6">
         <TitleSubtitle
           title="Expenses Management"
@@ -24,7 +24,7 @@ const ExpensesPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Main Content - Expense Records */}
         <div className="xl:col-span-2 space-y-6">
-          <ExpenseRecordsCard onAddClick={openModal} />
+          <ExpenseRecordsCard onAddClick={openModal} activeTab="Month" />
         </div>
 
         {/* Sidebar - Summary & Alerts */}

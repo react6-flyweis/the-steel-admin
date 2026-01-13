@@ -70,14 +70,14 @@ export function WIPProfitTrend() {
               <CartesianGrid vertical={false} stroke="#f0f0f0" />
               <XAxis
                 dataKey="month"
-                tickLine={false}
-                axisLine={false}
+                tickLine={{ stroke: "#e2e8f0" }}
+                axisLine={{ stroke: "#e2e8f0", strokeWidth: 3 }}
                 tick={{ fill: "#94a3b8", fontSize: 12 }}
                 tickMargin={12}
               />
               <YAxis
-                tickLine={false}
-                axisLine={false}
+                tickLine={{ stroke: "#e2e8f0" }}
+                axisLine={{ stroke: "#e2e8f0", strokeWidth: 3 }}
                 tick={{ fill: "#94a3b8", fontSize: 12 }}
                 tickFormatter={(value) => `$${value}K`}
                 domain={[0, 400]}

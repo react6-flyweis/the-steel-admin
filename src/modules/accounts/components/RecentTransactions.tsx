@@ -2,6 +2,7 @@ import { MoveDown, MoveUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import SectionHeaderWithAction from "./common_components/SectionHeaderWithAction";
+import { useNavigate } from "react-router";
 
 interface TransactionItemProps {
   type: "income" | "expense";
@@ -73,6 +74,7 @@ function TransactionItem({
 }
 
 export function RecentTransactions() {
+  const navigate = useNavigate();
   return (
     <div className="xl:p-6 p-4 border-none h-full bg-white rounded-md">
       <SectionHeaderWithAction
@@ -80,6 +82,7 @@ export function RecentTransactions() {
         actionLabel="View All"
         showIcon={true}
         subtitle="Latest financial activities"
+        onActionClick={() => navigate("/payment_overview")}
       />
       <div className="space-y-4 border-t border-gray-300 pt-3">
         <TransactionItem

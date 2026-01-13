@@ -1,5 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
+import type { TabType } from "../pages/Dashboard";
 
 interface TimelineStep {
   label: string;
@@ -30,17 +31,19 @@ const TimelineStep = ({ label, amount, isCompleted }: TimelineStep) => (
       />
     </div>
     <div className="flex flex-col gap-0.5">
-      <span className="font-semibold text-gray-900 text-sm md:text-base">
+      <span className="font-semibold text-black text-sm md:text-base">
         {label}
       </span>
-      <span className="text-gray-400 text-xs md:text-sm">{amount}</span>
+      <span className="text-[#6B7280] font-normal text-xs md:text-sm">
+        {amount}
+      </span>
     </div>
   </div>
 );
 
 const TimelineCard = ({ orderId, steps }: TimelineItemProps) => (
   <div className="md:p-4 p-2 flex flex-col rounded-md bg-white mb-4 last:mb-0 border">
-    <h5 className="font-bold text-gray-900 text-sm md:text-base mb-6">
+    <h5 className="font-medium text-black text-sm md:text-base mb-6">
       {orderId}
     </h5>
     <div className="flex flex-wrap md:items-center gap-8 md:gap-16">
@@ -51,8 +54,8 @@ const TimelineCard = ({ orderId, steps }: TimelineItemProps) => (
   </div>
 );
 
-export default function PaymentTimeline() {
-  const data: TimelineItemProps[] = [
+const timelineStatsByFilter: Record<TabType, TimelineItemProps[]> = {
+  Today: [
     {
       orderId: "ORD-2024-001-ABC Industries",
       steps: [
@@ -62,29 +65,86 @@ export default function PaymentTimeline() {
       ],
     },
     {
-      orderId: "ORD-2024-001-ABC Industries",
+      orderId: "ORD-2024-002-Delta Corp",
       steps: [
-        { label: "Deposit", amount: "$1,35,000", isCompleted: true },
-        { label: "Progress", amount: "$1,80,000", isCompleted: true },
+        { label: "Deposit", amount: "$90,000", isCompleted: true },
+        { label: "Progress", amount: "$1,10,000", isCompleted: false },
         { label: "Final", amount: "0", isCompleted: false },
       ],
     },
     {
-      orderId: "ORD-2024-001-ABC Industries",
+      orderId: "ORD-2024-003-Prime Solutions",
       steps: [
-        { label: "Deposit", amount: "$1,35,000", isCompleted: true },
-        { label: "Progress", amount: "$1,80,000", isCompleted: true },
+        { label: "Deposit", amount: "$1,10,000", isCompleted: true },
+        { label: "Progress", amount: "$75,000", isCompleted: false },
         { label: "Final", amount: "0", isCompleted: false },
       ],
     },
-  ];
+  ],
+
+  Week: [
+    {
+      orderId: "ORD-2024-W01-ABC Industries",
+      steps: [
+        { label: "Deposit", amount: "$3,60,000", isCompleted: true },
+        { label: "Progress", amount: "$3,40,000", isCompleted: true },
+        { label: "Final", amount: "0", isCompleted: false },
+      ],
+    },
+    {
+      orderId: "ORD-2024-W02-Delta Corp",
+      steps: [
+        { label: "Deposit", amount: "$2,40,000", isCompleted: true },
+        { label: "Progress", amount: "$2,10,000", isCompleted: true },
+        { label: "Final", amount: "0", isCompleted: false },
+      ],
+    },
+    {
+      orderId: "ORD-2024-W03-Prime Solutions",
+      steps: [
+        { label: "Deposit", amount: "$2,10,000", isCompleted: true },
+        { label: "Progress", amount: "$1,90,000", isCompleted: false },
+        { label: "Final", amount: "0", isCompleted: false },
+      ],
+    },
+  ],
+
+  Month: [
+    {
+      orderId: "ORD-2024-M01-ABC Industries",
+      steps: [
+        { label: "Deposit", amount: "$12,40,000", isCompleted: true },
+        { label: "Progress", amount: "$11,60,000", isCompleted: true },
+        { label: "Final", amount: "$4,20,000", isCompleted: true },
+      ],
+    },
+    {
+      orderId: "ORD-2024-M02-Delta Corp",
+      steps: [
+        { label: "Deposit", amount: "$10,60,000", isCompleted: true },
+        { label: "Progress", amount: "$9,80,000", isCompleted: true },
+        { label: "Final", amount: "$3,20,000", isCompleted: true },
+      ],
+    },
+    {
+      orderId: "ORD-2024-M03-Prime Solutions",
+      steps: [
+        { label: "Deposit", amount: "$8,90,000", isCompleted: true },
+        { label: "Progress", amount: "$7,60,000", isCompleted: true },
+        { label: "Final", amount: "$2,40,000", isCompleted: true },
+      ],
+    },
+  ],
+};
+export default function PaymentTimeline({ activeTab }: { activeTab: TabType }) {
+  const data = timelineStatsByFilter[activeTab];
 
   return (
     <div className="bg-white rounded-md xl:p-6 p-4">
-      <h2 className="md:text-xl font-bold text-black tracking-tight mb-4">
+      <h2 className="md:text-xl font-normal text-black tracking-tight self-start md:self-center">
         Payment Timeline
       </h2>
-      <div className="space-y-2">
+      <div className="space-y-2 mt-4">
         {data.map((item, index) => (
           <TimelineCard key={index} {...item} />
         ))}

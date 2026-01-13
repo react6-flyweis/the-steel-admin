@@ -1,13 +1,7 @@
 import React from "react";
 import Modal from "../common_components/Modal";
 import SearchableSelect from "../common_components/SearchableSelect";
-
-const vendors = [
-  { label: "Marilyn Culhane", value: "marilyn" },
-  { label: "Mike Johnson", value: "mike" },
-  { label: "Kaylynn Siphron", value: "kaylynn" },
-  { label: "Gustavo Arcand", value: "gustavo" },
-];
+import { vendors } from "../../data/mockData";
 
 interface AddExpenseModalProps {
   isOpen: boolean;

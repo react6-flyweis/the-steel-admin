@@ -1,5 +1,7 @@
 import { Card } from "@/components/ui/card";
+import { AnalysisCardsByFilter } from "../data/mockData";
 import { cn } from "@/lib/utils";
+import type { TabType } from "../pages/Dashboard";
 
 interface AnalysisCardProps {
   label: string;
@@ -8,6 +10,17 @@ interface AnalysisCardProps {
   textColor: string;
 }
 
+export interface AnalysisCardItem {
+  label: string;
+  value: string;
+  bgColor: string;
+  textColor: string;
+}
+
+export type AnalysisCardsByFilterType = Record<
+  TabType,
+  readonly AnalysisCardItem[]
+>;
 function AnalysisCard({ label, value, bgColor, textColor }: AnalysisCardProps) {
   return (
     <div
@@ -26,31 +39,17 @@ function AnalysisCard({ label, value, bgColor, textColor }: AnalysisCardProps) {
   );
 }
 
-export function AnalysisSection() {
+export function AnalysisSection({ activeTab }: { activeTab: TabType }) {
+  const cards = AnalysisCardsByFilter[activeTab];
   return (
     <Card className="xl:p-6 p-3 rounded-md shadow-none">
       <p className="md:text-xl text-sm font-medium text-black mb-1">
         Order Value vs Plant Costs Analysis
       </p>
       <div className="flex gap-4 flex-wrap">
-        <AnalysisCard
-          label="Total Order Value"
-          value="$12,30,000"
-          bgColor="bg-[#E5ECFF]"
-          textColor="text-[#1D51A4]"
-        />
-        <AnalysisCard
-          label="Total Plant Costs"
-          value="$9,97,000"
-          bgColor="bg-[#FEE2E2]"
-          textColor="text-[#EF4444]"
-        />
-        <AnalysisCard
-          label="Projected Profit"
-          value="$2,33,000"
-          bgColor="bg-[#F0FDF4]"
-          textColor="text-[#16A34A]"
-        />
+        {cards.map((card: AnalysisCardItem) => (
+          <AnalysisCard key={card.label} {...card} />
+        ))}
       </div>
     </Card>
   );

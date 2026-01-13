@@ -1,70 +1,83 @@
 import React from "react";
 import Modal from "../common_components/Modal";
 import SearchableSelect from "../common_components/SearchableSelect";
-import { vendors } from "@/data/mockData";
+import { status } from "../../data/mockData";
 
-interface AddNewTaxModalProps {
+interface AddNewEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const AddNewTaxModal: React.FC<AddNewTaxModalProps> = ({ isOpen, onClose }) => {
+const AddNewEntryModal: React.FC<AddNewEntryModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Add New Tax"
-      width="max-w-xl"
+      title="Add New Entry"
+      width="max-w-2xl"
     >
       <form className="flex flex-col max-h-full">
         <div className="overflow-y-auto pr-2 max-h-[400px] scrollbar-thin scrollbar-thumb-gray-200">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-2">
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">State</label>
+              <label className="text-sm font-medium text-gray-700">
+                Order Details
+              </label>
               <input
                 type="text"
-                placeholder="Enter State"
+                placeholder="order details"
                 className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
               />
             </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Order Value
+              </label>
+              <input
+                type="text"
+                placeholder="order value"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
+              />
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Payment Breakdown
+              </label>
+              <input
+                type="text"
+                placeholder="payment breakdown"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
+              />
+            </div>{" "}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                Outstanding
+              </label>
+              <input
+                type="text"
+                placeholder="outstanding"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
+              />
+            </div>{" "}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium text-gray-700">
+                WIP Profit
+              </label>
+              <input
+                type="text"
+                placeholder="wip profit"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
+              />
+            </div>{" "}
             <div className="relative">
               <SearchableSelect
-                label="Filling Frequency"
-                options={vendors}
+                label="Status"
+                options={status}
                 value={null}
                 onChange={() => {}}
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">
-                Due Date
-              </label>
-              <input
-                type="date"
-                placeholder="Honda"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium text-gray-700">
-                Threshold / Parameters
-              </label>
-              <input
-                type="text"
-                placeholder="Enter"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
-              />
-            </div>
-            <div className="flex flex-col gap-1.5 md:col-span-full">
-              <label className="text-sm font-medium text-gray-700">
-                Website Link
-              </label>
-              <input
-                type="text"
-                placeholder="Enter"
-                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
               />
             </div>
           </div>
@@ -91,4 +104,4 @@ const AddNewTaxModal: React.FC<AddNewTaxModalProps> = ({ isOpen, onClose }) => {
   );
 };
 
-export default AddNewTaxModal;
+export default AddNewEntryModal;

@@ -5,7 +5,7 @@ import {
   Trophy,
   ArrowDown,
 } from "lucide-react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
+import TitleSubtitle from "@/components/TitleSubtitle";
 import FinanceStatCard from "../../components/FinanceStatCard";
 import ProjectProfitabilityCard from "../../components/ProjectProfitabilityCard";
 import { ProfitGrowthOverTimeChart } from "../../components/ProfitGrowthOverTimeChart";
@@ -15,43 +15,127 @@ import WipVsCompletedCard from "../../components/WipVsCompletedCard";
 import ProjectDataTable from "../../components/ProjectDataTable";
 import ProjectCostBreakdown from "../../components/ProjectCostBreakdown";
 import DolleIcon from "../../assets/icon/blueDollerIcon.svg";
+import FilterTabs from "@/components/FilterTabs";
+import { useState } from "react";
+import type { TabType } from "../Dashboard";
+import { costBreakdownByFilter } from "../../data/mockData";
 
-const financeStats = [
-  {
-    title: "Total Project Value",
-    value: "$12,30,000",
-    icon: (
-      <img src={DolleIcon} className="w-5 h-5 object-contain text-[#1D51A4]" />
-    ),
-    iconBgColor: "bg-[#EFF6FF]",
-    valueColor: "text-black",
-  },
-  {
-    title: "Total Cost to Date",
-    value: "$8,45,000",
-    icon: <Calculator className="md:w-5 md:h-5 w-4 h-4 text-[#EA580C]" />,
-    iconBgColor: "bg-[#FFF7ED]",
-    valueColor: "text-emerald-500",
-  },
-  {
-    title: "Current WIP Profit",
-    value: "$3,85,000",
-    icon: <ChartLine className="md:w-5 md:h-5 w-4 h-4 text-[#16A34A]" />,
-    iconBgColor: "bg-[#F0FDF4]",
-    valueColor: "text-red-500",
-  },
-  {
-    title: "Profit Margin %",
-    value: "23%",
-    icon: <Percent className="md:w-5 md:h-5 w-4 h-4 text-[#9333EA]" />,
-    iconBgColor: "bg-[#FAF5FF]",
-    valueColor: "text-black",
-  },
-];
+export const financeStatsByFilter = {
+  Today: [
+    {
+      title: "Total Project Value",
+      value: "$12,30,000",
+      icon: (
+        <img
+          src={DolleIcon}
+          className="w-5 h-5 object-contain text-[#1D51A4]"
+        />
+      ),
+      iconBgColor: "bg-[#EFF6FF]",
+      valueColor: "text-black",
+    },
+    {
+      title: "Total Cost to Date",
+      value: "$8,45,000",
+      icon: <Calculator className="md:w-5 md:h-5 w-4 h-4 text-[#EA580C]" />,
+      iconBgColor: "bg-[#FFF7ED]",
+      valueColor: "text-emerald-500",
+    },
+    {
+      title: "Current WIP Profit",
+      value: "$3,85,000",
+      icon: <ChartLine className="md:w-5 md:h-5 w-4 h-4 text-[#16A34A]" />,
+      iconBgColor: "bg-[#F0FDF4]",
+      valueColor: "text-red-500",
+    },
+    {
+      title: "Profit Margin %",
+      value: "23%",
+      icon: <Percent className="md:w-5 md:h-5 w-4 h-4 text-[#9333EA]" />,
+      iconBgColor: "bg-[#FAF5FF]",
+      valueColor: "text-black",
+    },
+  ],
+
+  Week: [
+    {
+      title: "Total Project Value",
+      value: "$58,90,000",
+      icon: (
+        <img
+          src={DolleIcon}
+          className="w-5 h-5 object-contain text-[#1D51A4]"
+        />
+      ),
+      iconBgColor: "bg-[#EFF6FF]",
+      valueColor: "text-black",
+    },
+    {
+      title: "Total Cost to Date",
+      value: "$42,10,000",
+      icon: <Calculator className="md:w-5 md:h-5 w-4 h-4 text-[#EA580C]" />,
+      iconBgColor: "bg-[#FFF7ED]",
+      valueColor: "text-emerald-500",
+    },
+    {
+      title: "Current WIP Profit",
+      value: "$16,80,000",
+      icon: <ChartLine className="md:w-5 md:h-5 w-4 h-4 text-[#16A34A]" />,
+      iconBgColor: "bg-[#F0FDF4]",
+      valueColor: "text-red-500",
+    },
+    {
+      title: "Profit Margin %",
+      value: "28%",
+      icon: <Percent className="md:w-5 md:h-5 w-4 h-4 text-[#9333EA]" />,
+      iconBgColor: "bg-[#FAF5FF]",
+      valueColor: "text-black",
+    },
+  ],
+
+  Month: [
+    {
+      title: "Total Project Value",
+      value: "$2,42,80,000",
+      icon: (
+        <img
+          src={DolleIcon}
+          className="w-5 h-5 object-contain text-[#1D51A4]"
+        />
+      ),
+      iconBgColor: "bg-[#EFF6FF]",
+      valueColor: "text-black",
+    },
+    {
+      title: "Total Cost to Date",
+      value: "$1,98,40,000",
+      icon: <Calculator className="md:w-5 md:h-5 w-4 h-4 text-[#EA580C]" />,
+      iconBgColor: "bg-[#FFF7ED]",
+      valueColor: "text-emerald-500",
+    },
+    {
+      title: "Current WIP Profit",
+      value: "$44,40,000",
+      icon: <ChartLine className="md:w-5 md:h-5 w-4 h-4 text-[#16A34A]" />,
+      iconBgColor: "bg-[#F0FDF4]",
+      valueColor: "text-red-500",
+    },
+    {
+      title: "Profit Margin %",
+      value: "31%",
+      icon: <Percent className="md:w-5 md:h-5 w-4 h-4 text-[#9333EA]" />,
+      iconBgColor: "bg-[#FAF5FF]",
+      valueColor: "text-black",
+    },
+  ],
+} as const;
 
 const WipProfitPage = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("Today");
+  const stats = financeStatsByFilter[activeTab];
   return (
-    <div className="px-2 md:px-4 pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
+      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10">
         <TitleSubtitle
           title="WIP Profit Dashboard"
@@ -59,7 +143,7 @@ const WipProfitPage = () => {
         />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3 xl:gap-6 mb-5">
-        {financeStats.map((stat, index) => (
+        {stats.map((stat, index) => (
           <FinanceStatCard
             key={index}
             title={stat.title}
@@ -72,8 +156,8 @@ const WipProfitPage = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:gap-6 gap-3">
-        <ProfitGrowthOverTimeChart />
-        <EstimatedVsActualProfitChart />
+        <ProfitGrowthOverTimeChart activeTab={activeTab} />
+        <EstimatedVsActualProfitChart activeTab={activeTab} />
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 xl:gap-6 gap-3">
@@ -138,42 +222,18 @@ const WipProfitPage = () => {
         <OverallCostBreakdown
           title="Overall Cost Breakdown"
           totalCost="$1,678,000"
-          items={[
-            {
-              label: "Labor Cost",
-              value: "$1,010,000",
-              percentage: "60.2%",
-              color: "#3B82F6",
-              progress: 60.2,
-            },
-            {
-              label: "Material Cost",
-              value: "$565,000",
-              percentage: "33.7%",
-              color: "#22C55E",
-              progress: 33.7,
-            },
-            {
-              label: "Transportation Cost",
-              value: "$103,000",
-              percentage: "6.1%",
-              color: "#F97316",
-              progress: 6.1,
-            },
-          ]}
+          items={costBreakdownByFilter[activeTab]}
         />
-        <WipVsCompletedCard
-          totalWipValue="$2,450,000"
-          completedWork="$1,680,000"
-          completionRate="68.6%"
-        />
+        <WipVsCompletedCard activeTab={activeTab} />
       </div>
 
       <div className="">
-        <ProjectDataTable />
+        <ProjectDataTable activeTab={activeTab} />
       </div>
       <div className="">
+        {/* <div className="grid grid-cols-1 xl:grid-cols-2 xl:gap-6 gap-3 bg-white rounded-md"> */}
         <ProjectCostBreakdown />
+        {/* </div> */}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import { Download, FileText, Mail, TrendingUp, Landmark } from "lucide-react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
+import TitleSubtitle from "@/components/TitleSubtitle";
 import { Button } from "@/components/ui/button";
 import ProfitAndLossOverview from "../../components/management/ProfitAndLossOverview";
 import CashFlowAnalysis from "../../components/management/CashFlowAnalysis";
@@ -10,7 +10,7 @@ const FinancialReportPage = () => {
   const [activeTab, setActiveTab] = useState("profit_loss");
 
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10 mb-6">
         <TitleSubtitle
           title="Financial Reports"

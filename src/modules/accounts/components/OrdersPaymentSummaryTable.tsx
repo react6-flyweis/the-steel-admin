@@ -8,8 +8,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { orderSummaryByFilter } from "../data/mockData";
+import type { TabType } from "../pages/Dashboard";
+import { useState } from "react";
 
-interface OrderSummaryRecord {
+export interface OrderSummaryRecord {
   client: string;
   projectId: string;
   location: string;
@@ -24,89 +27,66 @@ interface OrderSummaryRecord {
   status: "In progress" | "Completed" | "Started";
 }
 
-const tableData: OrderSummaryRecord[] = [
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    location: "Workshop . Texas",
-    orderValue: "$4,50,000",
-    currentCost: "$3,61,000",
-    deposit: "$1,35,000",
-    progress: "$1,35,000",
-    final: "$0",
-    outstanding: "$1,35,000",
-    wipProfit: "$89,000",
-    margin: "19.8%",
-    status: "In progress",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    location: "Workshop . Texas",
-    orderValue: "$4,50,000",
-    currentCost: "$3,61,000",
-    deposit: "$1,35,000",
-    progress: "$1,35,000",
-    final: "$0",
-    outstanding: "$1,35,000",
-    wipProfit: "$89,000",
-    margin: "19.8%",
-    status: "Completed",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    location: "Workshop . Texas",
-    orderValue: "$4,50,000",
-    currentCost: "$3,61,000",
-    deposit: "$1,35,000",
-    progress: "$1,35,000",
-    final: "$0",
-    outstanding: "$1,35,000",
-    wipProfit: "$89,000",
-    margin: "19.8%",
-    status: "Started",
-  },
-  {
-    client: "John Doe",
-    projectId: "Q-2025-1047",
-    location: "Workshop . Texas",
-    orderValue: "$4,50,000",
-    currentCost: "$3,61,000",
-    deposit: "$1,35,000",
-    progress: "$1,35,000",
-    final: "$0",
-    outstanding: "$1,35,000",
-    wipProfit: "$89,000",
-    margin: "19.8%",
-    status: "In progress",
-  },
-];
+export default function OrdersPaymentSummaryTable({
+  activeTab,
+}: {
+  activeTab: TabType;
+}) {
+  const [statusFilter, setStatusFilter] = useState("all-clients");
 
-export default function OrdersPaymentSummaryTable() {
+  const [dateFilter, setDateFilter] = useState("all-dates");
+  const rows = orderSummaryByFilter[activeTab];
+
+  const filteredData = rows.filter((row) => {
+    const matchesStatus =
+      statusFilter === "all-clients"
+        ? true
+        : row.status.toLowerCase().replace(" ", "-") === statusFilter;
+
+    const matchesDate =
+      dateFilter === "all-dates"
+        ? true
+        : dateFilter === "settled"
+        ? row.final === "$0"
+        : true;
+
+    return matchesStatus && matchesDate;
+  });
   return (
     <div className="bg-white rounded-md">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4 mb-1 xl:p-6 p-4 ">
-        <h2 className="md:text-xl font-bold text-black tracking-tight self-start md:self-center">
+        <h2 className="md:text-xl font-normal text-black tracking-tight self-start md:self-center">
           Orders & Payment Summary
         </h2>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <Select defaultValue="all-clients">
-            <SelectTrigger className="w-full md:w-[160px] bg-white border-gray-200 rounded-lg h-10 text-gray-600 focus:ring-1 focus:ring-blue-500">
+          <Select
+            value={statusFilter}
+            onValueChange={(value) => setStatusFilter(value)}
+          >
+            <SelectTrigger className="w-full md:w-[160px] bg-white border-gray-200 rounded-lg h-10 text-gray-600">
               <SelectValue placeholder="All Clients" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectItem value="all-clients">All Clients</SelectItem>
+              <SelectItem value="in-progress">In progress</SelectItem>
+              <SelectItem value="started">Started</SelectItem>
+              <SelectItem value="completed">Completed</SelectItem>
             </SelectContent>
           </Select>
 
-          <Select defaultValue="all-dates">
-            <SelectTrigger className="w-full md:w-[160px] bg-white border-gray-200 rounded-lg h-10 text-gray-600 focus:ring-1 focus:ring-blue-500">
+          <Select
+            value={dateFilter}
+            onValueChange={(value) => setDateFilter(value)}
+          >
+            <SelectTrigger className="w-full md:w-[160px] bg-white border-gray-200 rounded-lg h-10 text-gray-600">
               <SelectValue placeholder="All Dates" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectItem value="all-dates">All Dates</SelectItem>
+              <SelectItem value="settled">Settled</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -116,31 +96,31 @@ export default function OrdersPaymentSummaryTable() {
         <table className="w-full text-left border-collapse min-w-[1200px] overflow-x-auto">
           <thead className="bg-[#F9FAFB] align-middle h-16">
             <tr className="border-b border-gray-100 uppercase">
-              <th className="pl-4 font-semibold text-gray-400 text-[11px] tracking-wider">
+              <th className="pl-4 font-normal text-[#6B7280] text-xs tracking-wider">
                 ORDER DETAILS
               </th>
-              <th className="px-2 font-semibold text-gray-400 text-[11px] tracking-wider">
+              <th className="px-2 font-normal text-[#6B7280] text-xs tracking-wider">
                 ORDER VALUE
               </th>
-              <th className=" px-2 font-semibold text-gray-400 text-[11px] tracking-wider text-center">
+              <th className=" px-2 font-normal text-[#6B7280] text-xs tracking-wider text-center">
                 PAYMENT BREAKDOWN
               </th>
-              <th className="px-2  font-semibold text-gray-400 text-[11px] tracking-wider text-center">
+              <th className="px-2  font-normal text-[#6B7280] text-xs tracking-wider text-center">
                 OUTSTANDING
               </th>
-              <th className=" px-2 font-semibold text-gray-400 text-[11px] tracking-wider text-center">
+              <th className=" px-2 font-normal text-[#6B7280] text-xs tracking-wider text-center">
                 WIP PROFIT
               </th>
-              <th className="px-2 font-semibold text-gray-400 text-[11px] tracking-wider text-center">
+              <th className="px-2 font-normal text-[#6B7280] text-xs tracking-wider text-center">
                 STATUS
               </th>
-              <th className="px-2 font-semibold text-gray-400 text-[11px] tracking-wider text-center">
+              <th className="px-2 font-normal text-[#6B7280] text-xs tracking-wider text-center">
                 ACTIONS
               </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-50 p-6">
-            {tableData.map((item, index) => (
+            {filteredData.map((item: OrderSummaryRecord, index: number) => (
               <tr
                 key={index}
                 className="hover:bg-gray-50/30 transition-colors p-6 "
@@ -163,7 +143,7 @@ export default function OrdersPaymentSummaryTable() {
                 {/* ORDER VALUE */}
                 <td className="py-6 min-w-[150px]">
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-normal text-gray-900 text-[15px]">
+                    <span className="font-medium text-gray-900 text-[15px]">
                       {item.orderValue}
                     </span>
                     <span className="text-gray-400 text-xs font-normal">
@@ -176,20 +156,20 @@ export default function OrdersPaymentSummaryTable() {
                 <td className="py-6 min-w-[100px]">
                   <div className="flex flex-col gap-1.5 pr-8">
                     <div className="flex justify-between items-center text-[13px]">
-                      <span className="text-gray-400">Deposit:</span>
-                      <span className="font-bold text-gray-700">
+                      <span className="text-[#6B7280]">Deposit:</span>
+                      <span className="font-normal text-black">
                         {item.deposit}
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-[13px]">
-                      <span className="text-gray-400">Progress:</span>
-                      <span className="font-bold text-gray-700">
+                      <span className="text-[#6B7280]">Progress:</span>
+                      <span className="font-normal text-black">
                         {item.progress}
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-[13px]">
-                      <span className="text-gray-400">Final:</span>
-                      <span className="font-bold text-gray-700">
+                      <span className="text-[#6B7280]">Final:</span>
+                      <span className="font-normal text-black">
                         {item.final}
                       </span>
                     </div>
@@ -206,7 +186,7 @@ export default function OrdersPaymentSummaryTable() {
                 {/* WIP PROFIT */}
                 <td className="py-6 text-center">
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-bold text-emerald-500 text-[15px]">
+                    <span className="font-normal text-emerald-500 text-[15px]">
                       {item.wipProfit}
                     </span>
                     <span className="text-gray-400 text-xs font-normal">
@@ -219,9 +199,9 @@ export default function OrdersPaymentSummaryTable() {
                 <td className="py-6 text-center">
                   <Badge
                     className={cn(
-                      "font-medium text-xs px-4 py-1.5 rounded-full border-none shadow-none",
+                      "font-normal text-xs px-4 h-6 w-[100px] rounded-full border-none shadow-none",
                       item.status === "In progress"
-                        ? "bg-blue-50 text-blue-600"
+                        ? "bg-[#DBEAFE] text-[#1D51A4]"
                         : item.status === "Completed"
                         ? "bg-emerald-50 text-emerald-600"
                         : "bg-orange-50 text-orange-600"

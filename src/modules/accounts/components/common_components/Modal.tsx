@@ -8,6 +8,7 @@ interface ModalProps {
   children: React.ReactNode;
   width?: string;
   height?: string;
+  className?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -17,6 +18,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   width = "max-w-2xl",
   height = "max-h-[90vh]",
+  className = "p-6 overflow-y-auto",
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -62,7 +64,7 @@ const Modal: React.FC<ModalProps> = ({
           </h2>
         </div>
 
-        <div className="p-6 overflow-y-auto">{children}</div>
+        <div className={className}>{children}</div>
       </div>
     </div>,
     document.body

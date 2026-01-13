@@ -1,5 +1,5 @@
 import { FileText, Funnel, FileX } from "lucide-react";
-import TitleSubtitle from "../../components/common_components/TitleSubtitle";
+import TitleSubtitle from "@/components/TitleSubtitle";
 import { ProfitGrowthOverTimeChart } from "../../components/ProfitGrowthOverTimeChart";
 import TopHighestCostProjectsCard from "../../components/TopHighestCostProjectsCard";
 import ProjectsExceedingBudgetCard from "../../components/ProjectsExceedingBudgetCard";
@@ -8,10 +8,15 @@ import ProjectCostAnalysisTable from "../../components/ProjectCostAnalysisTable"
 import { Button } from "@/components/ui/button";
 import CogsAnalysisCard from "../../components/analytics/CogsAnalysisCard";
 import CogsStatsGrid from "../../components/analytics/CogsStatsGrid";
+import type { TabType } from "../Dashboard";
+import { useState } from "react";
+import FilterTabs from "@/components/FilterTabs";
 
 const CogsAnalysis = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("Today");
   return (
-    <div className="xl:px-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
+      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0">
         <TitleSubtitle
           title="COGS Analysis"
@@ -48,7 +53,7 @@ const CogsAnalysis = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <CogsAnalysisCard />
-        <ProfitGrowthOverTimeChart />
+        <ProfitGrowthOverTimeChart activeTab={activeTab} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 xl:gap-4 gap-3 mb-6">
@@ -58,7 +63,7 @@ const CogsAnalysis = () => {
       </div>
 
       <div className="mb-6">
-        <ProjectCostAnalysisTable />
+        <ProjectCostAnalysisTable activeTab={activeTab} />
       </div>
     </div>
   );
