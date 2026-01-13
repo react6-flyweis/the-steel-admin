@@ -46,9 +46,13 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
   const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredEmployees = employees.filter((employee) => {
+    const q = searchQuery.trim().toLowerCase();
     const matchesSearch =
-      employee.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      employee.email.toLowerCase().includes(searchQuery.toLowerCase());
+      !q ||
+      employee.name.toLowerCase().includes(q) ||
+      employee.email.toLowerCase().includes(q) ||
+      employee.phone.toLowerCase().includes(q) ||
+      employee.team.toLowerCase().includes(q);
     const matchesRole = roleFilter === "all" || employee.role === roleFilter;
     const matchesStatus =
       statusFilter === "all" || employee.status === statusFilter;
