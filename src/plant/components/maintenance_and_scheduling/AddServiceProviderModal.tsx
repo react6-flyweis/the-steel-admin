@@ -1,12 +1,12 @@
 import React from "react";
 import Modal from "../Modal";
 
-interface ReportBreakdownModalProps {
+interface AddServiceProviderModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
+const AddServiceProviderModal: React.FC<AddServiceProviderModalProps> = ({
   isOpen,
   onClose,
 }) => {
@@ -14,7 +14,7 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Report Breakdown"
+      title="Add Service Provider"
       width="w-xl"
       height="h-[50vh]"
     >
@@ -22,39 +22,21 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
         <div className="flex-1 overflow-y-auto">
           <div className="space-y-6 pb-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {/* Equipment Name */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Equipment Name*
+                  Provider Name*
                 </label>
-                <div className="relative">
-                  <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
-                    <option>Concrete Mixer 350L</option>
-                    <option>Excavator CAT 320D</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-4 h-4"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                      />
-                    </svg>
-                  </div>
-                </div>
+                <input
+                  type="text"
+                  placeholder="Name"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
+                />
               </div>
 
               {/* Category */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Category*
+                  Services
                 </label>
                 <div className="relative">
                   <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
@@ -83,7 +65,7 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
               {/* Breakdown Type */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Breakdown Type
+                  Contact
                 </label>
                 <input
                   type="text"
@@ -95,11 +77,13 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
               {/* Severity */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Severity
+                  Rating
                 </label>
                 <input
-                  type="text"
-                  placeholder="Severity"
+                  max="5"
+                  min="1"
+                  type="number"
+                  placeholder="Rating"
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
                 />
               </div>
@@ -107,17 +91,17 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
               {/* Location */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Location
+                  Avg Cost
                 </label>
                 <input
-                  type="text"
-                  placeholder="Baner Pune"
+                  type="number"
+                  placeholder="Avg Cost"
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
                 />
               </div>
 
               {/* Upload Images */}
-              <div className="flex flex-col gap-1.5">
+              {/* <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
                   Upload Images
                 </label>
@@ -149,16 +133,16 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </div>
-              </div>
+              </div> */}
 
               {/* Reported By */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-sm font-medium text-gray-700">
-                  Reported By
+                  Last Service
                 </label>
                 <input
-                  type="text"
-                  placeholder="Name"
+                  type="date"
+                  placeholder="Last Service"
                   className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
                 />
               </div>
@@ -178,7 +162,7 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
                   type="submit"
                   className="px-8 py-2.5 rounded-lg bg-[#2563EB] text-white font-medium hover:opacity-90 transition-colors shadow-sm"
                 >
-                  Save & Report
+                  Submit
                 </button>
               </div>
             </div>
@@ -189,4 +173,4 @@ const ReportBreakdownModal: React.FC<ReportBreakdownModalProps> = ({
   );
 };
 
-export default ReportBreakdownModal;
+export default AddServiceProviderModal;

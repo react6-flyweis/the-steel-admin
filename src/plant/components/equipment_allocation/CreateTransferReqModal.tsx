@@ -1,5 +1,6 @@
 import React from "react";
-import Modal from "./Modal";
+import Modal from "../Modal";
+import { ChevronDownIcon, Upload } from "lucide-react";
 
 interface CreateTransferReqModalProps {
   isOpen: boolean;
@@ -15,7 +16,8 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Create Transfer Request"
-      width="max-w-3xl"
+      width="max-w-xl"
+      height="max-h-[calc(100vh-20rem)]"
     >
       <form className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -31,20 +33,7 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
                 <option>Generator 25 kVA</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
+                <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -61,20 +50,7 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
                 <option>Vehicles</option>
               </select>
               <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-4 h-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m19.5 8.25-7.5 7.5-7.5-7.5"
-                  />
-                </svg>
+                <ChevronDownIcon className="w-4 h-4" />
               </div>
             </div>
           </div>
@@ -82,45 +58,59 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
           {/* Equipment ID */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-700">
-              Equipment ID / Asset Code*
+              From Site*
             </label>
-            <input
-              type="text"
-              placeholder="EX-302, DG-065"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
-            />
+            <div className="relative">
+              <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
+                <option>Heavy Equipment</option>
+                <option>Light Machinery</option>
+                <option>Vehicles</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           {/* Manufacturer */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-700">
-              Manufacturer / Brand
-            </label>
-            <input
-              type="text"
-              placeholder="Honda"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
-            />
+            <label className="text-sm font-medium text-gray-700">To Site</label>
+            <div className="relative">
+              <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
+                <option>Heavy Equipment</option>
+                <option>Light Machinery</option>
+                <option>Vehicles</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           {/* Model Number */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-700">
-              Model Number
+              Priority
             </label>
-            <input
-              type="text"
-              placeholder="CAT 320D"
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
-            />
+            <div className="relative">
+              <select className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-gray-700">
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+              </select>
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <ChevronDownIcon className="w-4 h-4" />
+              </div>
+            </div>
           </div>
 
           {/* Serial Number */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-700">
-              Serial Number
+              Purpose / Reason*
             </label>
             <input
+              required
               type="text"
               placeholder="SN-45SD778812"
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
@@ -130,11 +120,11 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
           {/* Power / Capacity */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-700">
-              Power / Capacity
+              Requsted By (auto-fill)
             </label>
             <input
               type="text"
-              placeholder="65 kVA"
+              placeholder="PM Rakesh"
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
             />
           </div>
@@ -142,13 +132,40 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
           {/* Fuel Type */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-700">
-              Fuel Type
+              Expected Transfer Date
             </label>
             <input
+              type="date"
+              className="w-full px-4 py-3 border border-[#D5D5D5] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 text-gray-700"
+            />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-gray-700">Notes</label>
+            <input
               type="text"
-              placeholder="Diesel"
+              placeholder="Notes"
               className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400"
             />
+          </div>
+          <div className="flex flex-col gap-1.5">
+            <label className="text-sm font-medium text-gray-700">
+              Upload Supporting File (optional)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                readOnly
+                placeholder="Upload"
+                className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 placeholder-gray-400 cursor-pointer"
+              />
+              <div className="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none text-gray-500">
+                <Upload className="w-5 h-5" />
+              </div>
+              <input
+                type="file"
+                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+              />
+            </div>
           </div>
         </div>
 
@@ -165,7 +182,7 @@ const CreateTransferReqModal: React.FC<CreateTransferReqModalProps> = ({
             type="submit"
             className="px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-colors shadow-sm"
           >
-            Add Equipment
+            Submit Request
           </button>
         </div>
       </form>

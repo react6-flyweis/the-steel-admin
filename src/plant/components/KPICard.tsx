@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 
 interface KPICardProps {
   title: string;
@@ -21,27 +22,33 @@ const KPICard: React.FC<KPICardProps> = ({
   iconBgColor = "bg-blue-50",
   iconColor = "text-blue-500",
 }) => {
+  const navigation = useNavigate();
   return (
-    <div className="bg-white rounded-lg p-5 shadow-sm border border-gray-100 flex flex-col justify-between min-h-[140px]">
+    <div className="bg-white rounded-lg p-5 flex flex-col justify-between min-h-[140px]">
       <div className="flex justify-between items-start">
         <div>
-          <h3 className="text-lg font-bold text-gray-800">{value}</h3>
-          <p className="text-sm text-[#646B72] font-normal mt-2">{subtext}</p>
+          <h3 className="sm:text-xl font-medium text-gray-800 max-w-[100px] overflow-x-auto overflow-y-hidden sm:max-w-none">
+            {value}
+          </h3>
+          <p className="sm:text-xs text-[10px] mt-1">{subtext}</p>
         </div>
-        <div className={`p-3 rounded-lg ${iconBgColor} ${iconColor}`}>
+        <div className={`sm:p-4 p-2 rounded-lg ${iconBgColor} ${iconColor}`}>
           {icon}
         </div>
       </div>
 
       {trend && (
-        <div className="flex justify-between items-center mt-4 text-xs font-medium">
+        <div className="flex justify-between items-center mt-4 text-xs font-medium border-t border-[#E6EAED] pt-2">
           <span
             className={trend.isPositive ? "text-green-500" : "text-red-500"}
           >
             {trend.value}{" "}
             <span className="text-black-400 font-normal">vs Last Month</span>
           </span>
-          <button className="text-black-400 underline hover:text-gray-600">
+          <button
+            onClick={() => navigation("/material_inventory_management")}
+            className="xs:text-xs text-[10px] text-black-400 underline hover:text-gray-600"
+          >
             View All
           </button>
         </div>

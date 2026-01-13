@@ -1,33 +1,50 @@
 import { useState } from "react";
 import Table, { type Column } from "../Table";
-import AddEquipmentModal from "../AddEquipmentModal";
-import { equipmentData } from "./mockData";
-
+import { equipment_status_data } from "./mockData";
 import HammerIcon from "../../assets/hammerIcon.svg";
 import CheckedShieldIcon from "../../assets/checkedShieldIcon.svg";
 import YellowDollerIcon from "../../assets/yellowDollerIcon.svg";
 import SalmonGraphIcon from "../../assets/salmonGraphIcon.svg";
 import StatCard from "@/components/ui/stat-card";
-import CreateTransferReqModal from "../CreateTransferReqModal";
+import CreateTransferReqModal from "./CreateTransferReqModal";
+import AssignEquipmentModal from "./AssignEquipmentModal";
+import TitleSubtitle from "@/components/TitleSubtitle";
+import TableActionButtons from "../common_component/TableActionButtons";
 
 export const equipmentStats = [
   {
     title: "Total Equipment",
     value: "12 units",
-    icon: <img src={HammerIcon} alt="total-maintenance" className="size-7" />,
+    icon: (
+      <img
+        src={HammerIcon}
+        alt="total-maintenance"
+        className="md:size-7 size-5 p-[2px] "
+      />
+    ),
     color: "bg-[#1D51A4]",
   },
   {
     title: "Allocated to Sites:",
     value: "42",
-    icon: <img src={CheckedShieldIcon} alt="breakdown" className="size-7" />,
+    icon: (
+      <img
+        src={CheckedShieldIcon}
+        alt="breakdown"
+        className="md:size-7 size-5 p-[2px]"
+      />
+    ),
     color: "bg-[#3AB449]",
   },
   {
     title: "Available at Yard:",
     value: "74",
     icon: (
-      <img src={YellowDollerIcon} alt="due-maintenance" className="size-7" />
+      <img
+        src={YellowDollerIcon}
+        alt="due-maintenance"
+        className="md:size-7 size-4 p-1"
+      />
     ),
     color: "bg-[#F59E0B]",
   },
@@ -35,7 +52,11 @@ export const equipmentStats = [
     title: "Under Transfer:",
     value: "12",
     icon: (
-      <img src={SalmonGraphIcon} alt="under-maintenance" className="size-7" />
+      <img
+        src={SalmonGraphIcon}
+        alt="under-maintenance"
+        className="md:size-7 size-5 p-[2px]"
+      />
     ),
     color: "bg-[#FD8D5B]",
   },
@@ -45,90 +66,66 @@ const EquipmentAllocationView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
   const closeTransferModal = () => {
     setIsTransferModalOpen(false);
   };
 
-  const columns: Column<(typeof equipmentData)[0]>[] = [
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const columns: Column<(typeof equipment_status_data)[0]>[] = [
     {
-      header: "Equipment ID",
-      accessor: (row) => <span className="text-gray-500">{row.id}</span>,
-    },
-    {
-      header: "Name",
-      accessor: (row) => (
-        <span className="text-gray-800 font-medium block max-w-[150px]">
-          {row.name}
-        </span>
-      ),
+      header: "Equipment",
+      accessor: (row) => <span className="text-gray-500">{row.equipment}</span>,
     },
     {
       header: "Category",
       accessor: (row) => (
-        <span className="text-gray-700 font-medium">{row.category}</span>
+        <span className="text-gray-800 font-medium block max-w-[150px]">
+          {row.category}
+        </span>
       ),
     },
     {
-      header: "Status",
+      header: "Assigned To",
       accessor: (row) => (
-        <div className="flex items-center gap-2">
-          <div className={`w-2.5 h-2.5 rounded-full ${row.dotColor}`}></div>
-          <span className={`font-medium ${row.statusColor} text-xs`}>
-            {row.status}
-          </span>
-        </div>
+        <span className="text-gray-700 font-medium">{row.assigned_to}</span>
       ),
     },
     {
-      header: "Project",
-      accessor: (row) => <span className="text-gray-800">{row.project}</span>,
+      header: "Usage",
+
+      accessor: (row) => <span className="text-gray-800">{row.usage}</span>,
     },
     {
       header: "Location",
       accessor: (row) => <span className="text-gray-800">{row.location}</span>,
     },
     {
-      header: "Hours",
-      accessor: (row) => <span className="text-gray-800">{row.hours}</span>,
-    },
-    {
-      header: "Next Due",
+      header: "Status",
       accessor: (row) => (
-        <span
-          className={`font-medium ${
-            row.nextDue === "Overdue" ? "text-red-600" : "text-gray-800"
-          }`}
-        >
-          {row.nextDue}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className={`font-medium text-xs`}>{row.status}</span>
+        </div>
       ),
     },
     {
+      header: "GPS",
+      accessor: (row) => <span className="text-gray-800">{row.gps}</span>,
+    },
+    {
+      header: "Next Due",
+      accessor: (row) => <span className="text-gray-800">{row.nextDue}</span>,
+    },
+    {
       header: "Action",
-      accessor: (row) => {
-        if (row.status === "In Use") {
-          return (
-            <button className="bg-[#E6FFFA] text-[#0D9488] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-teal-100 transition-colors">
-              View / Transfer
-            </button>
-          );
-        } else if (row.status === "Breakdown") {
-          return (
-            <button className="bg-[#FFFBEB] text-[#D97706] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-yellow-100 transition-colors">
-              Log Issue
-            </button>
-          );
-        } else {
-          return (
-            <button className="bg-[#DBEAFE] text-[#2563EB] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-blue-200 transition-colors">
-              Maintenance
-            </button>
-          );
-        }
+      accessor: () => {
+        return (
+          <button className="bg-[#3AB44926] text-[#3AB449] px-3 py-1.5 rounded-full text-xs font-normaltransition-colors">
+            Maintain
+          </button>
+        );
       },
       className: "text-right",
       cellClassName: "text-right",
@@ -136,19 +133,15 @@ const EquipmentAllocationView = () => {
   ];
 
   return (
-    <div className="pr-5 pt-5 space-y-5">
+    <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
-        <div className="">
-          <h1 className="md:text-3xl text-lg font-normal text-gray-800 mb-2">
-            Equipment Allocation
-          </h1>
-          <p className="text-(--text-color-gray-2) text-sm">
-            Here’s a summary of your ongoing steel building projects.
-          </p>
-        </div>
-        <div className="flex flex-col lg:flex-row gap-1 flex-wrap">
+        <TitleSubtitle
+          title="Equipment Allocation"
+          subtitle="Here’s a summary of your ongoing steel building projects."
+        />
+        <div className="flex gap-3 flex-wrap ml-auto xk:mt-0 mt-5">
           <button
-            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-normal shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 md:text-sm text-xs"
             onClick={() => setIsTransferModalOpen(true)}
           >
             <span className="text-lg leading-none">+</span> Create Transfer
@@ -156,14 +149,14 @@ const EquipmentAllocationView = () => {
           </button>
 
           <button
-            className="w-full sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 text-sm"
+            className="sm:w-auto bg-primary text-white px-2 py-2 rounded-lg font-normal shadow-sm hover:opacity-80 transition-colors flex items-center justify-center gap-2 md:text-sm text-xs"
             onClick={() => setIsModalOpen(true)}
           >
             <span className="text-lg leading-none">+</span>Assign Equipment
           </button>
         </div>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-5">
         {equipmentStats.map((stat, index) => (
           <StatCard
             key={index}
@@ -177,69 +170,15 @@ const EquipmentAllocationView = () => {
       <Table
         title="EQUIPMENT LIST"
         columns={columns}
-        data={equipmentData}
+        data={equipment_status_data}
         pagination={true}
-        actions={
-          <div className="flex gap-2">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-600 text-sm hover:bg-gray-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-                />
-              </svg>
-              Filter Equipment
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-600 text-sm hover:bg-gray-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                />
-              </svg>
-              Export Excel
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-sm hover:opacity-80">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                />
-              </svg>
-              Export PDF
-            </button>
-          </div>
-        }
+        actions={<TableActionButtons />}
       />
       <CreateTransferReqModal
         isOpen={isTransferModalOpen}
         onClose={closeTransferModal}
       />
-      <AddEquipmentModal isOpen={isModalOpen} onClose={closeModal} />
+      <AssignEquipmentModal isOpen={isModalOpen} onClose={closeModal} />
     </div>
   );
 };

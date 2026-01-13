@@ -5,7 +5,9 @@ import HammerIcon from "../../assets/hammerIcon.svg";
 import CheckedShieldIcon from "../../assets/checkedShieldIcon.svg";
 import YellowDollerIcon from "../../assets/yellowDollerIcon.svg";
 import SalmonGraphIcon from "../../assets/salmonGraphIcon.svg";
-import AddMaterialModal from "./AddEquipmentModal";
+import AddMaterialModal from "./AddMaterialModal";
+import TitleSubtitle from "@/components/TitleSubtitle";
+import TableActionButtons from "../common_component/TableActionButtons";
 
 const MaterialInventoryView = () => {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -21,122 +23,154 @@ const MaterialInventoryView = () => {
     {
       id: "EX-302",
       name: "Excavator CAT 320D",
-      category: "Heavy",
-      status: "In Use",
+      category: "Cement",
+      status: "🔴 Low",
       statusColor: "text-green-600",
       dotColor: "bg-green-500",
       project: "ABC Warehouse",
       location: "Pune Site",
       hours: "128h",
-      nextDue: "20-Apr",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Reorder",
+      material: "Cement OPC 53",
     },
     {
       id: "CM-104",
       name: "Concrete Mixer 350L",
       category: "Medium",
-      status: "Under Maintenance",
+      status: "🟢 Ok",
       statusColor: "text-orange-600",
       dotColor: "bg-orange-500",
       project: "-",
       location: "Yard",
       hours: "-",
-      nextDue: "15-Apr",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Update",
+      material: "Concrete OPC 53",
     },
     {
       id: "DG-65",
       name: "Diesel Generator 65kVA",
-      category: "Medium",
-      status: "Breakdown",
+      category: "Diesel",
+      status: "🟡 Near Low",
       statusColor: "text-red-600",
       dotColor: "bg-red-500",
       project: "Metro Cast",
       location: "Ahmedabad",
       hours: "412h",
-      nextDue: "Overdue",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Purchase",
+      material: "Diesel Generator 65kVA",
     },
     {
       id: "EX-302",
       name: "Excavator CAT 320D",
-      category: "Heavy",
-      status: "In Use",
+      category: "Cement",
+      status: "🟢 Ok",
       statusColor: "text-green-600",
       dotColor: "bg-green-500",
       project: "ABC Warehouse",
       location: "Pune Site",
       hours: "128h",
-      nextDue: "20-Apr",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Purchase",
+      material: "Concrete OPC 53",
     },
     {
       id: "CM-104",
       name: "Concrete Mixer 350L",
       category: "Medium",
-      status: "Under Maintenance",
+      status: "🟢 Ok",
       statusColor: "text-orange-600",
       dotColor: "bg-orange-500",
       project: "-",
       location: "Yard",
       hours: "-",
-      nextDue: "15-Apr",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Update",
+      material: "Concrete OPC 53",
     },
     {
       id: "DG-65",
       name: "Diesel Generator 65kVA",
-      category: "Medium",
-      status: "Breakdown",
+      category: "Cement",
+      status: "🟡 Near Low",
       statusColor: "text-red-600",
       dotColor: "bg-red-500",
       project: "Metro Cast",
       location: "Ahmedabad",
       hours: "412h",
-      nextDue: "Overdue",
+      minLevel: "100",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Purchase",
+      material: "Diesel Generator 65kVA",
     },
     {
       id: "CM-104",
       name: "Concrete Mixer 350L",
-      category: "Medium",
-      status: "Under Maintenance",
+      category: "Cement",
+      status: "🟢 Ok",
       statusColor: "text-orange-600",
       dotColor: "bg-orange-500",
       project: "-",
       location: "Yard",
       hours: "-",
-      nextDue: "15-Apr",
+      minLevel: "10",
+      stock: "230",
+      unit: "Bags",
+      updated: "08-Apr",
+      action: "Update",
+      material: "Concrete OPC 53",
     },
   ];
 
   const columns: Column<(typeof equipmentData)[0]>[] = [
     {
       header: "Material",
-      accessor: (row) => <span className="text-gray-500">{row.id}</span>,
+      accessor: (row) => <span className="text-gray-500">{row.material}</span>,
     },
     {
       header: "Category",
       accessor: (row) => (
-        <span className="text-gray-800 font-medium block max-w-[150px]">
-          {row.name}
+        <span className="text-gray-500 font-medium block max-w-[150px]">
+          {row.category}
         </span>
       ),
     },
     {
       header: "Stock",
       accessor: (row) => (
-        <span className="text-gray-700 font-medium">{row.category}</span>
+        <span className="text-gray-700 font-medium">{row.stock}</span>
       ),
     },
     {
       header: "Status",
       accessor: (row) => (
         <div className="flex items-center gap-2">
-          <div className={`w-2.5 h-2.5 rounded-full ${row.dotColor}`}></div>
-          <span className={`font-medium ${row.statusColor} text-xs`}>
-            {row.status}
-          </span>
+          <span className={`font-normal text-black text-sm`}>{row.status}</span>
         </div>
       ),
     },
     {
       header: "Unit",
-      accessor: (row) => <span className="text-gray-800">{row.project}</span>,
+      accessor: (row) => <span className="text-gray-800">{row.unit}</span>,
     },
     {
       header: "Location",
@@ -144,39 +178,36 @@ const MaterialInventoryView = () => {
     },
     {
       header: "Updated",
-      accessor: (row) => <span className="text-gray-800">{row.hours}</span>,
+      accessor: (row) => <span className="text-gray-800">{row.updated}</span>,
     },
     {
       header: "Min Level",
       accessor: (row) => (
-        <span
-          className={`font-medium ${
-            row.nextDue === "Overdue" ? "text-red-600" : "text-gray-800"
-          }`}
-        >
-          {row.nextDue}
-        </span>
+        <span className={`font-medium ${"text-gray-800"}`}>{row.minLevel}</span>
       ),
     },
     {
       header: "Action",
       accessor: (row) => {
-        if (row.status === "In Use") {
+        if (row.action === "Update") {
           return (
-            <button className="bg-[#E6FFFA] text-[#0D9488] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-teal-100 transition-colors">
-              View / Transfer
+            <button className="w-[100px] bg-[#2563EB26] text-[#2563EB] py-1.5 rounded-full text-xs font-normal transition-colors">
+              Update
             </button>
           );
-        } else if (row.status === "Breakdown") {
+        } else if (row.action === "Reorder") {
           return (
-            <button className="bg-[#FFFBEB] text-[#D97706] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-yellow-100 transition-colors">
-              Log Issue
+            <button
+              onClick={openModal}
+              className=" w-[100px] bg-[#EAB30826] text-[#EAB308] py-1.5 rounded-full text-xs font-normal transition-colors"
+            >
+              Reorder
             </button>
           );
         } else {
           return (
-            <button className="bg-[#DBEAFE] text-[#2563EB] px-3 py-1.5 rounded-full text-xs font-semibold hover:bg-blue-200 transition-colors">
-              Maintenance
+            <button className="w-[100px] bg-[#EF444426] text-[#EF4444] py-1.5 rounded-full text-xs font-normal transition-colors">
+              Purchase
             </button>
           );
         }
@@ -190,48 +221,60 @@ const MaterialInventoryView = () => {
     {
       title: "Total Material",
       value: "128 units",
-      icon: <img src={HammerIcon} alt="equipment" className="size-7" />,
+      icon: (
+        <img src={HammerIcon} alt="equipment" className="size-5 sm:size-7" />
+      ),
       color: "bg-[#1D51A4]",
     },
     {
       title: "Available",
       value: "42",
-      icon: <img src={CheckedShieldIcon} alt="available" className="size-7" />,
+      icon: (
+        <img
+          src={CheckedShieldIcon}
+          alt="available"
+          className="size-5 sm:size-7"
+        />
+      ),
       color: "bg-[#3AB449]",
     },
     {
       title: "In Use",
       value: "74",
-      icon: <img src={YellowDollerIcon} alt="in-use" className="size-7" />,
+      icon: (
+        <img src={YellowDollerIcon} alt="in-use" className="size-5 sm:size-7" />
+      ),
       color: "bg-[#F59E0B]",
     },
     {
       title: "Under Maintenance",
       value: "12",
-      icon: <img src={SalmonGraphIcon} alt="maintenance" className="size-7" />,
+      icon: (
+        <img
+          src={SalmonGraphIcon}
+          alt="maintenance"
+          className="size-5 sm:size-7"
+        />
+      ),
       color: "bg-[#FD8D5B]",
     },
   ];
 
   return (
-    <div className="pr-5 pt-5 space-y-5">
+    <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
-        <div className="">
-          <h1 className="md:text-3xl text-lg font-normal text-gray-800 mb-2">
-            Material Inventory
-          </h1>
-          <p className="text-(--text-color-gray-2) text-sm">
-            Here’s a summary of your ongoing steel building projects.
-          </p>
-        </div>
+        <TitleSubtitle
+          title="Material Inventory"
+          subtitle="Here’s a summary of your ongoing steel building projects."
+        />
         <button
           onClick={openModal}
-          className="bg-primary text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center gap-2 text-sm"
+          className="xl:mt-0 mt-2 bg-primary text-white px-4 py-2 rounded-lg font-medium shadow-sm hover:opacity-80 transition-colors flex items-center gap-2 text-sm"
         >
           <span>+</span> Add Material Stock
         </button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-5">
         {equipmentStats.map((stat, index) => (
           <StatCard
             key={index}
@@ -247,61 +290,7 @@ const MaterialInventoryView = () => {
         columns={columns}
         data={equipmentData}
         pagination={true}
-        actions={
-          <div className="flex gap-2">
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-600 text-sm hover:bg-gray-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 01-.659 1.591l-5.432 5.432a2.25 2.25 0 00-.659 1.591v2.927a2.25 2.25 0 01-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 00-.659-1.591L3.659 7.409A2.25 2.25 0 013 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0112 3z"
-                />
-              </svg>
-              Filter Equipment
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-600 text-sm hover:bg-gray-50">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                />
-              </svg>
-              Export Excel
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 bg-primary text-white rounded-lg text-sm hover:opacity-80">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-4 h-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                />
-              </svg>
-              Export PDF
-            </button>
-          </div>
-        }
+        actions={<TableActionButtons />}
       />
       <AddMaterialModal isOpen={isModalOpen} onClose={closeModal} />
     </div>

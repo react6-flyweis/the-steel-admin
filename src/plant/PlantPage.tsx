@@ -3,18 +3,423 @@ import DashboardWidgets from "./components/DashboardWidgets";
 import InventoryTable from "./components/InventoryTable";
 import KPICard from "./components/KPICard";
 import type { Column } from "./components/Table";
-import { mockInventoryData, mockMachineUsageData } from "./data/mockData";
 import HammerIcon from "./assets/hammerIcon.svg";
 import CheckedShieldIcon from "./assets/checkedShieldIcon.svg";
 import YellowDollerIcon from "./assets/yellowDollerIcon.svg";
 import SalmonGraphIcon from "./assets/salmonGraphIcon.svg";
 import ProfitIcon from "./assets/ProfitIcon.svg";
-import HashIcon from "./assets/HashIcon.svg";
+import HashIcon from "./assets/hashIcon.svg";
 import InvoiceDueIcon from "./assets/InvoiceDueIcon.svg";
 import ExpensesIcon from "./assets/ExpensesIcon.svg";
+import { useState } from "react";
+import { useNavigate } from "react-router";
+import FilterTabs from "@/components/FilterTabs";
+import TitleSubtitle from "@/components/TitleSubtitle";
+
+export type TabType = "Today" | "Week" | "Month";
+
+type MockInventoryItem = {
+  material: string;
+  currentStock: number;
+  unit: string;
+  minLevel: number;
+  status: string;
+  action: string;
+  actionType: string;
+};
+
+// const mockInventoryData = [
+//   {
+//     material: "Cement",
+//     currentStock: 230,
+//     unit: "Bags",
+//     minLevel: 300,
+//     status: "🔴 Low Stock",
+//     action: "Reorder",
+//     actionType: "secondary",
+//   },
+//   {
+//     material: "Steel Rod TMT 12mm",
+//     currentStock: 8.2,
+//     unit: "Tons",
+//     minLevel: 5,
+//     status: "🟢 OK",
+//     action: "View",
+//     actionType: "primary",
+//   },
+//   {
+//     material: "Aggregates 20mm",
+//     currentStock: 40,
+//     unit: "Tons",
+//     minLevel: 30,
+//     status: "🟢 OK",
+//     action: "View",
+//     actionType: "primary",
+//   },
+//   {
+//     material: "Bricks (Red Clay)",
+//     currentStock: 15000,
+//     unit: "Pieces",
+//     minLevel: 20000,
+//     status: "🔴 Low Stock",
+//     action: "Reorder",
+//     actionType: "secondary",
+//   },
+// ];
+
+const flteredMockInventoryData: Record<
+  TabType,
+  {
+    material: string;
+    currentStock: number;
+    unit: string;
+    minLevel: number;
+    status: string;
+    action: string;
+    actionType: string;
+  }[]
+> = {
+  Today: [
+    {
+      material: "Cement",
+      currentStock: 230,
+      unit: "Bags",
+      minLevel: 300,
+      status: "🔴 Low Stock",
+      action: "Reorder",
+      actionType: "secondary",
+    },
+    {
+      material: "Steel Rod TMT 12mm",
+      currentStock: 8.2,
+      unit: "Tons",
+      minLevel: 5,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Aggregates 20mm",
+      currentStock: 40,
+      unit: "Tons",
+      minLevel: 30,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Bricks (Red Clay)",
+      currentStock: 15000,
+      unit: "Pieces",
+      minLevel: 20000,
+      status: "🔴 Low Stock",
+      action: "Reorder",
+      actionType: "secondary",
+    },
+  ],
+
+  Week: [
+    {
+      material: "Cement",
+      currentStock: 180,
+      unit: "Bags",
+      minLevel: 300,
+      status: "🔴 Low Stock",
+      action: "Reorder",
+      actionType: "secondary",
+    },
+    {
+      material: "Steel Rod TMT 12mm",
+      currentStock: 6.5,
+      unit: "Tons",
+      minLevel: 5,
+      status: "🟡 Near Limit",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Aggregates 20mm",
+      currentStock: 28,
+      unit: "Tons",
+      minLevel: 30,
+      status: "🔴 Low Stock",
+      action: "Reorder",
+      actionType: "secondary",
+    },
+    {
+      material: "Bricks (Red Clay)",
+      currentStock: 12000,
+      unit: "Pieces",
+      minLevel: 20000,
+      status: "🔴 Low Stock",
+      action: "Reorder",
+      actionType: "secondary",
+    },
+  ],
+
+  Month: [
+    {
+      material: "Cement",
+      currentStock: 520,
+      unit: "Bags",
+      minLevel: 300,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Steel Rod TMT 12mm",
+      currentStock: 14.8,
+      unit: "Tons",
+      minLevel: 5,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Aggregates 20mm",
+      currentStock: 92,
+      unit: "Tons",
+      minLevel: 30,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+    {
+      material: "Bricks (Red Clay)",
+      currentStock: 42000,
+      unit: "Pieces",
+      minLevel: 20000,
+      status: "🟢 OK",
+      action: "View",
+      actionType: "primary",
+    },
+  ],
+} as const;
+
+const mockMachineUsageData = [
+  {
+    equipment: "Excavator CAT 320D",
+    type: "Heavy",
+    project: "Highway Bridge Project",
+    operator: "Mike Johnson",
+    hoursUsed: 156,
+    lastService: "05-Apr",
+    nextDue: "20-Apr",
+    priority: "High",
+    priorityColor: "bg-red-500",
+    status: "🟢 Active",
+    action: "Details",
+    actionType: "primary",
+  },
+  {
+    equipment: "Concrete Mixer 350L",
+    type: "Medium",
+    project: "Downtown Office Complex",
+    operator: "John Smith",
+    hoursUsed: 42,
+    lastService: "12-Apr",
+    nextDue: "26-Apr",
+    priority: "Scheduled",
+    priorityColor: "bg-yellow-500",
+    status: "🟢 Active",
+    action: "Details",
+    actionType: "primary",
+  },
+  {
+    equipment: "Tower Crane TC5613",
+    type: "Heavy",
+    project: "City Mall Renovation",
+    operator: "Sarah Williams",
+    hoursUsed: 89,
+    lastService: "18-Apr",
+    nextDue: "02-May",
+    priority: "Low",
+    priorityColor: "bg-green-500",
+    status: "🟡 Maintenance",
+    action: "Details",
+    actionType: "primary",
+  },
+  {
+    equipment: "Bulldozer D8T",
+    type: "Heavy",
+    project: "Industrial Park",
+    operator: "Robert Brown",
+    hoursUsed: 120,
+    lastService: "22-Apr",
+    nextDue: "06-May",
+    priority: "Scheduled",
+    priorityColor: "bg-yellow-500",
+    status: "🟢 Active",
+    action: "Details",
+    actionType: "primary",
+  },
+];
+
+export const DashboardStatsByFilter: Record<
+  TabType,
+  {
+    title: string;
+    value: string;
+  }[]
+> = {
+  Today: [
+    { title: "Total Equipment", value: "247 units" },
+    { title: "Available", value: "89" },
+    { title: "In Use", value: "124" },
+    { title: "Under Maintenance", value: "34" },
+  ],
+
+  Week: [
+    { title: "Total Equipment", value: "312 units" },
+    { title: "Available", value: "102" },
+    { title: "In Use", value: "156" },
+    { title: "Under Maintenance", value: "54" },
+  ],
+
+  Month: [
+    { title: "Total Equipment", value: "420 units" },
+    { title: "Available", value: "168" },
+    { title: "In Use", value: "198" },
+    { title: "Under Maintenance", value: "54" },
+  ],
+} as const;
+
+export const icons = [
+  {
+    icon: <img src={HammerIcon} alt="leads" className="md:size-7 size-5" />,
+    color: "bg-[#1D51A4]",
+  },
+  {
+    icon: (
+      <img
+        src={CheckedShieldIcon}
+        alt="confirmed"
+        className="md:size-7 size-5"
+      />
+    ),
+    color: "bg-[#3AB449]",
+  },
+  {
+    icon: (
+      <img src={YellowDollerIcon} alt="value" className="md:size-7 size-5" />
+    ),
+    color: "bg-[#F59E0B]",
+  },
+  {
+    icon: (
+      <img src={SalmonGraphIcon} alt="revenue" className="md:size-7 size-5" />
+    ),
+    color: "bg-[#FD8D5B]",
+  },
+];
+
+const materialKpisByFilter: Record<
+  TabType,
+  {
+    value: string;
+    subtext: string;
+    trend: { value: string; isPositive: boolean };
+  }[]
+> = {
+  Today: [
+    {
+      value: "$1,248,900",
+      subtext: "Current Material Value",
+      trend: { value: "+8%", isPositive: true },
+    },
+    {
+      value: "$182,450",
+      subtext: "Outflow Today",
+      trend: { value: "-3%", isPositive: false },
+    },
+    {
+      value: "2",
+      subtext: "Reorder Requests Pending",
+      trend: { value: "+12%", isPositive: true },
+    },
+    {
+      value: "1",
+      subtext: "Emergency Material Alerts",
+      trend: { value: "-10%", isPositive: false },
+    },
+  ],
+
+  Week: [
+    {
+      value: "$4,782,300",
+      subtext: "Current Material Value",
+      trend: { value: "+18%", isPositive: true },
+    },
+    {
+      value: "$968,240",
+      subtext: "Outflow this Week",
+      trend: { value: "-11%", isPositive: false },
+    },
+    {
+      value: "5",
+      subtext: "Reorder Requests Pending",
+      trend: { value: "+28%", isPositive: true },
+    },
+    {
+      value: "3",
+      subtext: "Emergency Material Alerts",
+      trend: { value: "-15%", isPositive: false },
+    },
+  ],
+
+  Month: [
+    {
+      value: "$8,458,798",
+      subtext: "Current Material Value",
+      trend: { value: "+35%", isPositive: true },
+    },
+    {
+      value: "$4,898,878",
+      subtext: "Outflow this Month",
+      trend: { value: "-19%", isPositive: false },
+    },
+    {
+      value: "6",
+      subtext: "Reorder Requests Pending",
+      trend: { value: "+41%", isPositive: true },
+    },
+    {
+      value: "2",
+      subtext: "Emergency Material Alerts",
+      trend: { value: "-20%", isPositive: false },
+    },
+  ],
+} as const;
+
+const kpiVisuals = [
+  {
+    icon: <img src={ProfitIcon} alt="revenue" className="size-5" />,
+    iconBgColor: "bg-[#E9F8FB]",
+    iconColor: "text-[#06AED4]",
+  },
+  {
+    icon: <img src={InvoiceDueIcon} alt="revenue" className="size-5" />,
+    iconBgColor: "bg-[#E9F5F4]",
+    iconColor: "text-green-500",
+  },
+  {
+    icon: <img src={ExpensesIcon} alt="revenue" className="size-4" />,
+    iconBgColor: "bg-[#FCEFEA]",
+    iconColor: "text-orange-500",
+  },
+  {
+    icon: <img src={HashIcon} alt="revenue" className="size-4" />,
+    iconBgColor: "bg-[#EDEDFB]",
+    iconColor: "text-purple-500",
+  },
+];
 
 const PlantPage = () => {
-  const inventoryColumns: Column<(typeof mockInventoryData)[0]>[] = [
+  const [activeTab, setActiveTab] = useState<TabType>("Month");
+  const navigate = useNavigate();
+
+  const inventoryColumns: Column<MockInventoryItem>[] = [
     {
       header: "Material",
       accessor: (row) => <span className="text-gray-900">{row.material}</span>,
@@ -41,6 +446,7 @@ const PlantPage = () => {
       header: "Action",
       accessor: (row) => (
         <button
+          onClick={() => navigate("/equipment_management")}
           className={`px-4 py-1.5 rounded-full text-xs font-medium w-24 text-center transition-colors ${
             row.action === "Reorder"
               ? "bg-green-100 text-green-700 hover:bg-green-200"
@@ -55,7 +461,6 @@ const PlantPage = () => {
     },
   ];
 
-  // --- Data for Machine Usage Table ---
   const machineColumns: Column<(typeof mockMachineUsageData)[0]>[] = [
     {
       header: "Equipment",
@@ -92,6 +497,7 @@ const PlantPage = () => {
       header: "Action",
       accessor: (row) => (
         <button
+          onClick={() => navigate("/equipment_management")}
           className={`px-4 py-1.5 rounded-full text-xs font-medium w-24 text-center transition-colors ${
             row.priority === "High" || row.priority === "Scheduled"
               ? "bg-[#D1FAE5] text-[#065F46] hover:bg-green-200" // Light green button for "Reorder" look
@@ -107,99 +513,58 @@ const PlantPage = () => {
       cellClassName: "text-right",
     },
   ];
-
+  const stats = DashboardStatsByFilter[activeTab];
+  const kpis = materialKpisByFilter[activeTab];
   return (
-    <div className="pr-5 pt-5 space-y-5">
-      <div className="mt-1 mb-6">
-        <h1 className="md:text-3xl text-lg font-normal text-gray-800 mb-2">
-          Plant Overview
-        </h1>
-        <p className="text-[#4B5563] text-sm">
-          Here’s a summary of your ongoing steel building projects.
-        </p>
+    // <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:px-0 px-2 pb-10 space-y-6">
+      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <TitleSubtitle
+        title="Dashboard"
+        subtitle="Here’s a summary of your ongoing steel building projects."
+      />
+
+      <div className="grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 xl:gap-4 gap-3">
+        {stats.map((stat, index) => (
+          <StatCard
+            key={stat.title}
+            title={stat.title}
+            value={stat.value}
+            icon={icons[index].icon}
+            color={icons[index].color}
+          />
+        ))}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-5">
-        <StatCard
-          title="Total Equipment"
-          value={"247 units"}
-          icon={<img src={HammerIcon} alt="leads" className="size-7" />}
-          color="bg-[#1D51A4]"
-        />
-
-        <StatCard
-          title="Available"
-          value={"89"}
-          icon={
-            <img src={CheckedShieldIcon} alt="confirmed" className="size-7" />
-          }
-          color="bg-[#3AB449]"
-        />
-
-        <StatCard
-          title="In Use"
-          value={"12"}
-          icon={<img src={YellowDollerIcon} alt="value" className="size-7" />}
-          color="bg-[#F59E0B]"
-        />
-
-        <StatCard
-          title="Under Maintenance"
-          value={"12"}
-          icon={<img src={SalmonGraphIcon} alt="revenue" className="size-7" />}
-          color="bg-[#FD8D5B]"
-        />
-      </div>
-
-      <h2 className="md:text-2xl text-lg font-bold text-gray-800 mb-4">
+      <h2 className="xl:text-2xl text-lg font-semibold text-black xl:mt-10 ">
         Inventory KPIs
       </h2>
 
       {/* KPI Cards Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <KPICard
-          title=""
-          value="$8,458,798"
-          subtext="Current Material Value"
-          trend={{ value: "+35%", isPositive: true }}
-          icon={<img src={ProfitIcon} alt="revenue" className="size-5" />}
-          iconBgColor="bg-[#E9F8FB]"
-          iconColor="text-[#06AED4]"
-        />
-        <KPICard
-          title=""
-          value="$48,988,78"
-          subtext="Outflow this Month"
-          trend={{ value: "-19%", isPositive: false }}
-          icon={<img src={InvoiceDueIcon} alt="revenue" className="size-5" />}
-          iconBgColor="bg-[#E9F5F4]"
-          iconColor="text-green-500"
-        />
-        <KPICard
-          title=""
-          value="6"
-          subtext="Reorder Requests Pending"
-          trend={{ value: "+41%", isPositive: true }}
-          icon={<img src={ExpensesIcon} alt="revenue" className="size-4" />}
-          iconBgColor="bg-[#FCEFEA]"
-          iconColor="text-orange-500"
-        />
-        <KPICard
-          title=""
-          value="2"
-          subtext="Emergency Material Alerts"
-          trend={{ value: "-20%", isPositive: false }}
-          icon={<img src={HashIcon} alt="revenue" className="size-4" />}
-          iconBgColor="bg-[#EDEDFB]"
-          iconColor="text-purple-500"
-        />
+      <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 xl:gap-4 gap-3">
+        {kpis.map((kpi, index) => {
+          const visual = kpiVisuals[index];
+
+          return (
+            <KPICard
+              key={kpi.subtext}
+              title=""
+              value={kpi.value}
+              subtext={kpi.subtext}
+              trend={kpi.trend}
+              icon={visual.icon}
+              iconBgColor={visual.iconBgColor}
+              iconColor={visual.iconColor}
+            />
+          );
+        })}
       </div>
 
       {/* Render Inventory Table */}
       <InventoryTable
         title="Material Inventory Snapshot"
         columns={inventoryColumns}
-        data={mockInventoryData}
+        data={flteredMockInventoryData[activeTab]}
         footer={
           <div className="flex items-center gap-2 text-xs text-gray-600">
             <span className="font-medium">
@@ -212,10 +577,10 @@ const PlantPage = () => {
 
       {/* Render Machine Usage Table */}
       <InventoryTable
-        title="Maintenance Due (This Week)"
+        title="Machine usage & maintenance reminders"
         columns={machineColumns}
         data={mockMachineUsageData}
-        onViewAll={() => console.log("View All Clicked")}
+        onViewAll={() => navigate("/plants/equipment_management")}
       />
     </div>
   );

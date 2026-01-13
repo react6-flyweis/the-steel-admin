@@ -4,8 +4,8 @@ import Pagination from "./Pagination";
 export interface Column<T> {
   header: string;
   accessor: (item: T) => React.ReactNode;
-  className?: string; // Additional classes for the header th
-  cellClassName?: string; // Additional classes for the cell td
+  className?: string;
+  cellClassName?: string;
 }
 
 export interface TableProps<T> {
@@ -28,7 +28,7 @@ const Table = <T extends any>({
   pagination,
 }: TableProps<T>) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-8">
+    <div className="bg-white rounded-md overflow-hidden mb-8">
       {/* Header Section */}
       <div className="p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <h3 className="md:text-lg font-medium">{title}</h3>
@@ -44,7 +44,7 @@ const Table = <T extends any>({
               {columns.map((col, index) => (
                 <th
                   key={index}
-                  className={`px-6 py-4 font-medium md:text-sm text-black tracking-wider ${
+                  className={`md:px-5 px-4 py-4 font-medium md:text-sm text-xs text-(--text-color-gray-2) tracking-wider ${
                     col.className || ""
                   }`}
                 >
@@ -93,11 +93,10 @@ const Table = <T extends any>({
       )}
 
       <Pagination
-        totalItems={data.length}
+        totalItems={5}
+        itemsPerPage={5}
         currentPage={1}
-        rowsPerPage={1}
         onPageChange={() => {}}
-        onRowsPerPageChange={() => {}}
       />
     </div>
   );

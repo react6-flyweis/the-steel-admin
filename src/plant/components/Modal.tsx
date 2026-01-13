@@ -7,6 +7,7 @@ interface ModalProps {
   title?: string;
   children: React.ReactNode;
   width?: string;
+  height?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -15,6 +16,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   width = "max-w-2xl",
+  height = "max-h-[90vh]",
 }) => {
   const modalRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -36,6 +38,7 @@ const Modal: React.FC<ModalProps> = ({
   }, [isOpen, onClose]);
 
   const handleBackdropClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
       onClose();
     }
@@ -45,38 +48,22 @@ const Modal: React.FC<ModalProps> = ({
 
   return ReactDOM.createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 transition-opacity"
       onClick={handleBackdropClick}
     >
       <div
         ref={modalRef}
-        className={`bg-white rounded-xl shadow-2xl w-full ${width} m-4 relative flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200`}
+        className={`bg-white rounded-xl shadow-2xl w-full ${width} ${height} xl:m-4 m-2 relative flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#D5D5D5]">
-          <h2 className="text-xl font-bold text-gray-800">{title}</h2>
-          <button
-            onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors rounded-full p-1 hover:bg-gray-100"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="w-5 h-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18 18 6M6 6l12 12"
-              />
-            </svg>
-          </button>
-        </div>
-
-        <div className="p-6 overflow-y-auto">{children}</div>
+        {title && (
+          <div className="flex items-center justify-between p-6 border-b border-[#D5D5D5]">
+            <h2 className="md:text-base text-sm font-bold text-gray-800">
+              {title}
+            </h2>
+          </div>
+        )}
+        <div className="xl:p-6 p-2 overflow-y-auto">{children}</div>
       </div>
     </div>,
     document.body

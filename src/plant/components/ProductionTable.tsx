@@ -1,5 +1,6 @@
 import React from "react";
 import Pagination from "./Pagination";
+import { Eye, MessageSquare, User, UserPlus } from "lucide-react";
 
 interface Lead {
   id: string;
@@ -17,39 +18,43 @@ interface Lead {
 
 interface ProductionTableProps {
   data: Lead[];
+  onViewDetails: (lead: Lead) => void;
 }
 
-const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
+const ProductionTable: React.FC<ProductionTableProps> = ({
+  data,
+  onViewDetails,
+}) => {
   return (
-    <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-100">
+    <div className="overflow-x-auto bg-white rounded-md">
       <table className="w-full text-left border-collapse">
         <thead>
           <tr className="border-b border-gray-100 text-xs font-semibold text-gray-400 uppercase tracking-wider">
             <th className="p-4 w-12 text-center">
               <input
                 type="checkbox"
-                className="w-4 h-4 rounded border-gray-300 text-var(--color-primary)"
+                className="md:w-4 md:h-4 w-3 h-3 rounded border-gray-300 text-var(--color-primary)"
               />
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md ">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Lead Info
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Assigned To
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Progress
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Status
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Quote Value
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm">
               Chat
             </th>
-            <th className="p-4 text-gray-500 font-medium uppercase md:text-md text-center">
+            <th className="p-4 text-[#6B7280] font-medium capitalize md:text-sm text-center">
               Actions
             </th>
           </tr>
@@ -63,63 +68,42 @@ const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
               <td className="p-4 text-center">
                 <input
                   type="checkbox"
-                  className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="md:w-4 md:h-4 w-3 h-3 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
                 />
               </td>
-              <td className="p-4">
+              <td className="p-4 min-w-[120px]">
                 <div className="flex flex-col">
-                  <span className="font-semibold text-gray-900 text-sm">
+                  <span className="font-normal text-black md:text-sm text-xs">
                     {row.name}
                   </span>
-                  <span className="text-xs text-gray-500 mt-0.5">{row.id}</span>
-                  <span className="text-xs text-gray-500">{row.project}</span>
+                  <span className="md:text-xs text-[10px] text-gray-500 mt-0.5">
+                    {row.id}
+                  </span>
+                  <span className="md:text-xs text-[10px] text-gray-500">
+                    {row.project}
+                  </span>
                 </div>
               </td>
-              <td className="p-4">
+              <td className="p-4 min-w-[120px] md:text-sm text-xs">
                 <div className="flex items-center gap-3">
                   {row.assignedTo ? (
                     <>
                       <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600 shrink-0">
-                        {/* Placeholder Avatar Icon if no image */}
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <path
-                            fillRule="evenodd"
-                            d="M7.5 6a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM3.751 20.105a8.25 8.25 0 0 1 16.498 0 .75.75 0 0 1-.437.695A18.683 18.683 0 0 1 12 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 0 1-.437-.695Z"
-                            clipRule="evenodd"
-                          />
-                        </svg>
+                        <User className="w-4 h-4 text-[#36A44A]" />
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-xs font-semibold text-gray-900">
+                        <span className="md:text-xs text-[10px] font-semibold text-gray-900">
                           {row.assignedTo.name}
                         </span>
-                        <span className="text-[10px] text-gray-400">
+                        <span className="md:text-[10px] text-[8px] text-gray-400">
                           1 person assigned
                         </span>
                       </div>
                     </>
                   ) : (
                     <button className="flex items-center gap-2 group">
-                      <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-100 transition-colors">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={2}
-                          stroke="currentColor"
-                          className="w-4 h-4"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0ZM3.75 15a2.25 2.25 0 0 1 2.25-2.25h2.25a2.25 2.25 0 0 1 2.25 2.25v1.5a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V15Z"
-                          />
-                        </svg>
+                      <div className="w-8 h-8 rounded-lg bg-[#DCFCE7] border border-emerald-100 flex items-center justify-center text-emerald-600 group-hover:bg-emerald-100 transition-colors">
+                        <UserPlus className="w-4 h-4 text-[#36A44A]" />
                       </div>
                       <span className="text-sm font-medium text-blue-600">
                         Assign
@@ -134,7 +118,7 @@ const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
                     {[1, 2, 3, 4, 5].map((step) => (
                       <div
                         key={step}
-                        className={`w-2 h-2 rounded-full ${
+                        className={`w-3 h-3 rounded-full ${
                           step <= row.progress
                             ? "bg-emerald-400"
                             : "bg-gray-200"
@@ -160,30 +144,20 @@ const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
                   {row.status}
                 </span>
               </td>
-              <td className="p-4">
+              <td className="p-4 md:text-sm text-[10px] min-w-[120px]">
                 <span className="text-sm font-bold text-gray-900">
                   {row.quoteValue}
                 </span>
               </td>
               <td className="p-4">
                 <button
-                  className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-blue-600 rounded-lg 
+                  className="flex items-center gap-2 px-3 py-1.5 bg-blue-50 text-[#3C40AF] rounded-lg 
                   hover:bg-blue-100 transition-colors text-xs font-medium relative group"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 0 1 .865-.501 48.172 48.172 0 0 0 3.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
-                    />
-                  </svg>
+                  <MessageSquare
+                    strokeWidth={1}
+                    className="w-4 h-4 text-[#3C40AF]"
+                  />
                   Chat
                   {row.unreadMessages > 0 && (
                     <span className="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full shadow-sm border border-white">
@@ -193,26 +167,11 @@ const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
                 </button>
               </td>
               <td className="p-4 text-center">
-                <button className="p-1.5 hover:bg-gray-100 rounded-lg text-blue-600 transition-colors">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="w-5 h-5"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
-                    />
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                    />
-                  </svg>
+                <button
+                  onClick={() => onViewDetails(row)}
+                  className="p-1.5 hover:bg-gray-100 rounded-lg text-blue-600 transition-colors"
+                >
+                  <Eye strokeWidth={2} className="w-5 h-5 text-[#3C40AF]" />
                 </button>
               </td>
             </tr>
@@ -221,11 +180,10 @@ const ProductionTable: React.FC<ProductionTableProps> = ({ data }) => {
       </table>
 
       <Pagination
-        totalItems={data.length}
+        totalItems={5}
+        itemsPerPage={5}
         currentPage={1}
-        rowsPerPage={1}
-        onPageChange={() => {}}
-        onRowsPerPageChange={() => {}}
+        onPageChange={()=>{}}
       />
     </div>
   );
