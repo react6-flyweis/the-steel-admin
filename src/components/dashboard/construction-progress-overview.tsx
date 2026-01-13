@@ -9,8 +9,12 @@ interface Project {
   status: "On Track" | "Delayed" | "Starting";
 }
 
-export default function ConstructionProgressOverview() {
-  const projects: Project[] = [
+export default function ConstructionProgressOverview({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const baseProjects: Project[] = [
     {
       id: "1",
       name: "Downtown Office Complex",
@@ -36,6 +40,12 @@ export default function ConstructionProgressOverview() {
       status: "Starting",
     },
   ];
+
+  const scale = period === "Today" ? 0.05 : period === "Week" ? 0.5 : 1;
+  const projects = baseProjects.map((p) => ({
+    ...p,
+    progress: Math.max(0, Math.round(p.progress * scale)),
+  }));
 
   //   const getStatusVariant = (status: string) => {
   //     switch (status) {
