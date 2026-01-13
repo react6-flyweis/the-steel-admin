@@ -14,8 +14,12 @@ interface Performer {
   rankIcon?: ReactNode;
 }
 
-export default function TopSalesPerformers() {
-  const performers: Performer[] = [
+export default function TopSalesPerformers({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const basePerformers: Performer[] = [
     {
       id: "1",
       name: "Sarah Miller",
@@ -56,6 +60,17 @@ export default function TopSalesPerformers() {
       value: "$245K",
     },
   ];
+
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.5 : 1;
+  const performers: Performer[] = basePerformers.map((p) => ({
+    ...p,
+    deals: Math.max(1, Math.round(p.deals * scale)),
+    rate: Math.max(1, Math.round(p.rate * Math.max(0.5, scale))),
+    value: `$${Math.max(
+      1,
+      Math.round(parseInt(p.value.replace(/[^0-9]/g, "")) * scale)
+    )}K`,
+  }));
 
   const teamTotal = performers.reduce(
     (sum, p) => sum + parseInt(p.value.replace(/[^0-9]/g, "")),

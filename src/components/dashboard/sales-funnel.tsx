@@ -28,7 +28,7 @@ export default function SalesFunnel({
   timeframeOptions = ["This Month", "Last Month", "This Quarter"],
   items,
 }: SalesFunnelProps) {
-  const defaultItems: FunnelItem[] = [
+  const baseItems: FunnelItem[] = [
     {
       label: "New Leads",
       count: 247,
@@ -59,9 +59,32 @@ export default function SalesFunnel({
     },
   ];
 
-  const rows = items ?? defaultItems;
-
   const [timeframe, setTimeframe] = useState<string>(timeframeOptions[0]);
+
+  const tf = timeframe.toLowerCase();
+  const scale =
+    tf.includes("day") || tf.includes("today")
+      ? 0.05
+      : tf.includes("week")
+      ? 0.4
+      : tf.includes("quarter")
+      ? 3
+      : tf.includes("last month")
+      ? 0.9
+      : 1;
+
+  const defaultItems: FunnelItem[] = baseItems.map((it) => {
+    const count =
+      typeof it.count === "number"
+        ? Math.max(1, Math.round(it.count * scale))
+        : it.count;
+    return {
+      ...it,
+      count,
+    };
+  });
+
+  const rows = items ?? defaultItems;
 
   return (
     <Card className="p-4 gap-0">

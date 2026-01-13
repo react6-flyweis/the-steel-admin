@@ -1,4 +1,5 @@
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
 import {
   ChartContainer,
   ChartTooltip,
@@ -14,13 +15,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-const data = [
-  { id: "garage", label: "Garage", value: 1146, percent: 45 },
-  { id: "workshop", label: "Workshop", value: 638, percent: 25 },
-  { id: "roof", label: "Roof Sheets", value: 254, percent: 10 },
-  { id: "warehouse", label: "Warehouse", value: 509, percent: 20 },
-  { id: "carports", label: "Car Ports", value: 382, percent: 15 },
-  { id: "others", label: "Others", value: 84, percent: 9 },
+const baseData = [
+  { id: "garage", label: "Garage", value: 1146 },
+  { id: "workshop", label: "Workshop", value: 638 },
+  { id: "roof", label: "Roof Sheets", value: 254 },
+  { id: "warehouse", label: "Warehouse", value: 509 },
+  { id: "carports", label: "Car Ports", value: 382 },
+  { id: "others", label: "Others", value: 84 },
 ];
 
 const colors = [
@@ -32,7 +33,7 @@ const colors = [
   "#f66",
 ];
 
-const total = data.reduce((s, d) => s + d.value, 0);
+// total will be computed from scaled data inside component
 
 const chartConfig = {
   garage: { label: "Garage", color: colors[0] },
@@ -44,16 +45,34 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function TonnageSold({ className }: { className?: string }) {
+  const [timeframe, setTimeframe] = useState<string>("monthly");
+
+  const tf = timeframe.toLowerCase();
+  const scale =
+    tf.includes("day") || tf.includes("today")
+      ? 0.06
+      : tf.includes("week")
+      ? 0.45
+      : tf.includes("quarter")
+      ? 3
+      : 1;
+
+  const data = baseData.map((d) => ({
+    ...d,
+    value: Math.max(1, Math.round(d.value * scale)),
+  }));
+  const total = data.reduce((s, d) => s + d.value, 0);
+
   return (
     <Card className={"h-full p-4 gap-0" + (className ?? "")}>
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-xl font-semibold text-gray-900">Tonnage Sold</h2>
-        <Select defaultValue="monthly">
+        <Select value={timeframe} onValueChange={(v) => setTimeframe(v)}>
           <SelectTrigger
             size="sm"
             className="w-36 bg-blue-100 text-blue-600 border"
           >
-            <SelectValue placeholder="Monthly" />
+            <SelectValue />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="monthly">Monthly</SelectItem>
@@ -127,26 +146,30 @@ export default function TonnageSold({ className }: { className?: string }) {
         </div>
 
         <div className="flex-1 space-y-3 mt-5">
-          {data.map((d, i) => (
-            <div key={d.id} className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <span
-                  className="h-3.5 w-3.5 rounded-full"
-                  style={{ backgroundColor: colors[i % colors.length] }}
-                />
-                <p className="font-medium text-muted-foreground">{d.label}</p>
-              </div>
+          {data.map((d, i) => {
+            const percent =
+              total > 0 ? ((d.value / total) * 100).toFixed(1) : "0.0";
+            return (
+              <div key={d.id} className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <span
+                    className="h-3.5 w-3.5 rounded-full"
+                    style={{ backgroundColor: colors[i % colors.length] }}
+                  />
+                  <p className="font-medium text-muted-foreground">{d.label}</p>
+                </div>
 
-              <div className="flex items-center gap-2">
-                <span className="text-base font-semibold text-foreground">
-                  {d.value.toLocaleString()}
-                </span>
-                <span className="text-sm text-muted-foreground">
-                  ({d.percent}%)
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-semibold text-foreground">
+                    {d.value.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-muted-foreground">
+                    ({percent}%)
+                  </span>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </Card>

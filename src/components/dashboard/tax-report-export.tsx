@@ -35,6 +35,7 @@ export default function TaxReportExport() {
                 <Button
                   className="flex-1 bg-green-500 hover:bg-green-600"
                   size="sm"
+                  onClick={() => alert("Preparing Excel download...")}
                 >
                   <FileSpreadsheet className="w-4 h-4 mr-1" />
                   Excel
@@ -42,6 +43,7 @@ export default function TaxReportExport() {
                 <Button
                   className="flex-1 bg-red-500 hover:bg-red-600"
                   size="sm"
+                  onClick={() => alert("Preparing PDF download...")}
                 >
                   <FileText className="w-4 h-4 mr-1" />
                   PDF
@@ -49,6 +51,7 @@ export default function TaxReportExport() {
                 <Button
                   className="flex-1 bg-blue-500 hover:bg-blue-600"
                   size="sm"
+                  onClick={() => alert("Preparing CSV download...")}
                 >
                   <File className="w-4 h-4 mr-1" />
                   CSV
@@ -91,7 +94,10 @@ export default function TaxReportExport() {
               <SelectItem value="year">Last Year</SelectItem>
             </SelectContent>
           </Select>
-          <Button className="w-full bg-green-500 hover:bg-green-600">
+          <Button
+            className="w-full bg-green-500 hover:bg-green-600"
+            onClick={() => alert("Preparing Quick Export download...")}
+          >
             Quick Export
           </Button>
         </div>

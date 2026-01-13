@@ -1,20 +1,41 @@
 import { User } from "lucide-react";
 
-export default function TotalInvoicesGenerated() {
-  const invoices = [
+export default function TotalInvoicesGenerated({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const baseInvoices = [
     {
       name: "Oklahoma Steel Structures",
       description: "Invoice Sent: 30/1/2024 .",
-      amount: "$1,845",
-      contract: "$41,000 contract",
+      amount: 1845,
+      contract: 41000,
     },
     {
       name: "Customer 2",
       description: "Invoice Sent: 30/1/2024 .",
-      amount: "$1,845",
-      contract: "$41,000 contract",
+      amount: 1845,
+      contract: 41000,
     },
   ];
+
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.6 : 1;
+  const invoices = baseInvoices
+    .slice(0, Math.max(1, Math.round(baseInvoices.length * scale)))
+    .map((inv) => ({
+      ...inv,
+      amount: `$${Math.max(
+        1,
+        Math.round(inv.amount * scale)
+      ).toLocaleString()}`,
+      contract: `$${Math.max(
+        1,
+        Math.round(inv.contract * scale)
+      ).toLocaleString()} contract`,
+    }));
+
+  const totalCount = Math.max(1, Math.round(1230 * scale));
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-sm border">
@@ -22,7 +43,7 @@ export default function TotalInvoicesGenerated() {
         <h3 className="text-lg font-semibold text-gray-900">
           Total invoices generated
         </h3>
-        <span className="text-2xl font-bold text-gray-900">1230</span>
+        <span className="text-2xl font-bold text-gray-900">{totalCount}</span>
       </div>
 
       <div className="space-y-4">
