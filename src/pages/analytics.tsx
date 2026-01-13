@@ -60,6 +60,7 @@ export default function Analytics() {
   const [activeReport, setActiveReport] = useState<string | null>(
     "Reports & Analytics"
   );
+  const [period, setPeriod] = useState<string>("monthly");
 
   const salesRef = useRef<HTMLDivElement | null>(null);
   const convRef = useRef<HTMLDivElement | null>(null);
@@ -80,13 +81,25 @@ export default function Analytics() {
     setActiveReport(title);
   }
 
+  function formatPeriod(p: string) {
+    switch (p) {
+      case "weekly":
+        return "Last week";
+      case "yearly":
+        return "Last year";
+      case "monthly":
+      default:
+        return "Last month";
+    }
+  }
+
   return (
     <div className="p-6 space-y-6 min-h-0">
       {/* Header */}
       <div className="flex flex-col gap-5 lg:flex-row  lg:items-center justify-between">
         <h1 className="text-2xl font-bold">Reports & Analytics</h1>
         <div className="flex items-center gap-3">
-          <Select defaultValue="monthly">
+          <Select value={period} onValueChange={(v) => setPeriod(v)}>
             <SelectTrigger className="w-40 bg-background">
               <SelectValue placeholder="Select period" />
             </SelectTrigger>
@@ -146,7 +159,7 @@ export default function Analytics() {
                     <span className="text-sm text-muted-foreground">
                       Period
                     </span>
-                    <span className="text-sm">{card.period}</span>
+                    <span className="text-sm">{formatPeriod(period)}</span>
                   </div>
                 </div>
                 <Button
