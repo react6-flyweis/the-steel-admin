@@ -1,7 +1,11 @@
 import { User } from "lucide-react";
 
-export default function CustomerActivitiesApprovals() {
-  const activities = [
+export default function CustomerActivitiesApprovals({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const baseActivities = [
     {
       name: "Oklahoma Steel Structures",
       date: "30/1/2024",
@@ -17,6 +21,27 @@ export default function CustomerActivitiesApprovals() {
       statusType: "approved",
     },
   ];
+
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.6 : 1;
+  const activities = baseActivities
+    .slice(0, Math.max(1, Math.round(baseActivities.length * scale)))
+    .map((a) => ({
+      ...a,
+      amount: a.amount
+        ? `$${Math.max(
+            1,
+            Math.round(
+              parseInt((a.amount as string).replace(/[^0-9]/g, "")) * scale
+            )
+          ).toLocaleString()}`
+        : a.amount,
+      contract: a.contract
+        ? `${Math.max(
+            1,
+            Math.round(parseInt(a.contract.replace(/[^0-9]/g, "")) * scale)
+          ).toLocaleString()} contract`
+        : a.contract,
+    }));
 
   return (
     <div className="bg-white rounded-lg p-5 shadow-sm border">
