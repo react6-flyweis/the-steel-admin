@@ -7,12 +7,14 @@ import {
 } from "@/components/ui/chart";
 import { Label, Pie, PieChart, Cell } from "recharts";
 
-const leadSourcesData = [
-  { id: "website", label: "Website", value: 456, percent: 36.6 },
-  { id: "social", label: "Social Media", value: 296, percent: 23.9 },
-  { id: "email", label: "Email Campaign", value: 234, percent: 18.8 },
-  { id: "referrals", label: "Referrals", value: 156, percent: 12.5 },
-  { id: "direct", label: "Direct", value: 103, percent: 8.2 },
+type Period = "Today" | "Week" | "Month";
+
+const leadSourcesBase = [
+  { id: "website", label: "Website", value: 456 },
+  { id: "social", label: "Social Media", value: 296 },
+  { id: "email", label: "Email Campaign", value: 234 },
+  { id: "referrals", label: "Referrals", value: 156 },
+  { id: "direct", label: "Direct", value: 103 },
 ];
 
 const chartConfig = {
@@ -38,9 +40,16 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-const totalLeads = leadSourcesData.reduce((acc, item) => acc + item.value, 0);
+export default function LeadSourcesChart({ period }: { period?: Period }) {
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.45 : 1;
 
-export default function LeadSourcesChart() {
+  const leadSourcesData = leadSourcesBase.map((d) => ({
+    ...d,
+    value: Math.max(1, Math.round(d.value * scale)),
+  }));
+
+  const totalLeads = leadSourcesData.reduce((acc, item) => acc + item.value, 0);
+
   return (
     <Card className="h-full p-4 gap-0 rounded-2xl shadow">
       <div className="mt-6 flex flex-col ">
@@ -117,6 +126,8 @@ export default function LeadSourcesChart() {
               | { color?: string }
               | undefined;
             const color = cfg?.color ?? `var(--color-${item.id})`;
+            const percent =
+              totalLeads > 0 ? (item.value / totalLeads) * 100 : 0;
 
             return (
               <div key={item.id} className="flex items-center justify-between">
@@ -135,7 +146,7 @@ export default function LeadSourcesChart() {
                     {item.value.toLocaleString()}
                   </span>
                   <span className="text-sm text-muted-foreground">
-                    ({item.percent.toFixed(1)}%)
+                    ({percent.toFixed(1)}%)
                   </span>
                 </div>
               </div>
