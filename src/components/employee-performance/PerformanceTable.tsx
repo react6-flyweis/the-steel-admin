@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
 import {
   Select,
   SelectTrigger,
@@ -40,21 +41,48 @@ function formatCurrency(n: number) {
 }
 
 export default function PerformanceTable({ data }: Props) {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [deptFilter, setDeptFilter] = useState("all");
+
+  const departments = useMemo(
+    () => ["all", ...Array.from(new Set(data.map((d) => d.department)))],
+    [data]
+  );
+
+  const filtered = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    return data.filter((d) => {
+      if (deptFilter !== "all" && d.department !== deptFilter) return false;
+      if (!q) return true;
+      return (
+        d.name.toLowerCase().includes(q) ||
+        d.role.toLowerCase().includes(q) ||
+        d.department.toLowerCase().includes(q)
+      );
+    });
+  }, [data, searchQuery, deptFilter]);
+
   return (
     <Card>
       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
         <CardTitle>Employee Performance</CardTitle>
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <Input placeholder="Search employees..." className="w-full sm:w-48" />
-          <Select defaultValue="all">
-            <SelectTrigger size="sm" className="w-32">
+          <Input
+            placeholder="Search employees..."
+            className="w-full sm:w-48"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Select value={deptFilter} onValueChange={setDeptFilter}>
+            <SelectTrigger size="sm" className="w-40">
               <SelectValue placeholder="All" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="sales">Sales</SelectItem>
-              <SelectItem value="bd">Business Development</SelectItem>
-              <SelectItem value="am">Account Management</SelectItem>
+              {departments.map((dep) => (
+                <SelectItem key={dep} value={dep}>
+                  {dep}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -75,7 +103,7 @@ export default function PerformanceTable({ data }: Props) {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((d) => (
+              {filtered.map((d) => (
                 <TableRow key={d.name}>
                   <TableCell>
                     <div className="flex items-center gap-3">
@@ -160,7 +188,7 @@ export default function PerformanceTable({ data }: Props) {
 
         {/* Card layout (hidden) */}
         <div className="space-y-3 hidden p-4">
-          {data.map((d) => (
+          {filtered.map((d) => (
             <Card key={d.name} className="p-3">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
