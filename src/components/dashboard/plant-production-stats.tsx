@@ -1,10 +1,15 @@
 import { TrendingDown, Package, RefreshCw, Bell } from "lucide-react";
 
-export default function PlantProductionStats() {
-  const stats = [
+export default function PlantProductionStats({
+  period,
+}: {
+  period?: "Today" | "Week" | "Month";
+}) {
+  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.6 : 1;
+  const baseStats = [
     {
       title: "Material Value",
-      value: "$8,458,798",
+      value: 8458798,
       change: "+35%",
       trend: "up",
       icon: Package,
@@ -14,7 +19,7 @@ export default function PlantProductionStats() {
     },
     {
       title: "Outflow this Month",
-      value: "$48,988.78",
+      value: 48988.78,
       change: "-19%",
       trend: "down",
       icon: TrendingDown,
@@ -24,7 +29,7 @@ export default function PlantProductionStats() {
     },
     {
       title: "Reorder Requests Pending",
-      value: "6",
+      value: 6,
       change: "+41%",
       trend: "up",
       icon: RefreshCw,
@@ -34,7 +39,7 @@ export default function PlantProductionStats() {
     },
     {
       title: "Emergency Material Alerts",
-      value: "2",
+      value: 2,
       change: "-20%",
       trend: "down",
       icon: Bell,
@@ -43,6 +48,18 @@ export default function PlantProductionStats() {
       label: "vs Last Month",
     },
   ];
+
+  const stats = baseStats.map((s) => ({
+    ...s,
+    value:
+      typeof s.value === "number"
+        ? s.title === "Material Value"
+          ? `$${Math.max(1, Math.round(s.value * scale)).toLocaleString()}`
+          : s.title === "Outflow this Month"
+          ? `$${(s.value * scale).toFixed(2)}`
+          : `${Math.max(1, Math.round(s.value * Math.max(0.5, scale)))}`
+        : s.value,
+  }));
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
