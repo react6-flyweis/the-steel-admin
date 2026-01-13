@@ -8,8 +8,10 @@ interface ClosedDeal {
   closedTime: string;
 }
 
-export default function RecentClosedDeals() {
-  const closedDeals: ClosedDeal[] = [
+type Period = "Today" | "Week" | "Month";
+
+export default function RecentClosedDeals({ period }: { period?: Period }) {
+  const baseDeals: ClosedDeal[] = [
     {
       id: "1",
       company: "Global Industries",
@@ -35,6 +37,12 @@ export default function RecentClosedDeals() {
       closedTime: "Closed 3 days ago",
     },
   ];
+
+  const scale = period === "Today" ? 0.06 : period === "Week" ? 0.45 : 1;
+  const closedDeals = baseDeals.slice(
+    0,
+    Math.max(1, Math.round(baseDeals.length * Math.max(0.4, scale)))
+  );
 
   const totalThisWeek = closedDeals.reduce((sum, deal) => {
     const value = parseInt(deal.value.replace(/[^0-9]/g, ""));
