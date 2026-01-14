@@ -3,7 +3,7 @@ import { Plus, Upload, List } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import logo from "@/assets/the-steel-logo.svg";
+import logo from "@/assets/steel-building-depot-logo.png";
 import AddClientIcon from "../assets/icon/AddClientIcon.svg";
 import AddClientModal from "../components/modals/AddClientModal";
 import UploadImageModal from "../components/modals/UploadImageModal";

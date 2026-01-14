@@ -8,7 +8,7 @@ import PaymentScheduleDialog from "@/components/payment-schedule-dialog";
 import AddClientDialog from "@/components/add-client-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import steelLogo from "@/assets/the-steel-logo-dark.svg";
+import steelLogo from "@/assets/steel-building-depot-logo.png";
 import { useNavigate } from "react-router";
 
 export interface LineItem {
@@ -194,11 +194,7 @@ export default function InvoiceForm() {
           <div className="space-y-6">
             <div className="flex items-center gap-2">
               <div className="flex items-center shrink-0">
-                <img
-                  src={steelLogo}
-                  alt="The Steel"
-                  className="md:w-29 w-20 md:h-16 object-contain"
-                />
+                <img src={steelLogo} alt="The Steel" className="h-10" />
               </div>
             </div>
 

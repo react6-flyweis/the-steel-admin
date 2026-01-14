@@ -1,7 +1,7 @@
 import { useNavigate, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Mail } from "lucide-react";
-import logo from "@/assets/the-steel-logo.svg";
+import logo from "@/assets/steel-building-depot-logo.png";
 
 export default function InvoicePreview() {
   const navigate = useNavigate();
