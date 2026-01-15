@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { Link } from "react-router";
 
 interface Reminder {
   id: number;
@@ -87,9 +88,12 @@ export default function SmartReminders() {
       </div>
 
       <div className="mt-4 text-center">
-        <Button variant="link" className="text-blue-600 text-sm">
-          View All Smart Reminders →
-        </Button>
+        <Link to="/leads/follow-up/smart-reminders">
+          <Button variant="link" className="text-blue-600 text-sm">
+            View All Smart Reminders
+            <ArrowRight />
+          </Button>
+        </Link>
       </div>
     </Card>
   );
