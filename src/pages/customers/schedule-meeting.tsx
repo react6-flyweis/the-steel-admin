@@ -16,6 +16,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import ClientSelector from "@/components/customers/client-selector";
+import SuccessDialog from "@/components/success-dialog";
 
 const meetingSchema = z.object({
   client: z.string().min(1, "Please select a client"),
@@ -33,6 +34,7 @@ type MeetingFormData = z.infer<typeof meetingSchema>;
 export default function ScheduleMeeting() {
   const navigate = useNavigate();
   const [selectedClient, setSelectedClient] = useState("");
+  const [successOpen, setSuccessOpen] = useState(false);
 
   const {
     register,
@@ -44,6 +46,13 @@ export default function ScheduleMeeting() {
     resolver: zodResolver(meetingSchema),
     defaultValues: {
       mode: "online",
+      title: "",
+      date: "",
+      time: "",
+      duration: "",
+      link: "",
+      notes: "",
+      client: "",
     },
   });
 
@@ -52,7 +61,8 @@ export default function ScheduleMeeting() {
   const onSubmit = (data: MeetingFormData) => {
     console.log("Meeting scheduled:", data);
     // Handle form submission here
-    navigate("/customer-meetings");
+    setSuccessOpen(true);
+    navigate("/customers/meetings");
   };
 
   return (
@@ -87,7 +97,11 @@ export default function ScheduleMeeting() {
               </Label>
               <ClientSelector
                 value={selectedClient}
-                onValueChange={(value) => setSelectedClient(value ?? "")}
+                onValueChange={(value) => {
+                  const val = value ?? "";
+                  setSelectedClient(val);
+                  setValue("client", val);
+                }}
               />
               {errors.client && (
                 <p className="text-sm text-red-500">{errors.client.message}</p>
@@ -232,6 +246,16 @@ export default function ScheduleMeeting() {
           </Button>
         </div>
       </form>
+
+      <SuccessDialog
+        open={successOpen}
+        onClose={() => {
+          setSuccessOpen(false);
+          navigate("/customers/meetings");
+        }}
+        title="Meeting scheduled"
+        okLabel="Go to meetings"
+      />
     </div>
   );
 }
