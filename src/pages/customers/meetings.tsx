@@ -43,7 +43,7 @@ function generateMockMeetings(count: number): Meeting[] {
     "Liam Brown",
   ];
   const types: Meeting["type"][] = ["Online", "In-person"];
-  const statuses: Meeting["status"][] = ["Scheduled", "Completed", "Cancelled"];
+  const statuses: Meeting["status"][] = ["Scheduled", "Completed"];
 
   const rand = (arr: any[]) => arr[Math.floor(Math.random() * arr.length)];
   const pad = (n: number) => n.toString().padStart(2, "0");
@@ -103,12 +103,10 @@ export default function Meetings() {
 
   const getStatusColor = (status: Meeting["status"]) => {
     switch (status) {
-      case "Scheduled":
-        return "bg-green-100 text-green-700 hover:bg-green-100";
-      case "Cancelled":
-        return "bg-red-100 text-red-700 hover:bg-red-100";
       case "Completed":
-        return "bg-blue-100 text-blue-700 hover:bg-blue-100";
+        return "bg-green-100 text-green-700 hover:bg-green-100";
+      case "Scheduled":
+        return "bg-yellow-100 text-yellow-700 hover:bg-yellow-100";
       default:
         return "bg-gray-100 text-gray-700 hover:bg-gray-100";
     }
@@ -141,7 +139,6 @@ export default function Meetings() {
             <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="scheduled">Scheduled</SelectItem>
-              <SelectItem value="cancelled">Cancelled</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
             </SelectContent>
           </Select>
@@ -176,7 +173,7 @@ export default function Meetings() {
             </div>
 
             {/* Meeting Details */}
-            <div className="space-y-1">
+            <div className="flex items-center gap-2 space-y-1">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Calendar className="h-4 w-4" />
                 <span>{meeting.date}</span>
@@ -192,16 +189,18 @@ export default function Meetings() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-2">
-              <Button
-                size="sm"
-                className="w-full sm:flex-1 bg-blue-200 text-blue-600 hover:bg-blue-100 hover:text-blue-700"
-                onClick={() =>
-                  navigate(`/customers/meetings/reschedule/${meeting.id}`)
-                }
-              >
-                Edit
-              </Button>
+            <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              {meeting.status !== "Completed" && (
+                <Button
+                  size="sm"
+                  className="w-full sm:flex-1 bg-blue-200 text-blue-600 hover:bg-blue-100 hover:text-blue-700"
+                  onClick={() =>
+                    navigate(`/customers/meetings/reschedule/${meeting.id}`)
+                  }
+                >
+                  Edit
+                </Button>
+              )}
               <Button
                 size="sm"
                 className="w-full sm:flex-1 bg-orange-200 text-orange-600 hover:bg-orange-100 hover:text-orange-700"
