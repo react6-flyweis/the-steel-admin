@@ -206,7 +206,7 @@ export default function Dashboard() {
 
             {/* Sales Chart */}
             <div className="lg:col-span-2">
-              <PlantSalesChart period={period} />
+              <PlantSalesChart />
             </div>
           </div>
         </div>

@@ -1,136 +1,241 @@
+import { Card } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import { useMemo, useState } from "react";
 
-type Period = "Today" | "Week" | "Month";
+// base values/colors to derive monthly randomized data
+const BASE_DATA = [
+  { name: "Sales", base: 60, color: "#3b82f6" }, // Blue
+  { name: "Revenue", base: 20, color: "#fda4af" }, // Pink
+  { name: "Expense", base: 20, color: "#f97316" }, // Orange
+];
 
-export default function PlantSalesChart({ period }: { period?: Period }) {
-  const salesBase = [
-    { name: "Option A", value: 60, color: "bg-blue-600" },
-    { name: "Option B", value: 20, color: "bg-orange-400" },
-    { name: "OptionC", value: 20, color: "bg-orange-300" },
-  ];
+function seededRandom(seed: number) {
+  return () => {
+    seed = (seed * 9301 + 49297) % 233280;
+    return seed / 233280;
+  };
+}
 
-  const scale = period === "Today" ? 0.08 : period === "Week" ? 0.6 : 1;
-  const salesData = salesBase.map((s) => ({
-    ...s,
-    value: Math.max(1, Math.round(s.value * scale)),
+function generateData(year: number, month: number) {
+  const seed = year * 100 + month + 1;
+  const rnd = seededRandom(seed);
+
+  const raw = BASE_DATA.map((d) => {
+    const variance = (rnd() - 0.5) * 20; // -10..+10
+    return Math.max(0, d.base + variance);
+  });
+
+  const sum = raw.reduce((a, b) => a + b, 0);
+  // round percentages while ensuring total 100
+  const rounded: number[] = raw.map((v) => Math.round((v / sum) * 100));
+  const totalRounded = rounded.reduce((a, b) => a + b, 0);
+  const diff = 100 - totalRounded;
+  if (diff !== 0) {
+    // adjust the largest slice to account for rounding drift
+    const maxIdx = rounded.indexOf(Math.max(...rounded));
+    rounded[maxIdx] += diff;
+  }
+
+  return BASE_DATA.map((d, i) => ({
+    name: d.name,
+    value: rounded[i],
+    color: d.color,
   }));
+}
 
-  // Calculate total for percentage calculation
-  //   const total = salesData.reduce((sum, item) => sum + item.value, 0);
+const renderCustomizedLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+  index,
+}: {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+  index: number;
+}) => {
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+  const value = `${Math.round(percent * 100)}%`;
 
   return (
-    <div className="bg-white rounded-lg p-5 shadow-sm border">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900">Sales</h3>
-        <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2">
-            <button className="p-1 hover:bg-gray-100 rounded">
-              <ChevronLeft className="size-4 text-gray-600" />
-            </button>
-            <span className="text-sm font-medium text-gray-700">March</span>
-            <button className="p-1 hover:bg-gray-100 rounded">
-              <ChevronRight className="size-4 text-gray-600" />
-            </button>
-          </div>
-          <div className="flex items-center gap-2">
-            <button className="p-1 hover:bg-gray-100 rounded">
-              <ChevronLeft className="size-4 text-gray-600" />
-            </button>
-            <span className="text-sm font-medium text-gray-700">2025</span>
-            <button className="p-1 hover:bg-gray-100 rounded">
-              <ChevronRight className="size-4 text-gray-600" />
-            </button>
-          </div>
+    <g key={`label-${index}`}>
+      <circle
+        cx={x}
+        cy={y}
+        r={22}
+        fill="#f3e8ff"
+        stroke="#eef2f7"
+        style={{ filter: "drop-shadow(0 4px 8px rgba(16,24,40,0.08))" }}
+      />
+      <text
+        x={x}
+        y={y}
+        textAnchor="middle"
+        dominantBaseline="central"
+        fill="#111827"
+        fontSize={12}
+        fontWeight={700}
+      >
+        {value}
+      </text>
+    </g>
+  );
+};
+
+export default function PlantSalesChart() {
+  const [currentDate, setCurrentDate] = useState(() => new Date());
+
+  const monthName = currentDate.toLocaleString(undefined, { month: "long" });
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const salesDistributionData = useMemo(
+    () => generateData(year, month),
+    [year, month]
+  );
+
+  // total used to compute example currency values in the legend
+  const TOTAL_AMOUNT = 1300;
+
+  const formatCurrency = (value: number) =>
+    value.toLocaleString("en-US", { style: "currency", currency: "USD" });
+
+  const prevMonth = () =>
+    setCurrentDate((d) => {
+      const nd = new Date(d);
+      nd.setMonth(d.getMonth() - 1);
+      return nd;
+    });
+  const nextMonth = () =>
+    setCurrentDate((d) => {
+      const nd = new Date(d);
+      nd.setMonth(d.getMonth() + 1);
+      return nd;
+    });
+  const prevYear = () =>
+    setCurrentDate((d) => {
+      const nd = new Date(d);
+      nd.setFullYear(d.getFullYear() - 1);
+      return nd;
+    });
+  const nextYear = () =>
+    setCurrentDate((d) => {
+      const nd = new Date(d);
+      nd.setFullYear(d.getFullYear() + 1);
+      return nd;
+    });
+
+  return (
+    <Card className="p-6">
+      {/* Header: left month selector, centered title, right year selector */}
+      <div className="grid grid-cols-3 items-end gap-4 ">
+        <div className="flex items-center gap-2 justify-start  px-3 py-1.5 rounded-lg">
+          <button
+            onClick={prevMonth}
+            aria-label="Previous month"
+            className="hover:bg-gray-200 rounded p-0.5"
+          >
+            <ChevronLeft className="h-4 w-4 text-gray-600" />
+          </button>
+          <span className="text-sm font-medium text-gray-700">{monthName}</span>
+          <button
+            onClick={nextMonth}
+            aria-label="Next month"
+            className="hover:bg-gray-200 rounded p-0.5"
+          >
+            <ChevronRight className="h-4 w-4 text-gray-600" />
+          </button>
+        </div>
+
+        <h3 className="text-xl font-semibold text-center">Sales</h3>
+
+        <div className="flex items-center gap-2 justify-end  px-3 py-1.5 rounded-lg">
+          <button
+            onClick={prevYear}
+            aria-label="Previous year"
+            className="hover:bg-gray-200 rounded p-0.5"
+          >
+            <ChevronLeft className="h-4 w-4 text-gray-600" />
+          </button>
+          <span className="text-sm font-medium text-gray-700">{year}</span>
+          <button
+            onClick={nextYear}
+            aria-label="Next year"
+            className="hover:bg-gray-200 rounded p-0.5"
+          >
+            <ChevronRight className="h-4 w-4 text-gray-600" />
+          </button>
         </div>
       </div>
 
-      <div className="flex flex-col items-center justify-center gap-8">
-        {/* Donut Chart */}
-        <div className="relative">
-          <svg width="200" height="200" viewBox="0 0 200 200">
-            <circle
-              cx="100"
-              cy="100"
-              r="80"
-              fill="none"
-              stroke="#3B82F6"
-              strokeWidth="40"
-              strokeDasharray={`${(60 / 100) * 502.4} 502.4`}
-              transform="rotate(-90 100 100)"
-            />
-            <circle
-              cx="100"
-              cy="100"
-              r="80"
-              fill="none"
-              stroke="#FB923C"
-              strokeWidth="40"
-              strokeDasharray={`${(20 / 100) * 502.4} 502.4`}
-              strokeDashoffset={`-${(60 / 100) * 502.4}`}
-              transform="rotate(-90 100 100)"
-            />
-            <circle
-              cx="100"
-              cy="100"
-              r="80"
-              fill="none"
-              stroke="#FDBA74"
-              strokeWidth="40"
-              strokeDasharray={`${(20 / 100) * 502.4} 502.4`}
-              strokeDashoffset={`-${(80 / 100) * 502.4}`}
-              transform="rotate(-90 100 100)"
-            />
-            <circle cx="100" cy="100" r="50" fill="white" />
+      {/* Donut Chart with custom percentage bubbles */}
+      <div className="h-64 flex items-center justify-center">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={salesDistributionData}
+              cx="50%"
+              cy="50%"
+              innerRadius={60}
+              outerRadius={110}
+              paddingAngle={2}
+              dataKey="value"
+              label={renderCustomizedLabel}
+              labelLine={false}
+            >
+              {salesDistributionData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
 
-            {/* Percentage labels on the chart */}
-            <text
-              x="100"
-              y="60"
-              textAnchor="middle"
-              className="text-xs font-medium"
-              fill="#6B7280"
-            >
-              20%
-            </text>
-            <text
-              x="140"
-              y="100"
-              textAnchor="middle"
-              className="text-xs font-medium"
-              fill="#6B7280"
-            >
-              20%
-            </text>
-            <text
-              x="100"
-              y="140"
-              textAnchor="middle"
-              className="text-xs font-medium"
-              fill="#6B7280"
-            >
-              60%
-            </text>
-          </svg>
-        </div>
-
-        {/* Legend */}
-        <div className="space-y-3">
-          {salesData.map((item, index) => (
-            <div
-              key={index}
-              className="flex items-center justify-between gap-8"
-            >
-              <div className="flex items-center gap-2">
-                <div className={`w-2 h-2 rounded-full ${item.color}`} />
-                <span className="text-sm text-gray-700">{item.name}</span>
+      {/* Legend */}
+      <div className="">
+        <div className="flex items-start justify-between">
+          <div className="space-y-3">
+            {salesDistributionData.map((item) => (
+              <div key={item.name} className="flex items-center gap-3">
+                <div
+                  className="w-3 h-3 rounded-full"
+                  style={{ backgroundColor: item.color }}
+                />
+                <span className="text-sm font-medium text-gray-600">
+                  {item.name}
+                </span>
+                <span className="ml-2 text-sm text-gray-500">
+                  {item.value}%
+                </span>
               </div>
-              <span className="text-sm font-semibold text-gray-900">
-                {item.value}%
-              </span>
-            </div>
-          ))}
+            ))}
+          </div>
+
+          <div className="space-y-3 text-right">
+            {salesDistributionData.map((item) => {
+              const amt = (item.value / 100) * TOTAL_AMOUNT;
+              return (
+                <div
+                  key={item.name}
+                  className="text-sm font-semibold text-gray-900"
+                >
+                  {formatCurrency(amt)}
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
