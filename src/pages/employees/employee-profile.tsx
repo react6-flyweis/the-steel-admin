@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { AddEmployeeDialog } from "@/components/employees/add-employee-dialog";
 import { useParams, Link } from "react-router";
 import StatCard from "@/components/ui/stat-card";
 import { Card } from "@/components/ui/card";
@@ -7,12 +8,16 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 // Tabs: using original nav-style tabs (no shadcn Tabs)
 import {
+  Mail,
+  Phone,
+  Calendar,
   Users,
   Percent,
   CheckSquare,
   Smile,
   DollarSign,
   ArrowLeft,
+  Edit,
 } from "lucide-react";
 
 type Employee = {
@@ -94,6 +99,7 @@ export default function EmployeeProfilePage() {
     mockEmployees.find((e) => e.id === String(id)) || mockEmployees[0];
 
   const [activeTab, setActiveTab] = useState<string>("personal");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
 
   return (
     <div className="p-4 sm:p-6 space-y-6 max-w-7xl mx-auto">
@@ -182,24 +188,51 @@ export default function EmployeeProfilePage() {
         <div className="pt-6">
           {activeTab === "personal" && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-white p-6 rounded-lg shadow">
+              <div className="bg-white p-6 rounded-lg shadow relative">
                 <h4 className="font-semibold mb-4">Contact Information</h4>
-                <div className="space-y-3 text-sm text-gray-700">
-                  <div>
-                    <div className="text-gray-500 text-xs">Email</div>
-                    <div className="mt-1">{employee.email}</div>
+                <div className="space-y-4 text-sm text-gray-700">
+                  <div className="flex items-start gap-3">
+                    <div className="text-gray-400 mt-0.5">
+                      <Mail className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-gray-500 text-xs">Email</div>
+                      <div className="mt-1 text-gray-900">{employee.email}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-gray-500 text-xs">Phone</div>
-                    <div className="mt-1">{employee.phone}</div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="text-gray-400 mt-0.5">
+                      <Phone className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-gray-500 text-xs">Phone</div>
+                      <div className="mt-1 text-gray-900">{employee.phone}</div>
+                    </div>
                   </div>
-                  <div>
-                    <div className="text-gray-500 text-xs">Join Date</div>
-                    <div className="mt-1">{employee.joinedDate}</div>
+
+                  <div className="flex items-start gap-3">
+                    <div className="text-gray-400 mt-0.5">
+                      <Calendar className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-gray-500 text-xs">Join Date</div>
+                      <div className="mt-1 text-gray-900">
+                        {employee.joinedDate}
+                      </div>
+                    </div>
                   </div>
+
+                  <button
+                    aria-label="Edit contact"
+                    className="absolute right-4 p-4 bottom-4"
+                    onClick={() => setEditDialogOpen(true)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-              <div className="bg-white p-6 rounded-lg shadow">
+              <div className="relative bg-white p-6 rounded-lg shadow">
                 <h4 className="font-semibold mb-4">Roles & Permissions</h4>
                 <div className="space-y-3 text-sm text-gray-700">
                   <div>
@@ -225,6 +258,13 @@ export default function EmployeeProfilePage() {
                     </div>
                   </div>
                 </div>
+                <button
+                  aria-label="Edit roles and permissions"
+                  className="absolute right-4 p-4 bottom-4"
+                  onClick={() => setEditDialogOpen(true)}
+                >
+                  <Edit className="h-4 w-4" />
+                </button>
               </div>
             </div>
           )}
@@ -323,6 +363,23 @@ export default function EmployeeProfilePage() {
           )}
         </div>
       </div>
+      <AddEmployeeDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        hideTrigger
+        initialValues={{
+          name: employee.name,
+          email: employee.email,
+          phone: employee.phone,
+          role: employee.role.split(" - ")[0] || employee.role,
+          team: employee.team ?? "Sales",
+          status:
+            employee.status && employee.status.toLowerCase() === "active"
+              ? "active"
+              : "inactive",
+          password: "",
+        }}
+      />
     </div>
   );
 }
