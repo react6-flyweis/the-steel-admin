@@ -46,6 +46,7 @@ const initialLeads = [
     statusColor: "purple",
     quoteValue: "$12,500",
     chatCount: 2,
+    createdAt: new Date("2026-01-15"), // Today
   },
   {
     id: "ID-2025-1048",
@@ -61,6 +62,7 @@ const initialLeads = [
     statusColor: "orange",
     quoteValue: "$125,000",
     chatCount: 4,
+    createdAt: new Date("2026-01-13"), // This week
   },
   {
     id: "ID-2025-1049",
@@ -76,6 +78,7 @@ const initialLeads = [
     statusColor: "purple",
     quoteValue: "$220,000",
     chatCount: 2,
+    createdAt: new Date("2026-01-10"), // This week
   },
   {
     id: "ID-2025-1050",
@@ -91,6 +94,7 @@ const initialLeads = [
     statusColor: "green",
     quoteValue: "$45,000",
     chatCount: 2,
+    createdAt: new Date("2026-01-05"), // This month
   },
 ];
 
@@ -99,6 +103,7 @@ export default function LeadsPage() {
   const [projectValue, setProjectValue] = useState("all");
   const [assignments, setAssignments] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [period, setPeriod] = useState<"Today" | "Week" | "Month">("Today");
   const [leads] = useState(initialLeads);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
   // const [searchQuery, setSearchQuery] = useState("");
@@ -148,8 +153,37 @@ export default function LeadsPage() {
   const parseQuoteValue = (q?: string) =>
     Number((q || "").replace(/[^\d]/g, "") || 0);
 
+  // Helper to check if a date matches the selected period
+  const isInPeriod = (date: Date) => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const leadDate = new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+    if (period === "Today") {
+      return leadDate.getTime() === today.getTime();
+    } else if (period === "Week") {
+      const weekAgo = new Date(today);
+      weekAgo.setDate(today.getDate() - 7);
+      return leadDate >= weekAgo && leadDate <= today;
+    } else if (period === "Month") {
+      const monthAgo = new Date(today);
+      monthAgo.setDate(today.getDate() - 30);
+      return leadDate >= monthAgo && leadDate <= today;
+    }
+    return true;
+  };
+
   // Compute filtered leads based on search + filters
   const filteredLeads = leads.filter((lead) => {
+    // Period filter
+    if (!isInPeriod(lead.createdAt)) {
+      return false;
+    }
+
     // Search
     // const q = searchQuery.trim().toLowerCase();
     // if (q) {
@@ -197,7 +231,10 @@ export default function LeadsPage() {
 
   return (
     <>
-      <FilterTabs />
+      <FilterTabs
+        initialPeriod={period}
+        onPeriodChange={(newPeriod) => setPeriod(newPeriod)}
+      />
       <div className="p-4 sm:p-6 space-y-6">
         {/* Header */}
         <div>
@@ -209,26 +246,29 @@ export default function LeadsPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Leads"
-            value={String(leads.length)}
+            value={String(filteredLeads.length)}
             color="bg-blue-600"
             icon={<Users className="h-5 w-5 text-blue-600" />}
           />
           <StatCard
             title="Assigned"
-            value={String(leads.filter((l) => l.assignedTo).length)}
+            value={String(filteredLeads.filter((l) => l.assignedTo).length)}
             color="bg-green-600"
             icon={<UserCheck className="h-5 w-5 text-green-600" />}
           />
           <StatCard
             title="Unassigned"
-            value={String(leads.filter((l) => !l.assignedTo).length)}
+            value={String(filteredLeads.filter((l) => !l.assignedTo).length)}
             color="bg-yellow-500"
             icon={<UserX className="h-5 w-5 text-yellow-600" />}
           />
           <StatCard
             title="Unopened Message"
             value={String(
-              leads.reduce((acc, l) => acc + (l.chatCount > 0 ? 1 : 0), 0)
+              filteredLeads.reduce(
+                (acc, l) => acc + (l.chatCount > 0 ? 1 : 0),
+                0
+              )
             )}
             color="bg-orange-500"
             icon={<Mail className="h-5 w-5 text-orange-600" />}
