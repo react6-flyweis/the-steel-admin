@@ -1,4 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 interface Project {
   id: string;
@@ -78,9 +80,11 @@ export default function ConstructionProgressOverview({
       <CardHeader className="border-b">
         <div className="flex items-center justify-between">
           <CardTitle>Construction progress overview</CardTitle>
-          <a href="#" className="text-blue-600 hover:text-blue-700 font-medium">
-            View All
-          </a>
+          <Link to="/construction">
+            <Button variant="link" size="sm">
+              View Details
+            </Button>
+          </Link>
         </div>
       </CardHeader>
 
