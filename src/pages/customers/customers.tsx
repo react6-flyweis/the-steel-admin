@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   Search,
   Eye,
@@ -30,6 +30,8 @@ type Customer = {
   email?: string;
   inquiryFor?: string;
   status?: string;
+  createdAt: Date;
+  isReturning?: boolean;
 };
 
 // Helper: generate a random customer
@@ -59,6 +61,13 @@ function generateRandomCustomer(): Customer {
   const inquiryFor = inquiries[Math.floor(Math.random() * inquiries.length)];
   const status = statuses[Math.floor(Math.random() * statuses.length)];
 
+  // Random date within the last 30 days
+  const daysAgo = Math.floor(Math.random() * 30);
+  const createdAt = new Date();
+  createdAt.setDate(createdAt.getDate() - daysAgo);
+
+  const isReturning = Math.random() > 0.7; // 30% chance of being returning
+
   return {
     id,
     customerName: name,
@@ -66,12 +75,15 @@ function generateRandomCustomer(): Customer {
     email,
     inquiryFor,
     status,
+    createdAt,
+    isReturning,
   };
 }
 
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [period, setPeriod] = useState<"Today" | "Week" | "Month">("Today");
   // Seed state with a few random customers plus the initial seeds
   const [customers, setCustomers] = useState<Customer[]>(() => {
     const customers = Array.from({ length: 8 }).map(() =>
@@ -80,6 +92,53 @@ export default function CustomersPage() {
     return customers;
   });
   const navigate = useNavigate();
+
+  // Helper to check if a date matches the selected period
+  const isInPeriod = useCallback(
+    (date: Date) => {
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const customerDate = new Date(
+        date.getFullYear(),
+        date.getMonth(),
+        date.getDate()
+      );
+
+      if (period === "Today") {
+        return customerDate.getTime() === today.getTime();
+      } else if (period === "Week") {
+        const weekAgo = new Date(today);
+        weekAgo.setDate(today.getDate() - 7);
+        return customerDate >= weekAgo && customerDate <= today;
+      } else if (period === "Month") {
+        const monthAgo = new Date(today);
+        monthAgo.setDate(today.getDate() - 30);
+        return customerDate >= monthAgo && customerDate <= today;
+      }
+      return true;
+    },
+    [period]
+  );
+
+  // Calculate period-filtered stats
+  const periodFilteredCustomers = useMemo(() => {
+    return customers.filter((c) => isInPeriod(c.createdAt));
+  }, [customers, isInPeriod]);
+
+  const stats = useMemo(() => {
+    const total = periodFilteredCustomers.length;
+    const active = periodFilteredCustomers.filter(
+      (c) => c.status?.toLowerCase() === "active"
+    ).length;
+    const newCustomers = periodFilteredCustomers.filter(
+      (c) => !c.isReturning
+    ).length;
+    const returning = periodFilteredCustomers.filter(
+      (c) => c.isReturning
+    ).length;
+
+    return { total, active, newCustomers, returning };
+  }, [periodFilteredCustomers]);
 
   const filteredCustomers = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -104,7 +163,10 @@ export default function CustomersPage() {
 
   return (
     <>
-      <FilterTabs />
+      <FilterTabs
+        initialPeriod={period}
+        onPeriodChange={(newPeriod) => setPeriod(newPeriod)}
+      />
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -140,25 +202,25 @@ export default function CustomersPage() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
             title="Total Customers"
-            value="126"
+            value={String(stats.total)}
             color="bg-blue-600"
             icon={<Users className="h-5 w-5 text-blue-600" />}
           />
           <StatCard
             title="Active Customers"
-            value="48"
+            value={String(stats.active)}
             color="bg-green-600"
             icon={<UserCheck className="h-5 w-5 text-green-600" />}
           />
           <StatCard
-            title="New Cust. (This Month)"
-            value="15"
+            title="New Customers"
+            value={String(stats.newCustomers)}
             color="bg-yellow-500"
             icon={<UserPlus className="h-5 w-5 text-yellow-600" />}
           />
           <StatCard
             title="Returning Customers"
-            value="9"
+            value={String(stats.returning)}
             color="bg-orange-500"
             icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
           />
