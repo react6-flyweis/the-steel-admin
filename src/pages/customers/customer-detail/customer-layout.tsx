@@ -1,4 +1,4 @@
-import { Outlet, useNavigate, useParams } from "react-router";
+import { Link, Outlet, useNavigate, useParams } from "react-router";
 import { ArrowLeft, MailIcon } from "lucide-react";
 import PaymentSuccessIcon from "@/assets/icons/customers/payment-success.svg";
 import MoneyReceiveIcon from "@/assets/icons/customers/money-receive-square.svg";
@@ -39,10 +39,12 @@ export default function CustomerDetailLayout() {
           </Button>
           <h1 className="text-lg ">Customer Info</h1>
         </div>
-        <Button className="bg-green-600 hover:bg-green-700 w-full sm:w-auto mt-3 sm:mt-0">
-          <MailIcon className="h-4 w-4 mr-2" />
-          Schedule Meeting
-        </Button>
+        <Link to="/customers/meetings/schedule">
+          <Button className="bg-green-600 hover:bg-green-700 w-full sm:w-auto mt-3 sm:mt-0">
+            <MailIcon className="h-4 w-4 mr-2" />
+            Schedule Meeting
+          </Button>
+        </Link>
       </div>
 
       {/* Profile Card */}
