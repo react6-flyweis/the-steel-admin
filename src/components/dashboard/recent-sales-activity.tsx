@@ -6,6 +6,8 @@ import {
   Phone,
   FileText,
 } from "lucide-react";
+import { Button } from "../ui/button";
+import { Link } from "react-router";
 
 interface ActivityItem {
   id: string;
@@ -62,7 +64,11 @@ export default function RecentSalesActivity({
     <Card>
       <CardHeader className="border-b flex justify-between items-center">
         <CardTitle>Recent Sales Activity</CardTitle>
-        <a className="text-blue-600 hover:text-blue-700">View All</a>
+        <Link to="/employees/audit-log">
+          <Button variant="link" size="sm">
+            View All
+          </Button>
+        </Link>
       </CardHeader>
 
       <CardContent className="space-y-3">
