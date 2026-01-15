@@ -1,4 +1,6 @@
 import { User } from "lucide-react";
+import { Link } from "react-router";
+import { Button } from "../ui/button";
 
 export default function TotalInvoicesGenerated({
   period,
@@ -63,10 +65,13 @@ export default function TotalInvoicesGenerated({
           </div>
         ))}
       </div>
-
-      <button className="w-full text-center text-sm text-blue-600 hover:text-blue-700 font-medium mt-4">
-        View All
-      </button>
+      <div className="flex justify-center mt-5">
+        <Link to="/invoice/list">
+          <Button variant="link" size="sm">
+            View All
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }
