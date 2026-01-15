@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/success-dialog";
 import {
   Dialog,
   DialogContent,
@@ -73,8 +74,33 @@ const addEmployeeSchema = z.object({
 
 type AddEmployeeForm = z.infer<typeof addEmployeeSchema>;
 
-export function AddEmployeeDialog() {
-  const [open, setOpen] = useState(false);
+type AddEmployeeDialogProps = {
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
+  initialValues?: Partial<AddEmployeeForm>;
+  hideTrigger?: boolean;
+};
+
+const defaultFormValues: AddEmployeeForm = {
+  name: "",
+  email: "",
+  phone: "",
+  role: "Employee",
+  team: "Sales",
+  status: "active",
+  password: "",
+  permissions: {},
+};
+
+export function AddEmployeeDialog({
+  open: controlledOpen,
+  onOpenChange,
+  initialValues,
+  hideTrigger = false,
+}: AddEmployeeDialogProps) {
+  const isControlled = controlledOpen !== undefined;
+  const [openState, setOpenState] = useState<boolean>(controlledOpen ?? false);
+  const [showSuccess, setShowSuccess] = useState(false);
 
   const {
     register,
@@ -96,6 +122,23 @@ export function AddEmployeeDialog() {
     },
   });
 
+  useEffect(() => {
+    if (isControlled) {
+      setOpenState(controlledOpen as boolean);
+    }
+  }, [controlledOpen, isControlled]);
+
+  useEffect(() => {
+    if (openState && initialValues) {
+      reset({ ...defaultFormValues, ...initialValues });
+    }
+  }, [openState, initialValues, reset]);
+
+  const setOpen = (val: boolean) => {
+    if (!isControlled) setOpenState(val);
+    if (onOpenChange) onOpenChange(val);
+  };
+
   const onSubmit = (data: AddEmployeeForm) => {
     console.log({
       ...data,
@@ -104,21 +147,32 @@ export function AddEmployeeDialog() {
     });
     reset();
     setOpen(false);
+    setShowSuccess(true);
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button className="bg-[#3b82f6] hover:bg-[#2563eb]">
-          <Plus className="h-4 w-4 mr-2" />
-          Add Employee
-        </Button>
-      </DialogTrigger>
+    <Dialog open={openState} onOpenChange={setOpen}>
+      {!hideTrigger && (
+        <DialogTrigger asChild>
+          <Button className="bg-[#3b82f6] hover:bg-[#2563eb]">
+            <Plus className="h-4 w-4 mr-2" />
+            Add Employee
+          </Button>
+        </DialogTrigger>
+      )}
 
       <DialogContent className="w-full sm:max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>Add New Employee</DialogTitle>
-          <DialogDescription>Fill in the details below</DialogDescription>
+          <DialogTitle>
+            {initialValues && Object.keys(initialValues).length > 0
+              ? "Edit Employee Information"
+              : "Add New Employee"}
+          </DialogTitle>
+          <DialogDescription>
+            {initialValues && Object.keys(initialValues).length > 0
+              ? "Update the employee details below"
+              : "Fill in the details below"}
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -298,11 +352,22 @@ export function AddEmployeeDialog() {
               className="bg-[#3b82f6] hover:bg-[#2563eb]"
               disabled={isSubmitting}
             >
-              Add Employee
+              {initialValues && Object.keys(initialValues).length > 0
+                ? "Save Changes"
+                : "Add Employee"}
             </Button>
           </div>
         </form>
       </DialogContent>
+      <SuccessDialog
+        open={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        title={
+          initialValues && Object.keys(initialValues).length > 0
+            ? "Employee Updated Successfully!"
+            : "Employee Added Successfully!"
+        }
+      />
     </Dialog>
   );
 }
