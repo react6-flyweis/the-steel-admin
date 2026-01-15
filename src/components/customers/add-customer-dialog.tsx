@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/success-dialog";
 import {
   Select,
   SelectContent,
@@ -32,6 +33,8 @@ type Customer = {
   email?: string;
   inquiryFor?: string;
   status?: string;
+  createdAt: Date;
+  isReturning?: boolean;
 };
 
 export default function AddCustomerDialog({
@@ -42,6 +45,7 @@ export default function AddCustomerDialog({
   trigger?: React.ReactNode;
 }) {
   const [open, setOpen] = React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
 
   type FormValues = {
     customerName: string;
@@ -70,10 +74,13 @@ export default function AddCustomerDialog({
       customerName: values.customerName || "Unnamed",
       inquiryFor: values.inquiryFor,
       status: values.status || "New",
+      createdAt: new Date(),
+      isReturning: false,
     };
     onAdd(newCustomer);
     setOpen(false);
     form.reset();
+    setShowSuccess(true);
   }
 
   return (
@@ -226,6 +233,11 @@ export default function AddCustomerDialog({
           </DialogFooter>
         </form>
       </DialogContent>
+      <SuccessDialog
+        open={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        title="Customer Added Successfully!"
+      />
     </Dialog>
   );
 }
