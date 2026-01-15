@@ -7,10 +7,10 @@ import {
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import type { PropsWithChildren } from "react";
+type UserMenuProps = PropsWithChildren & { onOpenProfile?: () => void };
 
-export function UserMenu({ children }: PropsWithChildren) {
+export function UserMenu({ children, onOpenProfile }: UserMenuProps) {
   const navigate = useNavigate();
-
   const goProfile = () => navigate("/profile");
   const goSettings = () => navigate("/settings");
   const signOut = () => {
@@ -24,7 +24,11 @@ export function UserMenu({ children }: PropsWithChildren) {
 
       <DropdownMenuContent className="left-2 w-52 bg-white rounded-lg shadow-md ring-1 ring-gray-100">
         <div className="p-2">
-          <DropdownMenuItem onClick={goProfile}>My profile</DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => (onOpenProfile ? onOpenProfile() : goProfile())}
+          >
+            My profile
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={goSettings}>Settings</DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={signOut} className="text-red-500">

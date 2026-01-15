@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 
 import { NotificationMenu } from "@/components/notification-menu";
 import { UserMenu } from "@/components/user-menu";
+import ProfileDialog from "@/components/profile-dialog";
 import steelLogo from "@/assets/steel-building-depot-logo.png";
+import { useState } from "react";
 
 interface HeaderProps {
   onMenuClick: () => void;
 }
 
 export function Header({ onMenuClick }: HeaderProps) {
+  const [profileOpen, setProfileOpen] = useState(false);
   return (
     <header className="bg-white border-b px-4 md:px-8 py-4">
       <div className="flex items-center justify-between">
@@ -38,11 +41,13 @@ export function Header({ onMenuClick }: HeaderProps) {
         <div className="flex items-center gap-3 md:gap-6">
           <NotificationMenu />
 
-          <UserMenu>
+          <UserMenu onOpenProfile={() => setProfileOpen(true)}>
             <Button variant="ghost" size="icon" className="rounded-full">
               <User className="size-6 text-gray-700" />
             </Button>
           </UserMenu>
+
+          <ProfileDialog open={profileOpen} onOpenChange={setProfileOpen} />
 
           {/* The Steel Logo */}
           <div>
