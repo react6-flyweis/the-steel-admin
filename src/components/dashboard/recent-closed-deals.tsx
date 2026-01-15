@@ -1,5 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { Link } from "react-router";
 
 interface ClosedDeal {
   id: string;
@@ -51,8 +53,13 @@ export default function RecentClosedDeals({ period }: { period?: Period }) {
 
   return (
     <Card>
-      <CardHeader className="border-b">
+      <CardHeader className="border-b flex justify-between">
         <CardTitle>Recent Closed Deals</CardTitle>
+        <Link to="/leads">
+          <Button variant="link" size="sm">
+            View
+          </Button>
+        </Link>
       </CardHeader>
 
       <CardContent className="space-y-3">
