@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Plus, Upload, List } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import Input from "@/components/ui/Input";
+import { Input } from "@/components/ui/input";
 import logo from "@/assets/logo.svg";
 import AddClientIcon from "@/assets/icon/AddClientIcon.svg";
 import AddClientModal from "../components/modals/AddClientModal";

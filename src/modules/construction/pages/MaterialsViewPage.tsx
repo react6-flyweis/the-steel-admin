@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import BackArrow from "../assets/backarrowicon.svg";
 import PlusIcon from "../assets/plusicon.svg";
 import UploadImg from "../assets/uploadimg.png";
 import UploadCamera from "../assets/uploadcameraicon.svg";
 import RequestMaterialModel from "../components/requestMaterialModel";
 import PhotoModel from "../components/photoModel";
-import { useSearch } from "../context/SearchContext";
 import SuccessModal from "../components/common/SuccessModal";
 type RequestedMaterial = {
   material: string;
@@ -24,7 +23,8 @@ export default function MaterialsViewPage() {
   const [openPhotoModel, setPhotoModel] = useState(false);
   const initialPhotos = [UploadImg, UploadImg, UploadImg, UploadImg, UploadImg];
   const [photos, setPhotos] = useState<string[]>(initialPhotos);
-  const { search } = useSearch();
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const [successOpen, setSuccessOpen] = useState(false);
   const [successTitle, setSuccessTitle] = useState("");
   const [tempMaterial, setTempMaterial] = useState<Material | null>(null);

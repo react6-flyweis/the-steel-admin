@@ -7,7 +7,7 @@ import { FilePlus, FileX, Funnel } from "lucide-react";
 import TitleSubtitle from "../common_component/TitleSubtitle";
 import AddServiceProviderModal from "./AddServiceProviderModal";
 import FilterTabs from "../common_component/FilterTabs";
-import type { TabType } from "@/pages/PlantPage";
+import type { TabType } from "../../pages/PlantPage";
 import SuccessModal from "../common_component/SuccessModal";
 
 export type ServiceProvider = {

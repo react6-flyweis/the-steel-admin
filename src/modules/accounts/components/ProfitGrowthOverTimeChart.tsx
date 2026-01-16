@@ -15,7 +15,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartConfig } from "@/components/ui/chart";
-import type { TabType } from "@/pages/Dashboard";
+import type { TabType } from "../pages/Dashboard";
 
 export const chartDataByFilter: Record<
   TabType,

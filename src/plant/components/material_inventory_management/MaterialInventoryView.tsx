@@ -8,7 +8,7 @@ import SalmonGraphIcon from "../../assets/salmonGraphIcon.svg";
 import AddMaterialModal from "./AddMaterialModal";
 import TitleSubtitle from "../common_component/TitleSubtitle";
 import TableActionButtons from "../common_component/TableActionButtons";
-import type { TabType } from "@/pages/PlantPage";
+import type { TabType } from "../../pages/PlantPage";
 import FilterTabs from "../common_component/FilterTabs";
 import SuccessModal from "../common_component/SuccessModal";
 

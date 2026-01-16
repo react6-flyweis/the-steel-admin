@@ -8,7 +8,7 @@ import TitleSubtitle from "../common_component/TitleSubtitle";
 import AddServiceProviderModal from "./AddServiceProviderModal";
 import TableActionButtons from "../common_component/TableActionButtons";
 import FilterTabs from "../common_component/FilterTabs";
-import type { TabType } from "@/pages/PlantPage";
+import type { TabType } from "../../pages/PlantPage";
 import HammerIcon from "../../assets/hammerIcon.svg";
 import CheckedShieldIcon from "../../assets/checkedShieldIcon.svg";
 import YellowDollerIcon from "../../assets/yellowDollerIcon.svg";

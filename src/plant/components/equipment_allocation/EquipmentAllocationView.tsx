@@ -11,7 +11,7 @@ import AssignEquipmentModal from "./AssignEquipmentModal";
 import TitleSubtitle from "../common_component/TitleSubtitle";
 import TableActionButtons from "../common_component/TableActionButtons";
 import FilterTabs from "../common_component/FilterTabs";
-import type { TabType } from "@/pages/PlantPage";
+import type { TabType } from "../../pages/PlantPage";
 import SuccessModal from "../common_component/SuccessModal";
 
 const equipmentByFilter: Record<TabType, typeof equipment_status_data> = {
