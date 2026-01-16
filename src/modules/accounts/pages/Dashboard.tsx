@@ -3,7 +3,7 @@ import { WorkInProgress } from "../components/WorkInProgress";
 import { RevenueTrend } from "../components/RevenueTrend";
 import { ChevronDown, ChevronUp, RefreshCcw } from "lucide-react";
 import TitleSubtitle from "../components/common_components/TitleSubtitle";
-import { FinanceStatsGrid } from "../components/FinanceStatsGrid";
+
 import StorageIcon from "../assets/storageIcon.svg";
 import MoneyIcon from "../assets/money-bill-solid.svg";
 import ChartLineIcon from "../assets/chart-growth.svg";
@@ -228,7 +228,7 @@ const FinancePage = () => {
         </div>
       </div>
 
-      {isInvoiceOpen && <FinanceStatsGrid activeTab={activeTab} />}
+      {/* {isInvoiceOpen && <FinanceStatsGrid activeTab={activeTab} />} */}
       <div className="pt-2">
         <AnalysisSection activeTab={activeTab} />
       </div>
