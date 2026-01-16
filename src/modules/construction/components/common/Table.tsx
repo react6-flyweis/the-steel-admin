@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import EyeIcon from "../../assets/EyeIcon.svg";
 import EditIcon from "../../assets/EditIcon.svg";
 import LeftArrowIcon from "../../assets/left-arrow.svg";
@@ -32,6 +32,8 @@ export default function AllProjectsTable({ projects }: Props) {
   const [activeTab, setActiveTab] = useState<"overview" | "calendar">(
     "overview"
   );
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const navigate = useNavigate();
   const today = new Date();
 
@@ -71,6 +73,14 @@ export default function AllProjectsTable({ projects }: Props) {
     setCurrentYear(today.getFullYear());
     setSelectedDate(today.getDate());
   };
+
+  const filteredProjects = projects.filter((p) =>
+    search
+      ? `${p.name} ${p.code} ${p.client} ${p.status}`
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      : true
+  );
 
   return (
     <div>
@@ -139,7 +149,7 @@ export default function AllProjectsTable({ projects }: Props) {
               </thead>
 
               <tbody>
-                {projects.map((project) => (
+                {filteredProjects.map((project) => (
                   <tr
                     key={project.id}
                     className="border-b border-[#E5E7EB] last:border-b-0"
@@ -203,7 +213,7 @@ export default function AllProjectsTable({ projects }: Props) {
                       <div className="flex gap-4 text-[#2563EB]">
                         <button
                           onClick={() =>
-                            navigate("/construction/project-view-page", {
+                            navigate("/project-view-page", {
                               state: {
                                 projectCode: project.code,
                                 projectName: project.name,
@@ -234,7 +244,7 @@ export default function AllProjectsTable({ projects }: Props) {
                 ))}
               </tbody>
             </table>
-            {projects.length === 0 && (
+            {filteredProjects.length === 0 && (
               <p className="text-center text-sm text-[#6B7280] py-8 w-full">
                 No projects found
               </p>

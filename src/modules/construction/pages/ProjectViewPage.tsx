@@ -1,41 +1,11 @@
-import { useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router";
+import { useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation, useSearchParams } from "react-router";
 import BackArrow from "../assets/backarrowicon.svg";
 import EyeIcon from "../assets/EyeIcon.svg";
 import EditIcon from "../assets/EditIcon.svg";
 import CustomSelect from "../components/common/CustomSelect";
 import DownloadIcon from "../assets/downloadicon.svg";
 import PdfIcon from "../assets/pdficon.svg";
-
-type Deliverable = {
-  id: number;
-  text: string;
-};
-
-type Phase = {
-  title: string;
-  date: string;
-  status: "Completed" | "Inprogress" | "Upcoming";
-};
-
-type FileItem = {
-  name: string;
-  size: string;
-};
-
-type ProjectData = {
-  projectName: string;
-  manager: string;
-  managerCode: string;
-  initials: string;
-  start: string;
-  end: string;
-  duration: string;
-  scope: string;
-  deliverables: Deliverable[];
-  phases: Phase[];
-  files: FileItem[];
-};
 
 const projectFilterOptions = [
   { label: "Downtown Office Complex", value: "PRJ-001" },
@@ -44,7 +14,7 @@ const projectFilterOptions = [
   { label: "Industrial Warehouse", value: "PRJ-004" },
 ];
 
-const PROJECT_DATA: Record<string, ProjectData> = {
+const PROJECT_DATA: any = {
   "PRJ-001": {
     projectName: "Downtown Office Complex",
     manager: "John Smith",
@@ -205,14 +175,42 @@ const statusStyle: Record<string, string> = {
 export default function ProjectViewPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
+  const q = search.trim().toLowerCase();
 
-  const [status, setStatus] = useState(location.state?.projectCode || "all");
+  const [status, setStatus] = useState("all");
+  const [projectName, setProjectName] = useState("");
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  console.log(projectName);
+  useEffect(() => {
+    if (location.state?.projectCode) {
+      setStatus(location.state.projectCode);
+      setProjectName(location.state.projectName);
+    }
+  }, [location.state]);
 
-  const activeProject = status !== "all" ? PROJECT_DATA[status] : null;
-  const filteredDeliverables = activeProject?.deliverables;
-  const filteredFiles = activeProject?.files;
-  const filteredPhases = activeProject?.phases;
+  const [activeProject, setActiveProject] = useState<any>(null);
+  const filteredDeliverables = activeProject?.deliverables?.filter(
+    (d: any) => !q || d.text.toLowerCase().includes(q)
+  );
+  const filteredFiles = activeProject?.files?.filter(
+    (f: any) => !q || f.name.toLowerCase().includes(q)
+  );
+  const filteredPhases = activeProject?.phases?.filter(
+    (p: any) =>
+      !q ||
+      p.title.toLowerCase().includes(q) ||
+      p.status.toLowerCase().includes(q)
+  );
+
+  useEffect(() => {
+    if (status !== "all") {
+      setActiveProject(PROJECT_DATA[status]);
+    } else {
+      setActiveProject(null);
+    }
+  }, [status]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -224,14 +222,21 @@ export default function ProjectViewPage() {
       return;
     }
 
-    // Note: File upload would need to be connected to a backend or state management
-    // to persist the uploaded files since activeProject is now a derived value
-    alert(`File "${file.name}" would be uploaded here`);
+    const newFile = {
+      name: file.name,
+      size: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
+    };
+
+    setActiveProject((prev: any) => ({
+      ...prev,
+      files: [...(prev.files || []), newFile],
+    }));
+
     e.target.value = "";
   };
 
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6">
       <div className="flex lg:flex-row flex-col lg:items-center justify-between gap-2 mb-8">
         <div className="flex sm:flex-row flex-col sm:items-center justify-start gap-5">
           <button
@@ -252,8 +257,14 @@ export default function ProjectViewPage() {
             title="All Projects"
             options={projectFilterOptions}
             value={status}
-            onChange={(v) => setStatus(v)}
+            onChange={(v) => {
+              setStatus(v);
+              setProjectName(
+                projectFilterOptions.find((p) => p.value === v)?.label || ""
+              );
+            }}
             width="250px"
+            searchable
           />
 
           <button className="flex items-center gap-2 bg-[#3F63E1] text-white px-5 rounded-lg h-[36px] min-w-fit text-sm font-medium hover:opacity-90">
@@ -339,7 +350,7 @@ export default function ProjectViewPage() {
         <h3 className="text-lg font-semibold mb-6">Key Deliverables</h3>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          {filteredDeliverables?.map((item: Deliverable) => (
+          {filteredDeliverables?.map((item: any) => (
             <div
               key={item.id}
               className="flex items-center gap-4 bg-[#F9FAFB] rounded-[8px] px-5 py-4"
@@ -359,7 +370,7 @@ export default function ProjectViewPage() {
         </h3>
 
         <div className="space-y-5">
-          {filteredPhases?.map((phase: Phase, idx: number) => (
+          {filteredPhases?.map((phase: any, idx: number) => (
             <div
               key={idx}
               className="flex items-center justify-between rounded-[8px] shadow px-5 py-4"
@@ -417,7 +428,7 @@ export default function ProjectViewPage() {
           {filteredFiles
             ?.slice()
             .reverse()
-            .map((file: FileItem, idx: number) => (
+            .map((file: any, idx: number) => (
               <div
                 key={idx}
                 className="flex items-center justify-between rounded-xl border px-5 py-4"

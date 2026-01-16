@@ -36,11 +36,11 @@ const stats: StatItem[] = [
 ];
 
 export default function Tasks() {
-  const [activeTab, setActiveTab] = useState<
-    "Task Management" | "Progress Tracker"
-  >("Task Management");
+    const [activeTab, setActiveTab] = useState<"Task Management" | "Progress Tracker">(
+      "Task Management"
+    );
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6">
       <div>
         <div className="mb-8 flex md:flex-row flex-col gap-3 md:items-center justify-between">
           <h1 className="text-[#111827] lg:text-[30px] text-[24px] font-bold leading-[36px]">
@@ -74,8 +74,12 @@ export default function Tasks() {
         </div>
         <StatsOverview stats={stats} />
       </div>
-      {activeTab === "Task Management" && <TaskBoard />}
-      {activeTab === "Progress Tracker" && <ProgressTracker />}
+      {activeTab === "Task Management" && (
+          <TaskBoard />
+      )}
+      {activeTab === "Progress Tracker" && (
+          <ProgressTracker />
+      )}
     </div>
   );
 }

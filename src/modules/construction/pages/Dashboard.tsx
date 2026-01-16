@@ -15,12 +15,14 @@ import FolderIcon from "../assets/activeproject.svg";
 import MoneyIcon from "../assets/completionicon.svg";
 import BoxIcon from "../assets/pendingmaterialicon.svg";
 import ShieldIcon from "../assets/safetyscoreicon.svg";
+import FilterTabs from "../components/common/FilterTabs";
 import type { Dayjs } from "dayjs";
-import FilterTabs from "@/components/FilterTabs";
+import SuccessModal from "../components/common/SuccessModal";
 
 type StatsTab = "today" | "week" | "month";
 
 export default function Dashboard() {
+  const [activeTab, setActiveTab] = useState<string>("today");
   const stats: Record<StatsTab, StatItem[]> = {
     today: [
       {
@@ -105,11 +107,12 @@ export default function Dashboard() {
   const [manager, setManager] = useState("all");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [successOpen, setSuccessOpen] = useState(false);
 
   return (
-    <div className="space-y-6 relative">
-      <FilterTabs />
-      <div className="p-5">
+    <div className=" mt-10 space-y-6 relative">
+      <FilterTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+      <div>
         <div className="flex sm:flex-row flex-col sm:items-center justify-between mb-8 gap-4">
           <div>
             <h1 className="text-[#111827] lg:text-[30px] text-[24px] font-bold mb-2 leading-[36px]">
@@ -120,13 +123,22 @@ export default function Dashboard() {
             </p>
           </div>
           <div>
-            <button className="bg-[#2563EB] h-[42px] gap-2 text-[16px] flex justify-center items-center text-white px-4 py-2 rounded-[8px]">
+            <button
+              onClick={() => setSuccessOpen(true)}
+              className="bg-[#2563EB] h-[42px] gap-2 text-[16px] flex justify-center items-center text-white px-4 py-2 rounded-[8px]"
+            >
               <img src={ExportIcon} alt="" />
               Export Report
             </button>
+
+            <SuccessModal
+              open={successOpen}
+              title="Report Exported Successfully"
+              onClose={() => setSuccessOpen(false)}
+            />
           </div>
         </div>
-        <StatsOverview stats={stats["today"]} showActions />
+        <StatsOverview stats={stats[activeTab as StatsTab]} showActions />
       </div>
 
       <RecentProjects
@@ -222,8 +234,8 @@ export default function Dashboard() {
         />
       </div>
 
-      <div className="w-full rounded-[8px] border border-[#BFDBFE] bg-[#EFF6FF] px-5 py-4 flex items-center gap-3">
-        <div className="flex-shrink-0">
+      <div className="w-full rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-5 py-4 flex items-center gap-3">
+        <div className="shrink-0">
           <img src={InfoIcon} alt="" />
         </div>
 

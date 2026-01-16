@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useSearchParams } from "react-router";
 import StatsOverview from "../components/cards/StatCard";
 import PlusIcon from "../assets/plusicon.svg";
 import type { StatItem } from "../components/cards/StatCard";
@@ -16,6 +16,7 @@ import FolderIcon from "../assets/clockicon.svg";
 import BoxIcon from "../assets/dispatchicon.svg";
 import ShieldCheckIcon from "../assets/SieldIcon";
 import RightCheckIcon from "../assets/RightTickIcon";
+import SuccessModal from "../components/common/SuccessModal";
 
 const stats: StatItem[] = [
   {
@@ -122,18 +123,21 @@ export default function Materials() {
       supplier: "Tile Masters",
     },
   ]);
-  const [search] = useState("");
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const [status, setStatus] = useState("all");
   const navigate = useNavigate();
   const [openReportModel, setReportModel] = useState(false);
   const [openRequestModel, setRequestModel] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [pendingRequest, setPendingRequest] = useState<any>(null);
+  const [successTitle, setSuccessTitle] = useState("");
   const [openPhotoModel, setPhotoModel] = useState(false);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null
   );
 
   const filteredRequests = requests.filter((r) => {
-    // 🟣 status filter
     const matchStatus = status === "all" || r.status.toLowerCase() === status;
 
     const matchSearch = search
@@ -154,7 +158,7 @@ export default function Materials() {
   });
 
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6">
       <div>
         <div className="flex xl:flex-row flex-col gap-6 xl:items-center justify-between mb-8">
           <div>
@@ -180,13 +184,6 @@ export default function Materials() {
             >
               Issue Reporting
             </button>
-            <IssueReportingModal
-              open={openReportModel}
-              onClose={() => setReportModel(false)}
-              onCreate={(newRequest) =>
-                setRequests((prev) => [newRequest, ...prev])
-              }
-            />
 
             <button
               onClick={() => setRequestModel(true)}
@@ -195,12 +192,37 @@ export default function Materials() {
               <img src={PlusIcon} alt="" />
               Requests Material
             </button>
+
+            <IssueReportingModal
+              open={openReportModel}
+              onClose={() => setReportModel(false)}
+              onCreate={(newRequest) => {
+                setSuccessTitle("Report Submitted Successfully");
+                setPendingRequest(newRequest);
+                setSuccessOpen(true);
+              }}
+            />
+
             <RequestMaterialModel
               open={openRequestModel}
               onClose={() => setRequestModel(false)}
-              onCreate={(newRequest) =>
-                setRequests((prev) => [newRequest, ...prev])
-              }
+              onCreate={(newRequest) => {
+                setSuccessTitle("Material Requested Successfully");
+                setPendingRequest(newRequest);
+                setSuccessOpen(true);
+              }}
+            />
+
+            <SuccessModal
+              open={successOpen}
+              title={successTitle}
+              onClose={() => {
+                setSuccessOpen(false);
+                if (pendingRequest) {
+                  setRequests((prev) => [pendingRequest, ...prev]);
+                  setPendingRequest(null);
+                }
+              }}
             />
           </div>
         </div>
@@ -325,7 +347,9 @@ export default function Materials() {
           open={openPhotoModel}
           requestId={selectedRequestId}
           onClose={() => {
+            setSuccessTitle("Photo Uploaded Successfully");
             setPhotoModel(false);
+            setSuccessOpen(true);
             setSelectedRequestId(null);
           }}
           onUpload={(file, requestId) => {

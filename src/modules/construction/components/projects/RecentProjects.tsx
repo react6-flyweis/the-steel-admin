@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -72,17 +71,16 @@ export default function RecentProjects({
   project,
   manager,
 }: any) {
-  const [search] = useState("");
+  // const
   const navigate = useNavigate();
   const getFilteredProjects = () => {
-    const today = dayjs();
+    // const today = dayjs();
 
     return projects.filter((p) => {
       const projectDate = dayjs(p.projectDate, "DD/MM/YYYY");
-      const daysDifference = today.diff(projectDate, "day");
+      // const daysDifference = today.diff(projectDate, "day");
 
-      // Always filter by month by default
-      const tabFilter = daysDifference <= 30;
+      // let tabFilter = true;
 
       const matchProject =
         project === "all" || p.code === project || p.name === project;
@@ -95,19 +93,16 @@ export default function RecentProjects({
       const matchEndDate =
         !endDate || projectDate.isSameOrBefore(endDate, "day");
 
-      const matchSearch = search
-        ? `${p.name} ${p.code} ${p.manager}`
-            .toLowerCase()
-            .includes(search.toLowerCase())
-        : true;
+      // const matchSearch = search
+      //   ? `${p.name} ${p.code} ${p.manager}`
+      //       .toLowerCase()
+      //       .includes(search.toLowerCase())
+      //   : true;
 
       return (
-        tabFilter &&
-        matchProject &&
-        matchManager &&
-        matchStartDate &&
-        matchEndDate &&
-        matchSearch
+        // tabFilter &&
+        matchProject && matchManager && matchStartDate && matchEndDate
+        // matchSearch
       );
     });
   };
@@ -127,6 +122,7 @@ export default function RecentProjects({
                 value={project}
                 onChange={setProject}
                 width="100%"
+                searchable
               />
             </div>
 
@@ -170,13 +166,14 @@ export default function RecentProjects({
                 value={manager}
                 onChange={setManager}
                 width="100%"
+                searchable
               />
             </div>
           </div>
         </LocalizationProvider>
       </div>
       <div
-        className="rounded-[8px] sm:p-6 p-3 border border-[#F3F4F6] bg-white
+        className="rounded-xl sm:p-6 p-3 border border-[#F3F4F6] bg-white
       shadow-[0px_2px_4px_-2px_rgba(0,0,0,0.1),_0px_4px_6px_-1px_rgba(0,0,0,0.1)]"
       >
         <div className="flex justify-between items-center pb-4 border-b border-[#E5E7EB]">

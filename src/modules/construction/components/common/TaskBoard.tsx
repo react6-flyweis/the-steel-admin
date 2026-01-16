@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import DailyLogModel from "../dailyLogModel";
 import NewTaskModel from "../newTaskModel";
 import RightCheckIcon from "../../assets/RightTickIcon";
+import SuccessModal from "./SuccessModal";
+import { useSearchParams } from "react-router";
 
 type TaskPriority = "High" | "Medium" | "Low";
 
@@ -86,7 +88,14 @@ export default function TaskBoard() {
   const [openDailyLogModel, setDailyLogModel] = useState(false);
   const [openNewTaskModel, setNewTaskModel] = useState(false);
   const [tasks, setTasks] = useState(initialTasks);
-  const [search] = useState("");
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [successTitle, setSuccessTitle] = useState("");
+  const [afterSuccessAction, setAfterSuccessAction] = useState<
+    (() => void) | null
+  >(null);
+
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const filterTasksBySearch = (list: Task[]) => {
     if (!search.trim()) return list;
 
@@ -105,14 +114,14 @@ export default function TaskBoard() {
 
   const handleNewTask = (data: any) => {
     const newTask: Task = {
-      id: Date.now().toString(), // simple unique id
+      id: Date.now().toString(),
       title: data.taskName,
       project: data.project,
       description: data.description,
       priority: capitalizeFirstLetter(data.priority) as TaskPriority,
       due: data.deadline || "NA",
       assignee: data.assignedTo,
-      status: data.status, // todo / inProgress / done
+      status: data.status,
     };
 
     setTasks((prev) => {
@@ -128,18 +137,18 @@ export default function TaskBoard() {
   const handleDailyLogSubmit = (data: any) => {
     const newTask: Task = {
       id: Date.now().toString(),
-      title: data.task, // Task name
-      project: data.project, // Project
-      description: data.description, // Work description
-      progress: Number(data.progress), // % progress
-      priority: "Medium", // default
-      due: "NA", // In progress task
-      assignee: "You", // current user
+      title: data.task,
+      project: data.project,
+      description: data.description,
+      progress: Number(data.progress),
+      priority: "Medium",
+      due: "NA",
+      assignee: "You",
     };
 
     setTasks((prev) => ({
       ...prev,
-      inProgress: [newTask, ...prev.inProgress], // 🔥 sirf inProgress
+      inProgress: [newTask, ...prev.inProgress],
     }));
   };
 
@@ -168,14 +177,38 @@ export default function TaskBoard() {
             open={openDailyLogModel}
             onClose={() => setDailyLogModel(false)}
             onSubmit={(data) => {
-              handleDailyLogSubmit(data);
+              setAfterSuccessAction(() => () => {
+                handleDailyLogSubmit(data);
+                setDailyLogModel(false);
+              });
+              setSuccessTitle("Work Log Added Successfully");
+              setSuccessOpen(true);
             }}
           />
 
           <NewTaskModel
             open={openNewTaskModel}
-            onSubmit={handleNewTask}
+            onSubmit={(data) => {
+              setAfterSuccessAction(() => () => {
+                handleNewTask(data);
+                setNewTaskModel(false);
+              });
+              setSuccessTitle("Task Added Successfully");
+              setSuccessOpen(true);
+            }}
             onClose={() => setNewTaskModel(false)}
+          />
+
+          <SuccessModal
+            open={successOpen}
+            title={successTitle}
+            onClose={() => {
+              setSuccessOpen(false);
+              if (afterSuccessAction) {
+                afterSuccessAction();
+                setAfterSuccessAction(null);
+              }
+            }}
           />
         </div>
       </div>

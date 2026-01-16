@@ -6,6 +6,8 @@ import EyeIcon from "../assets/EyeIcon.svg";
 import DownloadIcon from "../assets/downloadicon.svg";
 import DrawingModel from "../components/drawingModel";
 import DrawingPreviewModal from "../components/drawingPreviewModel";
+import SuccessModal from "../components/common/SuccessModal";
+import { useSearchParams } from "react-router";
 const initialDummyProjects = [
   {
     name: "ABC Logistics Warehouse",
@@ -122,21 +124,38 @@ const statusStyle: Record<string, string> = {
 };
 
 export default function DrawingAttachment() {
-  const [openDrawingModel, setDrawingModel] = useState(false);
   const [openDrawingPreviewModel, setDrawingPreviewModel] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<UploadedFile | null>(null);
+  const [selectedFile, setSelectedFile] = useState<any>(null);
   const [selectedFileId, setSelectedFileId] = useState<string | null>(null);
-  const [search] = useState("");
+
+  const [searchParams] = useSearchParams();
+  const search = searchParams.get("search") || "";
   const [localSearch, setLocalSearch] = useState("");
   const [projects, setProjects] = useState<Project[]>(initialDummyProjects);
+  const [pendingData, setPendingData] = useState(null);
+  const [successOpen, setSuccessOpen] = useState(false);
+  const [openDrawingModel, setDrawingModel] = useState(false);
 
+  const onDrawingSubmit = (data: any) => {
+    setPendingData(data);
+    setDrawingModel(false);
+    setSuccessOpen(true);
+  };
+
+  const onSuccessClose = () => {
+    setSuccessOpen(false);
+
+    if (pendingData) {
+      handleUpload(pendingData);
+      setPendingData(null);
+    }
+  };
   const filteredProjects = projects
     .map((project) => {
       const query = `${search} ${localSearch}`.trim().toLowerCase();
 
       if (!query) return project;
 
-      // 🔹 project level match
       const projectMatch =
         project.name.toLowerCase().includes(query) ||
         project.code.toLowerCase().includes(query) ||
@@ -144,7 +163,6 @@ export default function DrawingAttachment() {
         project.location.toLowerCase().includes(query) ||
         project.updatedOn.toLowerCase().includes(query);
 
-      // 🔹 file level match
       const matchedFiles = project.files.filter((file) =>
         file.name.toLowerCase().includes(query)
       );
@@ -184,7 +202,6 @@ export default function DrawingAttachment() {
         (project) => project.code === projectCode
       );
 
-      // ✅ If project already exists → file add karo (top me)
       if (projectExists) {
         return prev.map((project) =>
           project.code === projectCode
@@ -197,7 +214,6 @@ export default function DrawingAttachment() {
         );
       }
 
-      // ✅ If new project → pura card upar add hoga
       const newProject: Project = {
         name: projectName,
         code: projectCode,
@@ -213,7 +229,7 @@ export default function DrawingAttachment() {
 
   return (
     <>
-      <div className="space-y-6 p-5">
+      <div className="space-y-6">
         <div className="mb-8">
           <h1 className="text-[#111827] lg:text-[30px] text-[24px] font-bold mb-2 leading-[36px]">
             Project Drawings
@@ -369,11 +385,16 @@ export default function DrawingAttachment() {
       </div>
       <DrawingModel
         open={openDrawingModel}
-        onSubmit={(data) => handleUpload(data)}
-        onClose={() => {
-          setDrawingModel(false);
-        }}
+        onSubmit={onDrawingSubmit}
+        onClose={() => setDrawingModel(false)}
       />
+
+      <SuccessModal
+        open={successOpen}
+        title="File Uploaded Successfully"
+        onClose={onSuccessClose}
+      />
+
       <DrawingPreviewModal
         open={openDrawingPreviewModel}
         fileId={selectedFileId ?? ""}

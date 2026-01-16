@@ -1,7 +1,7 @@
 import StatsOverview from "../components/cards/StatCard";
-import type { StatItem } from "../components/cards/StatCard";
+import type {StatItem} from "../components/cards/StatCard";
 import ProjectsTable from "../components/common/Table";
-import type { Project } from "../components/common/Table";
+import type {Project} from "../components/common/Table";
 import FolderIcon from "../assets/activeproject.svg";
 import MoneyIcon from "../assets/completionicon.svg";
 import BoxIcon from "../assets/pendingmaterialicon.svg";
@@ -97,19 +97,18 @@ const projectsData: Project[] = [
   },
 ];
 
+
 export default function Projects() {
   return (
-    <div className="space-y-6 p-5">
+    <div className="space-y-6">
       <div>
         <div className="mb-8">
-          <h1 className="text-[#111827] lg:text-[30px] text-[24px] font-bold mb-2 leading-[36px]">
-            Projects and Calendar
-          </h1>
-          <p className="text-[#4B5563] lg:text-[16px] text-[14px]">
-            Construction Department Performance
-          </p>
+            <h1 className="text-[#111827] lg:text-[30px] text-[24px] font-bold mb-2 leading-[36px]">Projects and Calendar</h1>
+            <p className="text-[#4B5563] lg:text-[16px] text-[14px]">Construction Department Performance</p>
         </div>
-        <StatsOverview stats={stats} />
+        <StatsOverview
+          stats={stats}
+        />
       </div>
       <ProjectsTable projects={projectsData} />
     </div>
