@@ -103,7 +103,7 @@ export default function SmartReminders() {
           </CardHeader>
 
           <CardContent>
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
               {reminders.map((reminder) => (
                 <Link
                   key={reminder.id}
