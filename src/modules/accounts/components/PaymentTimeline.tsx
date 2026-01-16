@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { TabType } from "../pages/Dashboard";
+import type { TabType } from "@/pages/Dashboard";
 
 interface TimelineStep {
   label: string;
@@ -54,90 +54,94 @@ const TimelineCard = ({ orderId, steps }: TimelineItemProps) => (
   </div>
 );
 
-const timelineStatsByFilter: Record<TabType, TimelineItemProps[]> = {
-  Today: [
-    {
-      orderId: "ORD-2024-001-ABC Industries",
-      steps: [
-        { label: "Deposit", amount: "$1,35,000", isCompleted: true },
-        { label: "Progress", amount: "$1,80,000", isCompleted: true },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-    {
-      orderId: "ORD-2024-002-Delta Corp",
-      steps: [
-        { label: "Deposit", amount: "$90,000", isCompleted: true },
-        { label: "Progress", amount: "$1,10,000", isCompleted: false },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-    {
-      orderId: "ORD-2024-003-Prime Solutions",
-      steps: [
-        { label: "Deposit", amount: "$1,10,000", isCompleted: true },
-        { label: "Progress", amount: "$75,000", isCompleted: false },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-  ],
+const timelineStatsByFilter: Record<
+ TabType,
+ TimelineItemProps[]
+> = {
+ today: [
+   {
+     orderId: "ORD-2024-001-ABC Industries",
+     steps: [
+       { label: "Deposit", amount: "$1,35,000", isCompleted: true },
+       { label: "Progress", amount: "$1,80,000", isCompleted: true },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+   {
+     orderId: "ORD-2024-002-Delta Corp",
+     steps: [
+       { label: "Deposit", amount: "$90,000", isCompleted: true },
+       { label: "Progress", amount: "$1,10,000", isCompleted: false },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+   {
+     orderId: "ORD-2024-003-Prime Solutions",
+     steps: [
+       { label: "Deposit", amount: "$1,10,000", isCompleted: true },
+       { label: "Progress", amount: "$75,000", isCompleted: false },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+ ],
 
-  Week: [
-    {
-      orderId: "ORD-2024-W01-ABC Industries",
-      steps: [
-        { label: "Deposit", amount: "$3,60,000", isCompleted: true },
-        { label: "Progress", amount: "$3,40,000", isCompleted: true },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-    {
-      orderId: "ORD-2024-W02-Delta Corp",
-      steps: [
-        { label: "Deposit", amount: "$2,40,000", isCompleted: true },
-        { label: "Progress", amount: "$2,10,000", isCompleted: true },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-    {
-      orderId: "ORD-2024-W03-Prime Solutions",
-      steps: [
-        { label: "Deposit", amount: "$2,10,000", isCompleted: true },
-        { label: "Progress", amount: "$1,90,000", isCompleted: false },
-        { label: "Final", amount: "0", isCompleted: false },
-      ],
-    },
-  ],
+ week: [
+   {
+     orderId: "ORD-2024-W01-ABC Industries",
+     steps: [
+       { label: "Deposit", amount: "$3,60,000", isCompleted: true },
+       { label: "Progress", amount: "$3,40,000", isCompleted: true },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+   {
+     orderId: "ORD-2024-W02-Delta Corp",
+     steps: [
+       { label: "Deposit", amount: "$2,40,000", isCompleted: true },
+       { label: "Progress", amount: "$2,10,000", isCompleted: true },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+   {
+     orderId: "ORD-2024-W03-Prime Solutions",
+     steps: [
+       { label: "Deposit", amount: "$2,10,000", isCompleted: true },
+       { label: "Progress", amount: "$1,90,000", isCompleted: false },
+       { label: "Final", amount: "0", isCompleted: false },
+     ],
+   },
+ ],
 
-  Month: [
-    {
-      orderId: "ORD-2024-M01-ABC Industries",
-      steps: [
-        { label: "Deposit", amount: "$12,40,000", isCompleted: true },
-        { label: "Progress", amount: "$11,60,000", isCompleted: true },
-        { label: "Final", amount: "$4,20,000", isCompleted: true },
-      ],
-    },
-    {
-      orderId: "ORD-2024-M02-Delta Corp",
-      steps: [
-        { label: "Deposit", amount: "$10,60,000", isCompleted: true },
-        { label: "Progress", amount: "$9,80,000", isCompleted: true },
-        { label: "Final", amount: "$3,20,000", isCompleted: true },
-      ],
-    },
-    {
-      orderId: "ORD-2024-M03-Prime Solutions",
-      steps: [
-        { label: "Deposit", amount: "$8,90,000", isCompleted: true },
-        { label: "Progress", amount: "$7,60,000", isCompleted: true },
-        { label: "Final", amount: "$2,40,000", isCompleted: true },
-      ],
-    },
-  ],
+ month: [
+   {
+     orderId: "ORD-2024-M01-ABC Industries",
+     steps: [
+       { label: "Deposit", amount: "$12,40,000", isCompleted: true },
+       { label: "Progress", amount: "$11,60,000", isCompleted: true },
+       { label: "Final", amount: "$4,20,000", isCompleted: true },
+     ],
+   },
+   {
+     orderId: "ORD-2024-M02-Delta Corp",
+     steps: [
+       { label: "Deposit", amount: "$10,60,000", isCompleted: true },
+       { label: "Progress", amount: "$9,80,000", isCompleted: true },
+       { label: "Final", amount: "$3,20,000", isCompleted: true },
+     ],
+   },
+   {
+     orderId: "ORD-2024-M03-Prime Solutions",
+     steps: [
+       { label: "Deposit", amount: "$8,90,000", isCompleted: true },
+       { label: "Progress", amount: "$7,60,000", isCompleted: true },
+       { label: "Final", amount: "$2,40,000", isCompleted: true },
+     ],
+   },
+ ],
 };
-export default function PaymentTimeline({ activeTab }: { activeTab: TabType }) {
-  const data = timelineStatsByFilter[activeTab];
+export default function PaymentTimeline({activeTab}:{activeTab:TabType}) {
+
+const data = timelineStatsByFilter[activeTab];
 
   return (
     <div className="bg-white rounded-md xl:p-6 p-4">

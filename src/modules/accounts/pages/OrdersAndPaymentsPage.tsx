@@ -3,14 +3,15 @@ import { ArrowDownToLine, Plus, Database } from "lucide-react";
 import FinanceStatCard from "../components/FinanceStatCard";
 import OrdersPaymentSummaryTable from "../components/OrdersPaymentSummaryTable";
 import PaymentTimeline from "../components/PaymentTimeline";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../components/common_components/TitleSubtitle";
 import { useState } from "react";
 import AddNewEntryModal from "../components/payments/NewEntryModal";
-import FilterTabs from "@/components/FilterTabs";
+import FilterTabs from "../components/common_components/FilterTabs";
 import type { TabType } from "./Dashboard";
+import SuccessModal from "../components/common_components/SuccessModal";
 
 export const financeStatsByFilter: any = {
-  Today: [
+  today: [
     {
       title: "Total Order Value",
       value: "$12,30,000",
@@ -41,7 +42,7 @@ export const financeStatsByFilter: any = {
     },
   ],
 
-  Week: [
+  week: [
     {
       title: "Total Order Value",
       value: "$58,90,000",
@@ -72,7 +73,7 @@ export const financeStatsByFilter: any = {
     },
   ],
 
-  Month: [
+  month: [
     {
       title: "Total Order Value",
       value: "$2,42,80,000",
@@ -106,7 +107,9 @@ export const financeStatsByFilter: any = {
 
 const OrdersAndPaymentsPage = () => {
   const [isAddNewEntryModalOpen, setIsAddNewEntryModalOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<TabType>("Today");
+  const [activeTab, setActiveTab] = useState<TabType>("today");
+  const [modalTitle, setModalTitle] = useState("");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const handleAddNewEntryModalOpen = () => {
     setIsAddNewEntryModalOpen(true);
@@ -120,7 +123,7 @@ const OrdersAndPaymentsPage = () => {
 
   return (
     <div className="xl:px-0 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10">
         <TitleSubtitle
           title="Orders & Payments"
@@ -128,6 +131,10 @@ const OrdersAndPaymentsPage = () => {
         />
         <div className="flex flex-wrap items-stretch sm:items-center gap-3 w-fit xl:w-auto ml-auto">
           <Button
+            onClick={() => {
+              setModalTitle("Report Exported Successfully");
+              setIsSuccessModalOpen(true);
+            }}
             variant={"outline"}
             className="bg-[#FFFFFF] hover:bg-[#FFFFFF] text-[#434C5B] rounded-lg h-10 px-4 gap-2 md:text-sm text-xs font-regular w-fit sm:w-auto border border-[#D5D8DE]"
           >
@@ -161,6 +168,16 @@ const OrdersAndPaymentsPage = () => {
       <AddNewEntryModal
         isOpen={isAddNewEntryModalOpen}
         onClose={handleAddNewEntryModalClose}
+        onSave={() => {
+          handleAddNewEntryModalClose();
+          setModalTitle("Entry Added Successfully");
+          setIsSuccessModalOpen(true);
+        }}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
       />
     </div>
   );

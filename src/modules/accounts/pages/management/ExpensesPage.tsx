@@ -1,14 +1,17 @@
 import { DollarSign, Info } from "lucide-react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../../components/common_components/TitleSubtitle";
 import ExpenseRecordsCard from "../../components/management/ExpenseRecordsCard";
 import BudgetVsActualCard from "../../components/management/BudgetVsActualCard";
 import BudgetAlertCard from "../../components/management/BudgetAlertCard";
 import AddExpenseModal from "../../components/management/AddExpenseModal";
 import { useState } from "react";
 import SummaryCard from "../../components/management/SummaryCard";
+import SuccessModal from "../../components/common_components/SuccessModal";
 
 const ExpensesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
 
@@ -24,7 +27,7 @@ const ExpensesPage = () => {
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         {/* Main Content - Expense Records */}
         <div className="xl:col-span-2 space-y-6">
-          <ExpenseRecordsCard onAddClick={openModal} activeTab="Month" />
+          <ExpenseRecordsCard onAddClick={openModal} activeTab="month" />
         </div>
 
         {/* Sidebar - Summary & Alerts */}
@@ -55,7 +58,20 @@ const ExpensesPage = () => {
           </p>
         </div>
       </div>
-      <AddExpenseModal isOpen={isModalOpen} onClose={closeModal} />
+      <AddExpenseModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={() => {
+          closeModal();
+          setModalTitle("Expense Added Successfully");
+          setIsSuccessModalOpen(true);
+        }}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

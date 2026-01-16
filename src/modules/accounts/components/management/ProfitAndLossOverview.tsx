@@ -238,7 +238,7 @@ export default function ProfitAndLossOverview() {
               <p className="text-sm font-medium text-blue-600 mb-1">
                 Total Revenue
               </p>
-              <p className="xl:text-2xl font-bold text-blue-900">$175,000</p>
+              <p className="xl:text-2xl font-normal text-blue-900">$175,000</p>
             </div>
           </div>
 
@@ -250,7 +250,7 @@ export default function ProfitAndLossOverview() {
               <p className="text-sm font-medium text-red-600 mb-1">
                 Total Expense
               </p>
-              <p className="xl:text-2xl font-bold text-red-900">$138,200</p>
+              <p className="xl:text-2xl font-normal text-red-900">$138,200</p>
             </div>
           </div>
 
@@ -260,7 +260,7 @@ export default function ProfitAndLossOverview() {
               <p className="text-sm font-medium text-green-600 mb-1">
                 Net Profit
               </p>
-              <p className="xl:text-2xl font-bold text-green-900">$36,800</p>
+              <p className="xl:text-2xl font-normal text-green-900">$36,800</p>
             </div>
           </div>
 
@@ -272,7 +272,7 @@ export default function ProfitAndLossOverview() {
               <p className="text-sm font-medium text-purple-600 mb-1">
                 Average Margin
               </p>
-              <p className="xl:text-2xl font-bold text-purple-900">16.9%</p>
+              <p className="xl:text-2xl font-normal text-purple-900">16.9%</p>
             </div>
           </div>
         </div>

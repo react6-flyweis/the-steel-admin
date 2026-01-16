@@ -1,14 +1,17 @@
 import { DollarSign, Info } from "lucide-react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../../components/common_components/TitleSubtitle";
 import BudgetVsActualCard from "../../components/management/BudgetVsActualCard";
 import BudgetAlertCard from "../../components/management/BudgetAlertCard";
 import AddExpenseModal from "../../components/management/AddExpenseModal";
 import { useState } from "react";
 import SummaryCard from "../../components/management/SummaryCard";
 import LaborExpenseRecordsCard from "../../components/management/LaborExpenseRecordsCard";
+import SuccessModal from "../../components/common_components/SuccessModal";
 
 const LaborExpensesPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
 
@@ -55,7 +58,20 @@ const LaborExpensesPage = () => {
           </p>
         </div>
       </div>
-      <AddExpenseModal isOpen={isModalOpen} onClose={closeModal} />
+      <AddExpenseModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={() => {
+          closeModal();
+          setModalTitle("Labor Expense Added Successfully");
+          setIsSuccessModalOpen(true);
+        }}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

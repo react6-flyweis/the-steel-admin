@@ -1,10 +1,10 @@
 // Mock data for the application
 
-import type { AnalysisCardsByFilterType } from "../components/AnalysisSection";
-import type { InvoiceByFilter } from "../components/InvoiceManagementTable";
-import type { OrderSummaryRecord } from "../components/OrdersPaymentSummaryTable";
-import type { ProjectsByFilter } from "../components/WorkInProgress";
-import type { TabType } from "../pages/Dashboard";
+import type { AnalysisCardsByFilterType } from "@/components/AnalysisSection";
+import type { InvoiceByFilter } from "@/components/InvoiceManagementTable";
+import type { OrderSummaryRecord } from "@/components/OrdersPaymentSummaryTable";
+import type { ProjectsByFilter } from "@/components/WorkInProgress";
+import type { TabType } from "@/pages/Dashboard";
 
 export const mockInventoryData = [
   {
@@ -588,198 +588,198 @@ export const mockCostAnalysisData = [
   },
 ];
 
-export const costAnalysisByFilter: Record<
-  TabType,
-  typeof mockCostAnalysisData
-> = {
-  Today: [
-    {
-      id: 1,
-      project: "HR Management System",
-      category: "Labour",
-      estimated: "$210,000",
-      actual: "$198,000",
-      variance: "-5.7%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "Human Resources",
-    },
-    {
-      id: 2,
-      project: "Marketing Automation Platform",
-      category: "Material",
-      estimated: "$125,000",
-      actual: "$135,000",
-      variance: "+8.0%",
-      varianceColor: "red",
-      date: "2026-01-12",
-      department: "Marketing",
-    },
-    {
-      id: 3,
-      project: "Quality Assurance Framework",
-      category: "Labour",
-      estimated: "$165,000",
-      actual: "$158,000",
-      variance: "-4.2%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "Quality Assurance",
-    },
-    {
-      id: 4,
-      project: "Customer Support Portal",
-      category: "Labour",
-      estimated: "$210,000",
-      actual: "$198,000",
-      variance: "-5.7%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "Customer Service",
-    },
-    {
-      id: 5,
-      project: "Sales Reporting Dashboard",
-      category: "Material",
-      estimated: "$125,000",
-      actual: "$135,000",
-      variance: "+8.0%",
-      varianceColor: "red",
-      date: "2026-01-12",
-      department: "Sales",
-    },
-    {
-      id: 6,
-      project: "Cloud Infrastructure Upgrade",
-      category: "Labour",
-      estimated: "$165,000",
-      actual: "$158,000",
-      variance: "-4.2%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "IT Operations",
-    },
-    {
-      id: 7,
-      project: "Mobile App Redesign",
-      category: "Labour",
-      estimated: "$210,000",
-      actual: "$198,000",
-      variance: "-5.7%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "Product Design",
-    },
-    {
-      id: 8,
-      project: "Data Warehouse Migration",
-      category: "Material",
-      estimated: "$125,000",
-      actual: "$135,000",
-      variance: "+8.0%",
-      varianceColor: "red",
-      date: "2026-01-12",
-      department: "Data Engineering",
-    },
-    {
-      id: 9,
-      project: "Cybersecurity Compliance Audit",
-      category: "Labour",
-      estimated: "$165,000",
-      actual: "$158,000",
-      variance: "-4.2%",
-      varianceColor: "green",
-      date: "2026-01-12",
-      department: "IT Security",
-    },
-  ],
+export const costAnalysisByFilter: Record<TabType, typeof mockCostAnalysisData> =
+  {
+    today: [
+  {
+    id: 1,
+    project: "HR Management System",
+    category: "Labour",
+    estimated: "$210,000",
+    actual: "$198,000",
+    variance: "-5.7%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "Human Resources",
+  },
+  {
+    id: 2,
+    project: "Marketing Automation Platform",
+    category: "Material",
+    estimated: "$125,000",
+    actual: "$135,000",
+    variance: "+8.0%",
+    varianceColor: "red",
+    date: "2026-01-12",
+    department: "Marketing",
+  },
+  {
+    id: 3,
+    project: "Quality Assurance Framework",
+    category: "Labour",
+    estimated: "$165,000",
+    actual: "$158,000",
+    variance: "-4.2%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "Quality Assurance",
+  },
+  {
+    id: 4,
+    project: "Customer Support Portal",
+    category: "Labour",
+    estimated: "$210,000",
+    actual: "$198,000",
+    variance: "-5.7%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "Customer Service",
+  },
+  {
+    id: 5,
+    project: "Sales Reporting Dashboard",
+    category: "Material",
+    estimated: "$125,000",
+    actual: "$135,000",
+    variance: "+8.0%",
+    varianceColor: "red",
+    date: "2026-01-12",
+    department: "Sales",
+  },
+  {
+    id: 6,
+    project: "Cloud Infrastructure Upgrade",
+    category: "Labour",
+    estimated: "$165,000",
+    actual: "$158,000",
+    variance: "-4.2%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "IT Operations",
+  },
+  {
+    id: 7,
+    project: "Mobile App Redesign",
+    category: "Labour",
+    estimated: "$210,000",
+    actual: "$198,000",
+    variance: "-5.7%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "Product Design",
+  },
+  {
+    id: 8,
+    project: "Data Warehouse Migration",
+    category: "Material",
+    estimated: "$125,000",
+    actual: "$135,000",
+    variance: "+8.0%",
+    varianceColor: "red",
+    date: "2026-01-12",
+    department: "Data Engineering",
+  },
+  {
+    id: 9,
+    project: "Cybersecurity Compliance Audit",
+    category: "Labour",
+    estimated: "$165,000",
+    actual: "$158,000",
+    variance: "-4.2%",
+    varianceColor: "green",
+    date: "2026-01-12",
+    department: "IT Security",
+  },
+],
 
-  Week: [
-    {
-      id: 4,
-      project: "CRM System Integration",
-      category: "Material",
-      estimated: "$195,000",
-      actual: "$210,000",
-      variance: "+7.7%",
-      varianceColor: "red",
-      date: "2026-01-10",
-      department: "Sales",
-    },
-    {
-      id: 5,
-      project: "Warehouse Automation",
-      category: "Logistics",
-      estimated: "$450,000",
-      actual: "$425,000",
-      variance: "-5.6%",
-      varianceColor: "green",
-      date: "2026-01-09",
-      department: "Operations",
-    },
-    {
-      id: 6,
-      project: "E-commerce Platform Enhancement",
-      category: "Labour",
-      estimated: "$320,000",
-      actual: "$345,000",
-      variance: "+7.8%",
-      varianceColor: "red",
-      date: "2026-01-08",
-      department: "E-commerce",
-    },
-    {
-      id: 7,
-      project: "Security Infrastructure Upgrade",
-      category: "Material",
-      estimated: "$180,000",
-      actual: "$175,000",
-      variance: "-2.8%",
-      varianceColor: "green",
-      date: "2026-01-07",
-      department: "IT Security",
-    },
-  ],
+    week: [
+      {
+        id: 4,
+        project: "CRM System Integration",
+        category: "Material",
+        estimated: "$195,000",
+        actual: "$210,000",
+        variance: "+7.7%",
+        varianceColor: "red",
+        date: "2026-01-10",
+        department: "Sales",
+      },
+      {
+        id: 5,
+        project: "Warehouse Automation",
+        category: "Logistics",
+        estimated: "$450,000",
+        actual: "$425,000",
+        variance: "-5.6%",
+        varianceColor: "green",
+        date: "2026-01-09",
+        department: "Operations",
+      },
+      {
+        id: 6,
+        project: "E-commerce Platform Enhancement",
+        category: "Labour",
+        estimated: "$320,000",
+        actual: "$345,000",
+        variance: "+7.8%",
+        varianceColor: "red",
+        date: "2026-01-08",
+        department: "E-commerce",
+      },
+      {
+        id: 7,
+        project: "Security Infrastructure Upgrade",
+        category: "Material",
+        estimated: "$180,000",
+        actual: "$175,000",
+        variance: "-2.8%",
+        varianceColor: "green",
+        date: "2026-01-07",
+        department: "IT Security",
+      },
+    ],
 
-  Month: [
-    {
-      id: 8,
-      project: "Data Analytics Platform",
-      category: "Labour",
-      estimated: "$245,000",
-      actual: "$234,000",
-      variance: "-4.5%",
-      varianceColor: "green",
-      date: "2026-01-05",
-      department: "Business Intelligence",
-    },
-    {
-      id: 9,
-      project: "Customer Portal Redesign",
-      category: "Material",
-      estimated: "$238,000",
-      actual: "$267,000",
-      variance: "+12.2%",
-      varianceColor: "red",
-      date: "2026-01-03",
-      department: "Digital Marketing",
-    },
-    {
-      id: 10,
-      project: "Supply Chain Optimization",
-      category: "Logistics",
-      estimated: "$274,000",
-      actual: "$298,000",
-      variance: "+8.8%",
-      varianceColor: "red",
-      date: "2026-01-01",
-      department: "Operations",
-    },
-  ],
-} as const;
+    month: [
+      {
+        id: 8,
+        project: "Data Analytics Platform",
+        category: "Labour",
+        estimated: "$245,000",
+        actual: "$234,000",
+        variance: "-4.5%",
+        varianceColor: "green",
+        date: "2026-01-05",
+        department: "Business Intelligence",
+      },
+      {
+        id: 9,
+        project: "Customer Portal Redesign",
+        category: "Material",
+        estimated: "$238,000",
+        actual: "$267,000",
+        variance: "+12.2%",
+        varianceColor: "red",
+        date: "2026-01-03",
+        department: "Digital Marketing",
+      },
+      {
+        id: 10,
+        project: "Supply Chain Optimization",
+        category: "Logistics",
+        estimated: "$274,000",
+        actual: "$298,000",
+        variance: "+8.8%",
+        varianceColor: "red",
+        date: "2026-01-01",
+        department: "Operations",
+      },
+    ],
+  } as const;
 
-export const AnalysisCardsByFilter: AnalysisCardsByFilterType = {
-  Today: [
+
+
+export const AnalysisCardsByFilter:AnalysisCardsByFilterType = {
+  today: [
     {
       label: "Total Order Value",
       value: "$12,30,000",
@@ -800,7 +800,7 @@ export const AnalysisCardsByFilter: AnalysisCardsByFilterType = {
     },
   ],
 
-  Week: [
+  week: [
     {
       label: "Total Order Value",
       value: "$58,90,000",
@@ -821,7 +821,7 @@ export const AnalysisCardsByFilter: AnalysisCardsByFilterType = {
     },
   ],
 
-  Month: [
+  month: [
     {
       label: "Total Order Value",
       value: "$2,42,80,000",
@@ -843,8 +843,9 @@ export const AnalysisCardsByFilter: AnalysisCardsByFilterType = {
   ],
 } as const;
 
+
 export const projectsByFilter: ProjectsByFilter = {
-  Today: [
+  today: [
     {
       name: "Residential Complex A",
       status: "In Progress",
@@ -871,7 +872,7 @@ export const projectsByFilter: ProjectsByFilter = {
     },
   ],
 
-  Week: [
+  week: [
     {
       name: "Residential Complex A",
       status: "In Progress",
@@ -898,7 +899,7 @@ export const projectsByFilter: ProjectsByFilter = {
     },
   ],
 
-  Month: [
+  month: [
     {
       name: "Residential Complex A",
       status: "Execution",
@@ -926,8 +927,9 @@ export const projectsByFilter: ProjectsByFilter = {
   ],
 };
 
+
 export const paymentStatsByFilter = {
-  Today: [
+  today: [
     {
       title: "Deposit Payments",
       percentage: "85.9%",
@@ -951,7 +953,7 @@ export const paymentStatsByFilter = {
     },
   ],
 
-  Week: [
+  week: [
     {
       title: "Deposit Payments",
       percentage: "78.4%",
@@ -975,7 +977,7 @@ export const paymentStatsByFilter = {
     },
   ],
 
-  Month: [
+  month: [
     {
       title: "Deposit Payments",
       percentage: "88.6%",
@@ -1000,8 +1002,9 @@ export const paymentStatsByFilter = {
   ],
 } as const;
 
+
 export const invoiceDataByFilter: InvoiceByFilter = {
-  Today: [
+  today: [
     {
       client: "John Doe",
       projectId: "Q-2025-1047",
@@ -1026,7 +1029,7 @@ export const invoiceDataByFilter: InvoiceByFilter = {
     },
   ],
 
-  Week: [
+  week: [
     {
       client: "John Doe",
       projectId: "Q-2025-1047",
@@ -1062,7 +1065,7 @@ export const invoiceDataByFilter: InvoiceByFilter = {
     },
   ],
 
-  Month: [
+  month: [
     {
       client: "John Doe",
       projectId: "Q-2025-1201",
@@ -1100,7 +1103,7 @@ export const invoiceDataByFilter: InvoiceByFilter = {
 };
 
 export const clientBreakdownByFilter: any = {
-  Today: [
+  today: [
     {
       company: "ABC Industries",
       totalInvoiced: "$3,45,000",
@@ -1133,7 +1136,7 @@ export const clientBreakdownByFilter: any = {
     },
   ],
 
-  Week: [
+  week: [
     {
       company: "ABC Industries",
       totalInvoiced: "$12,80,000",
@@ -1166,7 +1169,7 @@ export const clientBreakdownByFilter: any = {
     },
   ],
 
-  Month: [
+  month: [
     {
       company: "ABC Industries",
       totalInvoiced: "$42,60,000",
@@ -1200,8 +1203,11 @@ export const clientBreakdownByFilter: any = {
   ],
 };
 
-export const orderSummaryByFilter: Record<TabType, OrderSummaryRecord[]> = {
-  Today: [
+export const orderSummaryByFilter: Record<
+  TabType,
+  OrderSummaryRecord[]
+> = {
+  today: [
     {
       client: "John Doe",
       projectId: "Q-2025-1047",
@@ -1246,7 +1252,7 @@ export const orderSummaryByFilter: Record<TabType, OrderSummaryRecord[]> = {
     },
   ],
 
-  Week: [
+  week: [
     {
       client: "Michael Brown",
       projectId: "Q-2025-1047",
@@ -1305,7 +1311,7 @@ export const orderSummaryByFilter: Record<TabType, OrderSummaryRecord[]> = {
     },
   ],
 
-  Month: [
+  month: [
     {
       client: "John Doe",
       projectId: "Q-2025-1047",
@@ -1376,7 +1382,7 @@ export const orderSummaryByFilter: Record<TabType, OrderSummaryRecord[]> = {
       margin: "20.4%",
       status: "In progress",
     },
-    {
+      {
       client: "Michael Brown",
       projectId: "Q-2025-1064",
       location: "Retail Hub . Florida",
@@ -1393,6 +1399,9 @@ export const orderSummaryByFilter: Record<TabType, OrderSummaryRecord[]> = {
   ],
 };
 
+
+
+
 export const costBreakdownByFilter: Record<
   TabType,
   {
@@ -1403,7 +1412,7 @@ export const costBreakdownByFilter: Record<
     progress: number;
   }[]
 > = {
-  Today: [
+  today: [
     {
       label: "Labor Cost",
       value: "$120,000",
@@ -1427,7 +1436,7 @@ export const costBreakdownByFilter: Record<
     },
   ],
 
-  Week: [
+  week: [
     {
       label: "Labor Cost",
       value: "$420,000",
@@ -1451,7 +1460,7 @@ export const costBreakdownByFilter: Record<
     },
   ],
 
-  Month: [
+  month: [
     {
       label: "Labor Cost",
       value: "$1,010,000",

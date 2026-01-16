@@ -2,9 +2,9 @@ import { useState } from "react";
 import { Plus, Upload, List } from "lucide-react";
 import { useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import logo from "@/assets/steel-building-depot-logo.png";
-import AddClientIcon from "../assets/icon/AddClientIcon.svg";
+import Input from "@/components/ui/Input";
+import logo from "@/assets/logo.svg";
+import AddClientIcon from "@/assets/icon/AddClientIcon.svg";
 import AddClientModal from "../components/modals/AddClientModal";
 import UploadImageModal from "../components/modals/UploadImageModal";
 import ItemListModal from "../components/modals/ItemListModal";
@@ -13,6 +13,7 @@ import InvoiceActionModal from "../components/modals/InvoiceActionModal";
 import PaymentScheduleModal, {
   type PaymentEntry,
 } from "../components/modals/PaymentScheduleModal";
+import SuccessModal from "../components/common_components/SuccessModal";
 
 // Types
 interface InvoiceItem {
@@ -57,6 +58,8 @@ export default function NewInvoice() {
 
   const [isClientModalOpen, setIsClientModalOpen] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
   const [activeUploadItemId, setActiveUploadItemId] = useState<string | null>(
     null
   );
@@ -216,7 +219,13 @@ export default function NewInvoice() {
           </Button>
           <Button
             className="bg-[#2563EB] hover:bg-blue-700 text-white px-6"
-            onClick={() => navigate("/payments/invoice/preview")}
+            onClick={() => {
+              setModalTitle("Invoice Generated Successfully");
+              setIsSuccessModalOpen(true);
+              setTimeout(() => {
+                setIsSuccessModalOpen(false);
+              }, 3000);
+            }}
           >
             Save
           </Button>
@@ -691,6 +700,11 @@ export default function NewInvoice() {
         initialPayments={paymentSchedule.payments}
         initialUnit={paymentSchedule.unit}
         onDone={(payments, unit) => setPaymentSchedule({ payments, unit })}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
       />
     </div>
   );

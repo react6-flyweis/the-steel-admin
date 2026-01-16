@@ -6,9 +6,14 @@ import { vendors } from "../../data/mockData";
 interface AddNewTaxModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit?: () => void;
 }
 
-const AddNewTaxModal: React.FC<AddNewTaxModalProps> = ({ isOpen, onClose }) => {
+const AddNewTaxModal: React.FC<AddNewTaxModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+}) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -79,7 +84,7 @@ const AddNewTaxModal: React.FC<AddNewTaxModalProps> = ({ isOpen, onClose }) => {
               Cancel
             </button>
             <button
-              type="submit"
+              onClick={onSubmit}
               className="px-10 py-3 rounded-xl bg-[#2563EB] text-white font-normal hover:bg-blue-700 transition-colors shadow-sm"
             >
               Add

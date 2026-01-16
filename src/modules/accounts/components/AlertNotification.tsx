@@ -25,9 +25,12 @@ function AlertItem({ title, priority }: AlertItemProps) {
   };
 
   const style = priorityStyles[priority];
-
+  const navigate = useNavigate();
   return (
-    <div className={cn("p-4 rounded-xl mb-4 last:mb-0", style.bg)}>
+    <div
+      className={cn("p-4 rounded-xl mb-4 last:mb-0 cursor-pointer", style.bg)}
+      onClick={() => navigate("/payment_overview")}
+    >
       <h4 className="font-semibold text-gray-900 text-sm mb-3">{title}</h4>
       <Badge
         className={cn(

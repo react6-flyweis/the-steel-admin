@@ -15,13 +15,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartConfig } from "@/components/ui/chart";
-import type { TabType } from "../pages/Dashboard";
+import type { TabType } from "@/pages/Dashboard";
 
 export const chartDataByFilter: Record<
   TabType,
   { label: string; profit: number }[]
 > = {
-  Today: [
+  today: [
     { label: "9 AM", profit: 4_500 },
     { label: "11 AM", profit: 7_200 },
     { label: "1 PM", profit: 12_800 },
@@ -30,7 +30,7 @@ export const chartDataByFilter: Record<
     { label: "7 PM", profit: 11_900 },
   ],
 
-  Week: [
+  week: [
     { label: "Mon", profit: 45_000 },
     { label: "Tue", profit: 52_000 },
     { label: "Wed", profit: 48_000 },
@@ -40,7 +40,7 @@ export const chartDataByFilter: Record<
     { label: "Sun", profit: 85_000 },
   ],
 
-  Month: [
+  month: [
     { label: "Jan", profit: 45_000 },
     { label: "Feb", profit: 52_000 },
     { label: "Mar", profit: 48_000 },
@@ -65,9 +65,9 @@ const chartConfig = {
 
 const CustomLegend = ({ activeTab }: { activeTab: TabType }) => {
   const profitTitleMap: Record<TabType, string> = {
-    Today: "Today's Profit",
-    Week: "Weekly Profit",
-    Month: "Monthly Profit",
+    today: "Today's Profit",
+    week: "Weekly Profit",
+    month: "Monthly Profit",
   };
   return (
     <div className="flex justify-end gap-6 mb-4">

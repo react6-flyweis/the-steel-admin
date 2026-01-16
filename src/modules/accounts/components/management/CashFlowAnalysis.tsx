@@ -28,10 +28,10 @@ const barChartData = [
 ].reverse(); // Recharts renders bottom-up. Image shows Operations at top.
 
 const pieData = [
-  { name: "Vendor", value: 45, color: "#3B82F6" },
+  { name: "Vendor", value: 100, color: "#3B82F6" },
   { name: "Labour", value: 45, color: "#EF4444" },
-  { name: "Logistic", value: 45, color: "#F59E0B" },
-  { name: "Enance", value: 45, color: "#10B981" },
+  { name: "Logistic", value: 25, color: "#F59E0B" },
+  { name: "Enance", value: 25, color: "#10B981" },
 ];
 
 const tableRows = [
@@ -115,7 +115,7 @@ export default function CashFlowAnalysis() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:gap-6 md:gap-4 gap-2 mb-4">
-        <Card className="bg-emerald-50/50 border-none shadow-sm rounded-lg">
+        <Card className="bg-[#F0FDF4] border-none rounded-lg">
           <CardContent className="p-4 xl:p-6">
             <p className="text-sm font-medium text-gray-600 mb-2">
               Total inflows
@@ -123,7 +123,7 @@ export default function CashFlowAnalysis() {
             <p className="xl:text-2xl font-bold text-gray-900">$2,450,000</p>
           </CardContent>
         </Card>
-        <Card className="bg-red-50/30 border-none shadow-sm rounded-lg">
+        <Card className="bg-[#FEF2F2]border-none rounded-lg">
           <CardContent className="p-4 xl:p-6">
             <p className="text-sm font-medium text-gray-600 mb-2">
               Total Outflows
@@ -131,7 +131,7 @@ export default function CashFlowAnalysis() {
             <p className="xl:text-2xl font-bold text-gray-900">$1,680,000</p>
           </CardContent>
         </Card>
-        <Card className="bg-blue-50/50 border-none shadow-sm rounded-lg">
+        <Card className="bg-[#EFF6FF] border-none rounded-lg">
           <CardContent className="p-4 xl:p-6">
             <p className="text-sm font-medium text-gray-600 mb-2">
               net cash balance
@@ -139,7 +139,7 @@ export default function CashFlowAnalysis() {
             <p className="xl:text-2xl font-bold text-gray-900">$770,000</p>
           </CardContent>
         </Card>
-        <Card className="bg-orange-50/30 border-none shadow-sm rounded-lg">
+        <Card className="bg-[#FEF2F2] border-none rounded-lg">
           <CardContent className="p-4 xl:p-6">
             <p className="text-sm font-medium text-gray-600 mb-2">
               Variance vs last month
@@ -153,7 +153,7 @@ export default function CashFlowAnalysis() {
       <div className="grid grid-cols-1 lg:grid-cols-2 xl:gap-8 md:gap-6 gap-2">
         {/* Bar Chart */}
         <div>
-          <h4 className="md:text-base font-normal text-black mb-6">
+          <h4 className="md:text-base font-semibold text-black mb-6">
             Inflows vs outflows by department
           </h4>
           <div className="h-[300px] w-full">
@@ -164,12 +164,18 @@ export default function CashFlowAnalysis() {
                 margin={{ top: 10, right: 30, left: 40, bottom: 5 }}
               >
                 <CartesianGrid
-                  strokeDasharray="3 3"
+                  strokeDasharray="0"
                   horizontal={true}
                   vertical={true}
-                  stroke="#E5E7EB"
+                  stroke="#00000033"
                 />
-                <XAxis type="number" tickCount={7} domain={[0, 3]} />
+                <XAxis
+                  type="number"
+                  tickCount={7}
+                  domain={[-0.5, 3]}
+                  ticks={[0, 0.5, 1, 1.5, 2, 2.5, 3]}
+                  tickLine={false}
+                />
                 <YAxis
                   dataKey="name"
                   type="category"
@@ -205,7 +211,7 @@ export default function CashFlowAnalysis() {
 
         {/* Pie Chart */}
         <div>
-          <h4 className="md:text-base font-normal text-black mb-6">
+          <h4 className="md:text-base font-semibold text-black mb-6">
             Expense Distribution by category
           </h4>
           <div className="h-[300px] w-full flex items-center justify-center">

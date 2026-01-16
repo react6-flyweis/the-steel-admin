@@ -15,13 +15,13 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import type { ChartConfig } from "@/components/ui/chart";
-import type { TabType } from "../pages/Dashboard";
+import type { TabType } from "@/pages/Dashboard";
 
 export const projectCostChartByFilter: Record<
   TabType,
   { project: string; estimated: number; actual: number }[]
 > = {
-  Today: [
+  today: [
     { project: "Project A", estimated: 8_500, actual: 9_200 },
     { project: "Project B", estimated: 6_500, actual: 5_800 },
     { project: "Project C", estimated: 12_000, actual: 13_500 },
@@ -29,7 +29,7 @@ export const projectCostChartByFilter: Record<
     { project: "Project E", estimated: 7_500, actual: 8_200 },
   ],
 
-  Week: [
+  week: [
     { project: "Project A", estimated: 5_000, actual: 6_000 },
     { project: "Project B", estimated: 6_500, actual: 10_800 },
     { project: "Project C", estimated: 12_000, actual: 13_500 },
@@ -37,7 +37,7 @@ export const projectCostChartByFilter: Record<
     { project: "Project E", estimated: 7_500, actual: 8_200 },
   ],
 
-  Month: [
+  month: [
     { project: "Project A", estimated: 285_000, actual: 310_000 },
     { project: "Project B", estimated: 210_000, actual: 198_000 },
     { project: "Project C", estimated: 420_000, actual: 465_000 },

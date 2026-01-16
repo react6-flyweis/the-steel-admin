@@ -5,7 +5,7 @@ import {
   Trophy,
   ArrowDown,
 } from "lucide-react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../../components/common_components/TitleSubtitle";
 import FinanceStatCard from "../../components/FinanceStatCard";
 import ProjectProfitabilityCard from "../../components/ProjectProfitabilityCard";
 import { ProfitGrowthOverTimeChart } from "../../components/ProfitGrowthOverTimeChart";
@@ -15,13 +15,13 @@ import WipVsCompletedCard from "../../components/WipVsCompletedCard";
 import ProjectDataTable from "../../components/ProjectDataTable";
 import ProjectCostBreakdown from "../../components/ProjectCostBreakdown";
 import DolleIcon from "../../assets/icon/blueDollerIcon.svg";
-import FilterTabs from "@/components/FilterTabs";
+import FilterTabs from "../../components/common_components/FilterTabs";
 import { useState } from "react";
 import type { TabType } from "../Dashboard";
 import { costBreakdownByFilter } from "../../data/mockData";
 
 export const financeStatsByFilter = {
-  Today: [
+  today: [
     {
       title: "Total Project Value",
       value: "$12,30,000",
@@ -57,7 +57,7 @@ export const financeStatsByFilter = {
     },
   ],
 
-  Week: [
+  week: [
     {
       title: "Total Project Value",
       value: "$58,90,000",
@@ -93,7 +93,7 @@ export const financeStatsByFilter = {
     },
   ],
 
-  Month: [
+  month: [
     {
       title: "Total Project Value",
       value: "$2,42,80,000",
@@ -131,11 +131,11 @@ export const financeStatsByFilter = {
 } as const;
 
 const WipProfitPage = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("Today");
+  const [activeTab, setActiveTab] = useState<TabType>("today");
   const stats = financeStatsByFilter[activeTab];
   return (
     <div className="xl:px-0 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0 sm:pr-10">
         <TitleSubtitle
           title="WIP Profit Dashboard"

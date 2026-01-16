@@ -6,11 +6,13 @@ import { vendors } from "../../data/mockData";
 interface AddExpenseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit?: () => void;
 }
 
 const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
   isOpen,
   onClose,
+  onSubmit,
 }) => {
   return (
     <Modal
@@ -83,7 +85,7 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
               Cancel
             </button>
             <button
-              type="submit"
+              onClick={onSubmit}
               className="px-10 py-3 rounded-xl bg-[#2563EB] text-white font-normal hover:bg-blue-700 transition-colors shadow-sm"
             >
               Add

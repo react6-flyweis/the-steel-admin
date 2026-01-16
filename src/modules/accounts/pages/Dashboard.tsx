@@ -3,6 +3,7 @@ import { WorkInProgress } from "../components/WorkInProgress";
 import { RevenueTrend } from "../components/RevenueTrend";
 import { ChevronDown, ChevronUp, RefreshCcw } from "lucide-react";
 import TitleSubtitle from "../components/common_components/TitleSubtitle";
+import { FinanceStatsGrid } from "../components/FinanceStatsGrid";
 import StorageIcon from "../assets/storageIcon.svg";
 import MoneyIcon from "../assets/money-bill-solid.svg";
 import ChartLineIcon from "../assets/chart-growth.svg";
@@ -15,11 +16,11 @@ import { WIPProfitTrend } from "../components/WIPProfitTrend";
 import { CostBreakdown } from "../components/CostBreakdown";
 import StatCard from "@/components/ui/stat-card";
 import { Button } from "@/components/ui/button";
+import FilterTabs from "../components/common_components/FilterTabs";
 import { useState } from "react";
-import FilterTabs from "@/components/FilterTabs";
 
 export const DashboardStatsByFilter = {
-  Today: [
+  today: [
     {
       title: "Total Revenue",
       value: "12",
@@ -31,6 +32,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#1D51A4]",
+      navigateTo: "/income",
     },
     {
       title: "Total Expenses",
@@ -39,6 +41,7 @@ export const DashboardStatsByFilter = {
         <img src={MoneyIcon} alt="breakdown" className="md:size-7 size-5 p-1" />
       ),
       color: "bg-[#3AB449]",
+      navigateTo: "/expenses",
     },
     {
       title: "Net Profit",
@@ -51,6 +54,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#F59E0B]",
+      navigateTo: "/wip_profit",
     },
     {
       title: "Outstanding Payments",
@@ -63,10 +67,11 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#FD8D5B]",
+      navigateTo: "/payment_overview",
     },
   ],
 
-  Week: [
+  week: [
     {
       title: "Total Revenue",
       value: "86",
@@ -78,6 +83,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#1D51A4]",
+      navigateTo: "/income",
     },
     {
       title: "Total Expenses",
@@ -86,6 +92,7 @@ export const DashboardStatsByFilter = {
         <img src={MoneyIcon} alt="breakdown" className="md:size-7 size-5 p-1" />
       ),
       color: "bg-[#3AB449]",
+      navigateTo: "/expenses",
     },
     {
       title: "Net Profit",
@@ -98,6 +105,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#F59E0B]",
+      navigateTo: "/wip_profit",
     },
     {
       title: "Outstanding Payments",
@@ -110,10 +118,11 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#FD8D5B]",
+      navigateTo: "/payment_overview",
     },
   ],
 
-  Month: [
+  month: [
     {
       title: "Total Revenue",
       value: "324",
@@ -125,6 +134,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#1D51A4]",
+      navigateTo: "/income",
     },
     {
       title: "Total Expenses",
@@ -133,6 +143,7 @@ export const DashboardStatsByFilter = {
         <img src={MoneyIcon} alt="breakdown" className="md:size-7 size-5 p-1" />
       ),
       color: "bg-[#3AB449]",
+      navigateTo: "/expenses",
     },
     {
       title: "Net Profit",
@@ -145,6 +156,7 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#F59E0B]",
+      navigateTo: "/wip_profit",
     },
     {
       title: "Outstanding Payments",
@@ -157,32 +169,34 @@ export const DashboardStatsByFilter = {
         />
       ),
       color: "bg-[#FD8D5B]",
+      navigateTo: "/payment_overview",
     },
   ],
 } as const;
 
-export type TabType = "Today" | "Week" | "Month";
+export type TabType = "today" | "week" | "month";
 
 const FinancePage = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("Today");
+  const [activeTab, setActiveTab] = useState<TabType>("today");
   const [isInvoiceOpen, setIsInvoiceOpen] = useState(true);
 
   return (
     <div className="xl:px-0 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <TitleSubtitle
         title="Financial Overview"
         subtitle="Monitor your business financial performance and key metrics"
       />
 
       <div className="grid grid-cols-2 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-5">
-        {DashboardStatsByFilter[activeTab as TabType].map((stat, index) => (
+        {DashboardStatsByFilter[activeTab].map((stat, index) => (
           <StatCard
             key={index}
             title={stat.title}
             value={stat.value}
             icon={stat.icon}
             color={stat.color}
+            navigateTo={stat.navigateTo}
           />
         ))}
       </div>
@@ -214,6 +228,7 @@ const FinancePage = () => {
         </div>
       </div>
 
+      {isInvoiceOpen && <FinanceStatsGrid activeTab={activeTab} />}
       <div className="pt-2">
         <AnalysisSection activeTab={activeTab} />
       </div>

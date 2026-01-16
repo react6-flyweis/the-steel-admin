@@ -6,11 +6,13 @@ import { status } from "../../data/mockData";
 interface AddNewEntryModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSave?: () => void;
 }
 
 const AddNewEntryModal: React.FC<AddNewEntryModalProps> = ({
   isOpen,
   onClose,
+  onSave,
 }) => {
   return (
     <Modal
@@ -92,7 +94,7 @@ const AddNewEntryModal: React.FC<AddNewEntryModalProps> = ({
               Cancel
             </button>
             <button
-              type="submit"
+              onClick={onSave}
               className="px-10 py-3 rounded-xl bg-[#2563EB] text-white font-normal hover:bg-blue-700 transition-colors shadow-sm"
             >
               Add

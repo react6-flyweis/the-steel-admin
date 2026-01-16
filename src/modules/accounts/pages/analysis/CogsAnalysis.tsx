@@ -1,5 +1,5 @@
 import { FileText, Funnel, FileX } from "lucide-react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../../components/common_components/TitleSubtitle";
 import { ProfitGrowthOverTimeChart } from "../../components/ProfitGrowthOverTimeChart";
 import TopHighestCostProjectsCard from "../../components/TopHighestCostProjectsCard";
 import ProjectsExceedingBudgetCard from "../../components/ProjectsExceedingBudgetCard";
@@ -10,13 +10,16 @@ import CogsAnalysisCard from "../../components/analytics/CogsAnalysisCard";
 import CogsStatsGrid from "../../components/analytics/CogsStatsGrid";
 import type { TabType } from "../Dashboard";
 import { useState } from "react";
-import FilterTabs from "@/components/FilterTabs";
+import FilterTabs from "../../components/common_components/FilterTabs";
+import SuccessModal from "../../components/common_components/SuccessModal";
 
 const CogsAnalysis = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("Today");
+  const [activeTab, setActiveTab] = useState<TabType>("today");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
   return (
     <div className="xl:px-0 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <div className="flex justify-between items-center flex-wrap gap-2 pr-0">
         <TitleSubtitle
           title="COGS Analysis"
@@ -26,6 +29,7 @@ const CogsAnalysis = () => {
           <Button
             variant="outline"
             className="text-gray-600 border-gray-200 bg-gray-50 h-9"
+            onClick={() => setActiveTab("month")}
           >
             <Funnel className="w-4 h-4 mr-2" />
             Filter Project
@@ -33,6 +37,10 @@ const CogsAnalysis = () => {
           <Button
             variant="outline"
             className="text-gray-600 border-gray-200 bg-gray-50 h-9 "
+            onClick={() => {
+              setModalTitle("Excel Exported Successfully");
+              setIsSuccessModalOpen(true);
+            }}
           >
             <FileX className="w-4 h-4 mr-2" />
             Export Excel
@@ -43,6 +51,10 @@ const CogsAnalysis = () => {
             bg-blue-600
             text-white
             h-9 font-normal"
+            onClick={() => {
+              setModalTitle("PDF Exported Successfully");
+              setIsSuccessModalOpen(true);
+            }}
           >
             <FileText className="w-4 h-4 mr-2" />
             Export PDF
@@ -65,6 +77,11 @@ const CogsAnalysis = () => {
       <div className="mb-6">
         <ProjectCostAnalysisTable activeTab={activeTab} />
       </div>
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

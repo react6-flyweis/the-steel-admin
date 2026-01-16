@@ -8,7 +8,7 @@ import { useNavigate } from "react-router";
 
 interface ProjectItemProps {
   name: string;
-  status: "In Progress" | "Planning" | "Execution" | "Completed";
+  status: "In Progress" | "Planning" | "Execution";
   margin: string;
   revenue: string;
   costs: string;
@@ -44,7 +44,6 @@ function ProjectItem({
     "In Progress": "bg-blue-50 text-blue-600 border-blue-100",
     Planning: "bg-orange-50 text-orange-600 border-orange-100",
     Execution: "bg-emerald-50 text-emerald-600 border-emerald-100",
-    Completed: "bg-green-50 text-green-600 border-green-100",
   };
 
   return (
@@ -109,12 +108,12 @@ export function WorkInProgress({ activeTab }: { activeTab: TabType }) {
       <SectionHeaderWithAction
         title="Work in progress - Profit Analysis"
         subtitle="Real time profitability tracking for active projects"
-        onActionClick={() => navigate("/payment_overview")}
+        onActionClick={() => navigate("/wip_profit")}
         showIcon={true}
       />
 
       <div className="space-y-4 overflow-y-auto border-t border-gray-300 pt-4">
-        {projects.map((project) => (
+        {projects.map((project: any) => (
           <ProjectItem
             key={project.name}
             name={project.name}

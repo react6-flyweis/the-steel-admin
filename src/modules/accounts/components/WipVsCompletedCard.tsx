@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { Clock } from "lucide-react";
-import type { TabType } from "../pages/Dashboard";
+import type { TabType } from "@/pages/Dashboard";
 
 interface WipVsCompletedCardProps {
   activeTab: TabType;
@@ -17,21 +17,21 @@ export const wipVsCompletedByFilter: Record<
     completedPercent: number;
   }
 > = {
-  Today: {
+  today: {
     totalWipValue: "$185,000",
     completedWork: "$92,000",
     completionRate: "49.7%",
     completedPercent: 49.7,
   },
 
-  Week: {
+  week: {
     totalWipValue: "$820,000",
     completedWork: "$564,000",
     completionRate: "68.7%",
     completedPercent: 68.7,
   },
 
-  Month: {
+  month: {
     totalWipValue: "$2,430,000",
     completedWork: "$1,668,000",
     completionRate: "68.6%",

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../../components/common_components/TitleSubtitle";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -8,23 +8,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+import Input from "../../components/common_components/Input";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Calendar,
-  Clock,
-  Check,
-  DollarSign,
-  Plus,
-  FileText,
-} from "lucide-react";
+import { Clock, Check, DollarSign, Plus, FileText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import AddNewTaxModal from "../../components/management/AddNewTaxModal";
 import { taxData } from "../../data/mockData";
-import Pagination from "@/components/Pagination";
+import Pagination from "../../components/common_components/Pagination";
+import SuccessModal from "../../components/common_components/SuccessModal";
 
 const TaxationPage = () => {
   const [isAddNewTaxModalOpen, setIsAddNewTaxModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
 
   const handleOpenAddNewTaxModal = () => {
     setIsAddNewTaxModalOpen(true);
@@ -46,7 +42,13 @@ const TaxationPage = () => {
         <div className="flex justify-between items-center flex-wrap">
           <h2 className="md:text-xl text-lg font-regular">Taxation</h2>
           <div className="flex gap-3">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white gap-2">
+            <Button
+              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+              onClick={() => {
+                setModalTitle("PDF Exported Successfully");
+                setIsSuccessModalOpen(true);
+              }}
+            >
               <FileText className="w-4 h-4" />
               Export PDF
             </Button>
@@ -68,11 +70,10 @@ const TaxationPage = () => {
               </label>
               <div className="relative">
                 <Input
-                  type="text"
+                  type="date"
                   placeholder="mm/dd/yyyy"
                   className="pl-3 pr-10 border-gray-200 h-9.5"
                 />
-                <Calendar className="absolute right-3 top-2.5 w-4 h-4 text-gray-500" />
               </div>
             </div>
             <div className="space-y-1.5">
@@ -172,10 +173,9 @@ const TaxationPage = () => {
             </table>
             <Pagination
               totalItems={2}
-              rowsPerPage={2}
+              itemsPerPage={2}
               currentPage={1}
               onPageChange={() => {}}
-              onRowsPerPageChange={() => {}}
             />
           </div>
         </div>
@@ -235,6 +235,16 @@ const TaxationPage = () => {
       <AddNewTaxModal
         isOpen={isAddNewTaxModalOpen}
         onClose={handleCloseAddNewTaxModal}
+        onSubmit={() => {
+          handleCloseAddNewTaxModal();
+          setModalTitle("Tax Added Successfully");
+          setIsSuccessModalOpen(true);
+        }}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
       />
     </div>
   );

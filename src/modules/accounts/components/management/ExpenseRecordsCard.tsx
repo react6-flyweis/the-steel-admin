@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import Input from "../../components/common_components/Input";
 import { cn } from "@/lib/utils";
 import SearchableSelect from "../common_components/SearchableSelect";
 import { vendors } from "../../data/mockData";
@@ -21,7 +21,7 @@ type ExpenseItem = {
 };
 
 const expenseDataByTab: Record<TabType, ExpenseItem[]> = {
-  Today: [
+  today: [
     {
       id: "EXP-001",
       category: "Vendor Payments",
@@ -42,7 +42,7 @@ const expenseDataByTab: Record<TabType, ExpenseItem[]> = {
     },
   ],
 
-  Week: [
+  week: [
     {
       id: "EXP-003",
       category: "Logistics",
@@ -72,7 +72,7 @@ const expenseDataByTab: Record<TabType, ExpenseItem[]> = {
     },
   ],
 
-  Month: [
+  month: [
     {
       id: "EXP-006",
       category: "Maintenance",

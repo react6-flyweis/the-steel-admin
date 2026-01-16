@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 import type { TabType } from "../pages/Dashboard";
-import dummyPDF from "../assets/dummy-pdf_2.pdf";
+import SuccessModal from "../components/common_components/SuccessModal";
 
 interface ProjectRow {
   id: number;
@@ -41,7 +41,7 @@ type SortDirection = "asc" | "desc";
 /* -------------------- DATA -------------------- */
 
 const projectTableByFilter: Record<TabType, ProjectRow[]> = {
-  Today: [
+  today: [
     {
       id: 1,
       name: "Downtown Office Complex",
@@ -66,7 +66,7 @@ const projectTableByFilter: Record<TabType, ProjectRow[]> = {
     },
   ],
 
-  Week: [
+  week: [
     {
       id: 1,
       name: "Shopping Mall Renovation",
@@ -102,7 +102,7 @@ const projectTableByFilter: Record<TabType, ProjectRow[]> = {
     },
   ],
 
-  Month: [
+  month: [
     {
       id: 1,
       name: "Hospital Wing",
@@ -141,6 +141,8 @@ const projectTableByFilter: Record<TabType, ProjectRow[]> = {
 
 export default function ProjectDataTable({ activeTab }: ProjectDataTableProps) {
   const [sortKey, setSortKey] = useState<SortKey | null>(null);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
 
   const rawProjects = projectTableByFilter[activeTab] ?? [];
@@ -219,23 +221,25 @@ export default function ProjectDataTable({ activeTab }: ProjectDataTableProps) {
             Refresh Data
           </Button>
           <Button
-            asChild
             variant="outline"
             className="text-gray-600 border-gray-200 hover:bg-gray-50 h-9"
+            onClick={() => {
+              setModalTitle("PDF Exported Successfully");
+              setIsSuccessModalOpen(true);
+            }}
           >
-            <a href={dummyPDF} download className="flex gap-2">
-              <FileText className="w-4 h-4 mr-2" />
-              Export PDF
-            </a>
+            <FileText className="w-4 h-4 mr-2" />
+            Export PDF
           </Button>
           <Button
-            asChild
+            onClick={() => {
+              setModalTitle("EXCEL Exported Successfully");
+              setIsSuccessModalOpen(true);
+            }}
             className="bg-blue-600 hover:bg-blue-700 text-white h-9"
           >
-            <a href={dummyPDF} download className="flex gap-2">
-              <FileSpreadsheet className="w-4 h-4 mr-2" />
-              Export Excel
-            </a>
+            <FileSpreadsheet className="w-4 h-4 mr-2" />
+            Export Excel
           </Button>
         </div>
       </div>
@@ -378,6 +382,12 @@ export default function ProjectDataTable({ activeTab }: ProjectDataTableProps) {
           </tbody>
         </table>
       </div>
+
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 }

@@ -1,4 +1,4 @@
-// import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/uibutton";
 
 // const Pagination = () => {
 //   return (
@@ -42,6 +42,7 @@
 // };
 
 // export default Pagination;
+
 import { Button } from "@/components/ui/button";
 
 interface PaginationProps {
