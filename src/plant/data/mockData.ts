@@ -1,6 +1,6 @@
 // Mock data for the application
 
-type TabType = "today" | "week" | "month";
+import type { TabType } from "@/pages/PlantPage";
 
 export const mockInventoryData = [
   {
@@ -170,6 +170,7 @@ export const flteredMockInventoryData: Record<
     },
   ],
 } as const;
+
 
 export const mockMachineUsageData = [
   {
@@ -396,6 +397,7 @@ export const filterMockMachineUsageData: Record<
     },
   ],
 } as const;
+
 
 export const mockEquipmentData = [
   {
@@ -705,6 +707,7 @@ export const mockBreakdownCases = [
     assignedTo: "PowerTech",
   },
 ];
+
 
 export const equipmentByFilter: Record<
   TabType,

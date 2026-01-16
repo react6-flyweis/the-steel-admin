@@ -63,7 +63,7 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
         <div className="flex items-start gap-4 flex-wrap">
           <button
             onClick={() => navigate(-1)}
-            className="flex items-center gap-2 px-4 py-2 bg-(--button-bg-primary-color) text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity text-sm font-medium"
           >
             <MoveLeft className="w-4 h-4" />
             <p className="font-normal">Back</p>
@@ -73,7 +73,7 @@ const ProfileView: React.FC<ProfileViewProps> = () => {
             subtitle="Update your personal information and security settings"
           />
         </div>
-        <button className="md:px-4 ml-auto md:mt-0 mt-4 py-2.5 bg-(--button-bg-primary-color) text-white rounded-lg hover:opacity-90 transition-opacity md:text-sm text-xs font-normal min-w-[128px] w-fit">
+        <button className="md:px-4 ml-auto md:mt-0 mt-4 py-2.5 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity md:text-sm text-xs font-normal min-w-[128px] w-fit">
           Save All Changes
         </button>
       </div>

@@ -4,8 +4,11 @@ import ReportBreakdownModal from "./ReportBreakdownModal";
 import LogMaintenanceModal from "./LogMaintenanceModal";
 import { mockServiceProviders } from "../../data/mockData";
 import { FilePlus, FileX, Funnel } from "lucide-react";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../common_component/TitleSubtitle";
 import AddServiceProviderModal from "./AddServiceProviderModal";
+import FilterTabs from "../common_component/FilterTabs";
+import type { TabType } from "@/pages/PlantPage";
+import SuccessModal from "../common_component/SuccessModal";
 
 export type ServiceProvider = {
   id: number;
@@ -16,6 +19,7 @@ export type ServiceProvider = {
   avgCost: string;
   lastService: string;
 };
+
 const renderStars = (rating: number) => (
   <div className="flex items-center gap-0.5">
     {[...Array(5)].map((_, index) => (
@@ -37,6 +41,7 @@ const renderStars = (rating: number) => (
     ))}
   </div>
 );
+
 export const serviceProviderColumns: Column<ServiceProvider>[] = [
   {
     header: "Provider Name",
@@ -79,38 +84,48 @@ export const serviceProviderColumns: Column<ServiceProvider>[] = [
       ),
   },
 ];
+
+const serviceProvidersByFilter: Record<TabType, ServiceProvider[]> = {
+  today: mockServiceProviders.slice(0, 3),
+  week: mockServiceProviders.slice(0, 6),
+  month: mockServiceProviders,
+};
+
 const ServiceProvidersView = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("month");
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
   const [isLogModalOpen, setIsLogModalOpen] = useState(false);
   const [isServiceProviderModalOpen, setIsServiceProviderModalOpen] =
     useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
 
-  const openReportModal = () => {
-    setIsReportModalOpen(true);
-  };
-
-  const openLogModal = () => {
-    setIsLogModalOpen(true);
-  };
-
-  const openServiceProviderModal = () => {
-    setIsServiceProviderModalOpen(true);
-  };
+  const openReportModal = () => setIsReportModalOpen(true);
+  const openLogModal = () => setIsLogModalOpen(true);
+  const openServiceProviderModal = () => setIsServiceProviderModalOpen(true);
 
   const closeReportModal = () => {
     setIsReportModalOpen(false);
+    setIsSuccessModalOpen(true);
+    setModalTitle("Report Breakdown Added Successfully");
   };
-
   const closeLogModal = () => {
     setIsLogModalOpen(false);
+    setIsSuccessModalOpen(true);
+    setModalTitle("Log Maintenance Added Successfully");
   };
-
   const closeServiceProviderModal = () => {
     setIsServiceProviderModalOpen(false);
+    setIsSuccessModalOpen(true);
+    setModalTitle("Service Provider Added Successfully");
   };
 
+  const tableData = serviceProvidersByFilter[activeTab];
+
   return (
-    <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:pr-5 px-2 pb-10 space-y-6">
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
+
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
         <TitleSubtitle
           title="Service Providers"
@@ -145,7 +160,7 @@ const ServiceProvidersView = () => {
       <Table
         title="Service Provider Table"
         columns={serviceProviderColumns}
-        data={mockServiceProviders}
+        data={tableData}
         pagination={true}
         actions={
           <div className="flex gap-2 flex-wrap mt-2 md:mt-0 justify-end ml-auto">
@@ -164,15 +179,27 @@ const ServiceProvidersView = () => {
           </div>
         }
       />
+
       <AddServiceProviderModal
         isOpen={isServiceProviderModalOpen}
         onClose={closeServiceProviderModal}
+        onSubmit={closeServiceProviderModal}
       />
       <ReportBreakdownModal
         isOpen={isReportModalOpen}
         onClose={closeReportModal}
+        onSubmit={closeReportModal}
       />
-      <LogMaintenanceModal isOpen={isLogModalOpen} onClose={closeLogModal} />
+      <LogMaintenanceModal
+        isOpen={isLogModalOpen}
+        onClose={closeLogModal}
+        onSubmit={closeLogModal}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

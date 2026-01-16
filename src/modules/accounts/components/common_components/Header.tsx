@@ -88,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle }) => {
         </div>
         <div className="relative" ref={profileRef}>
           <button
-            className="text-gray-500 hover:text-gray-700 relative focus:outline-none bg-(--button-bg-primary-color) rounded-full p-2"
+            className="text-gray-500 hover:text-gray-700 relative focus:outline-none bg-primary rounded-full p-2"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
           >
             <svg

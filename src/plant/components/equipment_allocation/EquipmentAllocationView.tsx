@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Table, { type Column } from "../Table";
 import { equipment_status_data } from "./mockData";
 import HammerIcon from "../../assets/hammerIcon.svg";
@@ -8,70 +8,201 @@ import SalmonGraphIcon from "../../assets/salmonGraphIcon.svg";
 import StatCard from "@/components/ui/stat-card";
 import CreateTransferReqModal from "./CreateTransferReqModal";
 import AssignEquipmentModal from "./AssignEquipmentModal";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import TitleSubtitle from "../common_component/TitleSubtitle";
 import TableActionButtons from "../common_component/TableActionButtons";
+import FilterTabs from "../common_component/FilterTabs";
+import type { TabType } from "@/pages/PlantPage";
+import SuccessModal from "../common_component/SuccessModal";
 
-export const equipmentStats = [
+const equipmentByFilter: Record<TabType, typeof equipment_status_data> = {
+  today: equipment_status_data.slice(0, 3),
+  week: equipment_status_data.slice(0, 6),
+  month: equipment_status_data,
+};
+
+const equipmentStatsByFilter: Record<
+  TabType,
   {
-    title: "Total Equipment",
-    value: "12 units",
-    icon: (
-      <img
-        src={HammerIcon}
-        alt="total-maintenance"
-        className="md:size-7 size-5 p-[2px] "
-      />
-    ),
-    color: "bg-[#1D51A4]",
-  },
-  {
-    title: "Allocated to Sites:",
-    value: "42",
-    icon: (
-      <img
-        src={CheckedShieldIcon}
-        alt="breakdown"
-        className="md:size-7 size-5 p-[2px]"
-      />
-    ),
-    color: "bg-[#3AB449]",
-  },
-  {
-    title: "Available at Yard:",
-    value: "74",
-    icon: (
-      <img
-        src={YellowDollerIcon}
-        alt="due-maintenance"
-        className="md:size-7 size-4 p-1"
-      />
-    ),
-    color: "bg-[#F59E0B]",
-  },
-  {
-    title: "Under Transfer:",
-    value: "12",
-    icon: (
-      <img
-        src={SalmonGraphIcon}
-        alt="under-maintenance"
-        className="md:size-7 size-5 p-[2px]"
-      />
-    ),
-    color: "bg-[#FD8D5B]",
-  },
-];
+    title: string;
+    value: string;
+    icon: any;
+    color: string;
+  }[]
+> = {
+  today: [
+    {
+      title: "Total Equipment",
+      value: "3 units",
+      icon: (
+        <img
+          src={HammerIcon}
+          alt="total-maintenance"
+          className="md:size-7 size-5 p-[2px] "
+        />
+      ),
+      color: "bg-[#1D51A4]",
+    },
+    {
+      title: "Allocated to Sites:",
+      value: "1",
+      icon: (
+        <img
+          src={CheckedShieldIcon}
+          alt="breakdown"
+          className="md:size-7 size-5 p-[2px]"
+        />
+      ),
+      color: "bg-[#3AB449]",
+    },
+    {
+      title: "Available at Yard:",
+      value: "1",
+      icon: (
+        <img
+          src={YellowDollerIcon}
+          alt="due-maintenance"
+          className="md:size-7 size-4 p-1"
+        />
+      ),
+      color: "bg-[#F59E0B]",
+    },
+    {
+      title: "Under Transfer:",
+      value: "1",
+      icon: (
+        <img
+          src={SalmonGraphIcon}
+          alt="under-maintenance"
+          className="md:size-4 size-3"
+        />
+      ),
+      color: "bg-[#FD8D5B]",
+    },
+  ],
+  week: [
+    {
+      title: "Total Equipment",
+      value: "6 units",
+      icon: (
+        <img
+          src={HammerIcon}
+          alt="total-maintenance"
+          className="md:size-7 size-5 p-[2px] "
+        />
+      ),
+      color: "bg-[#1D51A4]",
+    },
+    {
+      title: "Allocated to Sites:",
+      value: "3",
+      icon: (
+        <img
+          src={CheckedShieldIcon}
+          alt="breakdown"
+          className="md:size-7 size-5 p-[2px]"
+        />
+      ),
+      color: "bg-[#3AB449]",
+    },
+    {
+      title: "Available at Yard:",
+      value: "2",
+      icon: (
+        <img
+          src={YellowDollerIcon}
+          alt="due-maintenance"
+          className="md:size-7 size-4 p-1"
+        />
+      ),
+      color: "bg-[#F59E0B]",
+    },
+    {
+      title: "Under Transfer:",
+      value: "1",
+      icon: (
+        <img
+          src={SalmonGraphIcon}
+          alt="under-maintenance"
+          className="md:size-4 size-3"
+        />
+      ),
+      color: "bg-[#FD8D5B]",
+    },
+  ],
+  month: [
+    {
+      title: "Total Equipment",
+      value: "12 units",
+      icon: (
+        <img
+          src={HammerIcon}
+          alt="total-maintenance"
+          className="md:size-7 size-5 p-[2px] "
+        />
+      ),
+      color: "bg-[#1D51A4]",
+    },
+    {
+      title: "Allocated to Sites:",
+      value: "42",
+      icon: (
+        <img
+          src={CheckedShieldIcon}
+          alt="breakdown"
+          className="md:size-7 size-5 p-[2px]"
+        />
+      ),
+      color: "bg-[#3AB449]",
+    },
+    {
+      title: "Available at Yard:",
+      value: "74",
+      icon: (
+        <img
+          src={YellowDollerIcon}
+          alt="due-maintenance"
+          className="md:size-7 size-4 p-1"
+        />
+      ),
+      color: "bg-[#F59E0B]",
+    },
+    {
+      title: "Under Transfer:",
+      value: "12",
+      icon: (
+        <img
+          src={SalmonGraphIcon}
+          alt="under-maintenance"
+          className="md:size-4 size-3"
+        />
+      ),
+      color: "bg-[#FD8D5B]",
+    },
+  ],
+};
 
 const EquipmentAllocationView = () => {
+  const [activeTab, setActiveTab] = useState<TabType>("month");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isTransferModalOpen, setIsTransferModalOpen] = useState(false);
 
+  const [isCategoryFilterOn, setIsCategoryFilterOn] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+
   const closeTransferModal = () => {
     setIsTransferModalOpen(false);
+    setIsSuccessModalOpen(true);
+    setModalTitle("Transfer Request Created Successfully");
   };
-
   const closeModal = () => {
     setIsModalOpen(false);
+    setIsSuccessModalOpen(true);
+    setModalTitle("Equipment Assigned Successfully");
+  };
+
+  const toggleCategoryFilter = () => {
+    setIsCategoryFilterOn((prev) => !prev);
   };
 
   const columns: Column<(typeof equipment_status_data)[0]>[] = [
@@ -95,7 +226,6 @@ const EquipmentAllocationView = () => {
     },
     {
       header: "Usage",
-
       accessor: (row) => <span className="text-gray-800">{row.usage}</span>,
     },
     {
@@ -132,8 +262,20 @@ const EquipmentAllocationView = () => {
     },
   ];
 
+  const stats = equipmentStatsByFilter[activeTab];
+  const baseData = equipmentByFilter[activeTab];
+
+  const filteredData = useMemo(() => {
+    if (!isCategoryFilterOn) return baseData;
+
+    return baseData.filter((item) => item.category === "Heavy");
+  }, [baseData, isCategoryFilterOn]);
+
   return (
-    <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
+    <div className="xl:pr-5 px-2 pb-10 space-y-6">
+      {/* FILTER TABS */}
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
+
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
         <TitleSubtitle
           title="Equipment Allocation"
@@ -156,8 +298,9 @@ const EquipmentAllocationView = () => {
           </button>
         </div>
       </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-5">
-        {equipmentStats.map((stat, index) => (
+        {stats.map((stat, index) => (
           <StatCard
             key={index}
             title={stat.title}
@@ -170,15 +313,27 @@ const EquipmentAllocationView = () => {
       <Table
         title="EQUIPMENT LIST"
         columns={columns}
-        data={equipment_status_data}
+        data={filteredData}
         pagination={true}
-        actions={<TableActionButtons />}
+        actions={
+          <TableActionButtons onCickOfFilterButton={toggleCategoryFilter} />
+        }
       />
       <CreateTransferReqModal
         isOpen={isTransferModalOpen}
         onClose={closeTransferModal}
+        onSubmit={closeTransferModal}
       />
-      <AssignEquipmentModal isOpen={isModalOpen} onClose={closeModal} />
+      <AssignEquipmentModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={closeModal}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

@@ -5,16 +5,24 @@ import StatCard from "@/components/ui/stat-card";
 
 import TableActionButtons from "./common_component/TableActionButtons";
 import { equipmentByFilter } from "../data/mockData";
-import { DashboardStatsByFilter, icons, type TabType } from "../PlantPage";
-import FilterTabs from "@/components/FilterTabs";
-import TitleSubtitle from "@/components/TitleSubtitle";
+import {
+  DashboardStatsByFilter,
+  icons,
+  type TabType,
+} from "../pages/PlantPage";
+import FilterTabs from "./common_component/FilterTabs";
+import TitleSubtitle from "./common_component/TitleSubtitle";
+import { equipmenViewText } from "../data/text/EquipmenViewText";
+import SuccessModal from "./common_component/SuccessModal";
 
 const CATEGORY_SEQUENCE = ["Heavy", "Medium", "All"] as const;
 type CategoryFilter = (typeof CATEGORY_SEQUENCE)[number];
 const EquipmentView = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("All");
-  const [activeTab, setActiveTab] = useState<TabType>("Month");
+  const [activeTab, setActiveTab] = useState<TabType>("month");
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
 
   const openModal = () => {
     setIsModalOpen(true);
@@ -121,11 +129,11 @@ const EquipmentView = () => {
   const stats = DashboardStatsByFilter[activeTab];
   return (
     <div className="xl:pr-5 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <div className="flex items-center justify-between flex-wrap mt-1 mb-6">
         <TitleSubtitle
-          title="Equipment & Inventory"
-          subtitle="Here’s a summary of your ongoing steel building projects."
+          title={equipmenViewText.header.title}
+          subtitle={equipmenViewText.header.subtitle}
         />
         <button
           onClick={openModal}
@@ -156,7 +164,20 @@ const EquipmentView = () => {
           <TableActionButtons onCickOfFilterButton={handleToggleFilter} />
         }
       />
-      <AddEquipmentModal isOpen={isModalOpen} onClose={closeModal} />
+      <AddEquipmentModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSubmit={() => {
+          closeModal();
+          setIsSuccessModalOpen(true);
+          setModalTitle("Equipment Added Successfully");
+        }}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={() => setIsSuccessModalOpen(false)}
+        title={modalTitle}
+      />
     </div>
   );
 };

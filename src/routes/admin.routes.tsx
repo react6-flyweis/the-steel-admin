@@ -143,7 +143,7 @@ const TransferRequestsView = lazy(
 const UsageTrackingView = lazy(
   () => import("@/plant/components/equipment_allocation/UsageTrackingView")
 );
-const PlantDashboard = lazy(() => import("@/plant/PlantPage"));
+const PlantDashboard = lazy(() => import("@/plant/pages/PlantPage"));
 
 // Financial Accounts section
 

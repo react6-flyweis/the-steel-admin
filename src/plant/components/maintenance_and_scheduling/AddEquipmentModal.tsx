@@ -4,11 +4,13 @@ import Modal from "../Modal";
 interface AddEquipmentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onSubmit: () => void;
 }
 
 const AddEquipmentModal: React.FC<AddEquipmentModalProps> = ({
   isOpen,
   onClose,
+  onSubmit,
 }) => {
   return (
     <Modal
@@ -160,7 +162,7 @@ const AddEquipmentModal: React.FC<AddEquipmentModalProps> = ({
             Cancel
           </button>
           <button
-            type="submit"
+            onClick={onSubmit}
             className="px-6 py-2.5 rounded-lg bg-primary text-white font-medium hover:opacity-90 transition-colors shadow-sm"
           >
             Add Material

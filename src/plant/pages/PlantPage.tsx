@@ -1,260 +1,28 @@
 import StatCard from "@/components/ui/stat-card";
-import DashboardWidgets from "./components/DashboardWidgets";
-import InventoryTable from "./components/InventoryTable";
-import KPICard from "./components/KPICard";
-import type { Column } from "./components/Table";
-import HammerIcon from "./assets/hammerIcon.svg";
-import CheckedShieldIcon from "./assets/checkedShieldIcon.svg";
-import YellowDollerIcon from "./assets/yellowDollerIcon.svg";
-import SalmonGraphIcon from "./assets/salmonGraphIcon.svg";
-import ProfitIcon from "./assets/ProfitIcon.svg";
-import HashIcon from "./assets/hashIcon.svg";
-import InvoiceDueIcon from "./assets/InvoiceDueIcon.svg";
-import ExpensesIcon from "./assets/ExpensesIcon.svg";
+import DashboardWidgets from "../components/DashboardWidgets";
+import InventoryTable from "../components/InventoryTable";
+import KPICard from "../components/KPICard";
+import type { Column } from "../components/Table";
+import {
+  flteredMockInventoryData,
+  mockInventoryData,
+  mockMachineUsageData,
+} from "../data/mockData";
+import HammerIcon from "../assets/hammerIcon.svg";
+import CheckedShieldIcon from "../assets/checkedShieldIcon.svg";
+import YellowDollerIcon from "../assets/yellowDollerIcon.svg";
+import SalmonGraphIcon from "../assets/salmonGraphIcon.svg";
+import ProfitIcon from "../assets/ProfitIcon.svg";
+import HashIcon from "../assets/HashIcon.svg";
+import InvoiceDueIcon from "../assets/InvoiceDueIcon.svg";
+import ExpensesIcon from "../assets/ExpensesIcon.svg";
+import TitleSubtitle from "../components/common_component/TitleSubtitle";
+import { dashboardText } from "../data/text/DashboardText";
+import FilterTabs from "../components/common_component/FilterTabs";
 import { useState } from "react";
 import { useNavigate } from "react-router";
-import FilterTabs from "@/components/FilterTabs";
-import TitleSubtitle from "@/components/TitleSubtitle";
 
-export type TabType = "Today" | "Week" | "Month";
-
-type MockInventoryItem = {
-  material: string;
-  currentStock: number;
-  unit: string;
-  minLevel: number;
-  status: string;
-  action: string;
-  actionType: string;
-};
-
-// const mockInventoryData = [
-//   {
-//     material: "Cement",
-//     currentStock: 230,
-//     unit: "Bags",
-//     minLevel: 300,
-//     status: "🔴 Low Stock",
-//     action: "Reorder",
-//     actionType: "secondary",
-//   },
-//   {
-//     material: "Steel Rod TMT 12mm",
-//     currentStock: 8.2,
-//     unit: "Tons",
-//     minLevel: 5,
-//     status: "🟢 OK",
-//     action: "View",
-//     actionType: "primary",
-//   },
-//   {
-//     material: "Aggregates 20mm",
-//     currentStock: 40,
-//     unit: "Tons",
-//     minLevel: 30,
-//     status: "🟢 OK",
-//     action: "View",
-//     actionType: "primary",
-//   },
-//   {
-//     material: "Bricks (Red Clay)",
-//     currentStock: 15000,
-//     unit: "Pieces",
-//     minLevel: 20000,
-//     status: "🔴 Low Stock",
-//     action: "Reorder",
-//     actionType: "secondary",
-//   },
-// ];
-
-const flteredMockInventoryData: Record<
-  TabType,
-  {
-    material: string;
-    currentStock: number;
-    unit: string;
-    minLevel: number;
-    status: string;
-    action: string;
-    actionType: string;
-  }[]
-> = {
-  Today: [
-    {
-      material: "Cement",
-      currentStock: 230,
-      unit: "Bags",
-      minLevel: 300,
-      status: "🔴 Low Stock",
-      action: "Reorder",
-      actionType: "secondary",
-    },
-    {
-      material: "Steel Rod TMT 12mm",
-      currentStock: 8.2,
-      unit: "Tons",
-      minLevel: 5,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Aggregates 20mm",
-      currentStock: 40,
-      unit: "Tons",
-      minLevel: 30,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Bricks (Red Clay)",
-      currentStock: 15000,
-      unit: "Pieces",
-      minLevel: 20000,
-      status: "🔴 Low Stock",
-      action: "Reorder",
-      actionType: "secondary",
-    },
-  ],
-
-  Week: [
-    {
-      material: "Cement",
-      currentStock: 180,
-      unit: "Bags",
-      minLevel: 300,
-      status: "🔴 Low Stock",
-      action: "Reorder",
-      actionType: "secondary",
-    },
-    {
-      material: "Steel Rod TMT 12mm",
-      currentStock: 6.5,
-      unit: "Tons",
-      minLevel: 5,
-      status: "🟡 Near Limit",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Aggregates 20mm",
-      currentStock: 28,
-      unit: "Tons",
-      minLevel: 30,
-      status: "🔴 Low Stock",
-      action: "Reorder",
-      actionType: "secondary",
-    },
-    {
-      material: "Bricks (Red Clay)",
-      currentStock: 12000,
-      unit: "Pieces",
-      minLevel: 20000,
-      status: "🔴 Low Stock",
-      action: "Reorder",
-      actionType: "secondary",
-    },
-  ],
-
-  Month: [
-    {
-      material: "Cement",
-      currentStock: 520,
-      unit: "Bags",
-      minLevel: 300,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Steel Rod TMT 12mm",
-      currentStock: 14.8,
-      unit: "Tons",
-      minLevel: 5,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Aggregates 20mm",
-      currentStock: 92,
-      unit: "Tons",
-      minLevel: 30,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-    {
-      material: "Bricks (Red Clay)",
-      currentStock: 42000,
-      unit: "Pieces",
-      minLevel: 20000,
-      status: "🟢 OK",
-      action: "View",
-      actionType: "primary",
-    },
-  ],
-} as const;
-
-const mockMachineUsageData = [
-  {
-    equipment: "Excavator CAT 320D",
-    type: "Heavy",
-    project: "Highway Bridge Project",
-    operator: "Mike Johnson",
-    hoursUsed: 156,
-    lastService: "05-Apr",
-    nextDue: "20-Apr",
-    priority: "High",
-    priorityColor: "bg-red-500",
-    status: "🟢 Active",
-    action: "Details",
-    actionType: "primary",
-  },
-  {
-    equipment: "Concrete Mixer 350L",
-    type: "Medium",
-    project: "Downtown Office Complex",
-    operator: "John Smith",
-    hoursUsed: 42,
-    lastService: "12-Apr",
-    nextDue: "26-Apr",
-    priority: "Scheduled",
-    priorityColor: "bg-yellow-500",
-    status: "🟢 Active",
-    action: "Details",
-    actionType: "primary",
-  },
-  {
-    equipment: "Tower Crane TC5613",
-    type: "Heavy",
-    project: "City Mall Renovation",
-    operator: "Sarah Williams",
-    hoursUsed: 89,
-    lastService: "18-Apr",
-    nextDue: "02-May",
-    priority: "Low",
-    priorityColor: "bg-green-500",
-    status: "🟡 Maintenance",
-    action: "Details",
-    actionType: "primary",
-  },
-  {
-    equipment: "Bulldozer D8T",
-    type: "Heavy",
-    project: "Industrial Park",
-    operator: "Robert Brown",
-    hoursUsed: 120,
-    lastService: "22-Apr",
-    nextDue: "06-May",
-    priority: "Scheduled",
-    priorityColor: "bg-yellow-500",
-    status: "🟢 Active",
-    action: "Details",
-    actionType: "primary",
-  },
-];
+export type TabType = "today" | "week" | "month";
 
 export const DashboardStatsByFilter: Record<
   TabType,
@@ -263,31 +31,31 @@ export const DashboardStatsByFilter: Record<
     value: string;
   }[]
 > = {
-  Today: [
+  today: [
     { title: "Total Equipment", value: "247 units" },
     { title: "Available", value: "89" },
     { title: "In Use", value: "124" },
     { title: "Under Maintenance", value: "34" },
   ],
 
-  Week: [
+  week: [
     { title: "Total Equipment", value: "312 units" },
     { title: "Available", value: "102" },
     { title: "In Use", value: "156" },
     { title: "Under Maintenance", value: "54" },
   ],
 
-  Month: [
-    { title: "Total Equipment", value: "420 units" },
+  month: [
+    { title: "Total Equipment", value: "320 units" },
     { title: "Available", value: "168" },
-    { title: "In Use", value: "198" },
+    { title: "In Use", value: "98" },
     { title: "Under Maintenance", value: "54" },
   ],
 } as const;
 
 export const icons = [
   {
-    icon: <img src={HammerIcon} alt="leads" className="md:size-7 size-5" />,
+    icon: <img src={HammerIcon} alt="leads" className="md:size-6 size-4" />,
     color: "bg-[#1D51A4]",
   },
   {
@@ -295,26 +63,26 @@ export const icons = [
       <img
         src={CheckedShieldIcon}
         alt="confirmed"
-        className="md:size-7 size-5"
+        className="md:size-6 size-4"
       />
     ),
     color: "bg-[#3AB449]",
   },
   {
     icon: (
-      <img src={YellowDollerIcon} alt="value" className="md:size-7 size-5" />
+      <img src={YellowDollerIcon} alt="value" className="md:size-6 size-4" />
     ),
     color: "bg-[#F59E0B]",
   },
   {
     icon: (
-      <img src={SalmonGraphIcon} alt="revenue" className="md:size-7 size-5" />
+      <img src={SalmonGraphIcon} alt="revenue" className="md:size-6 size-4" />
     ),
     color: "bg-[#FD8D5B]",
   },
 ];
 
-const materialKpisByFilter: Record<
+export const materialKpisByFilter: Record<
   TabType,
   {
     value: string;
@@ -322,7 +90,7 @@ const materialKpisByFilter: Record<
     trend: { value: string; isPositive: boolean };
   }[]
 > = {
-  Today: [
+  today: [
     {
       value: "$1,248,900",
       subtext: "Current Material Value",
@@ -345,7 +113,7 @@ const materialKpisByFilter: Record<
     },
   ],
 
-  Week: [
+  week: [
     {
       value: "$4,782,300",
       subtext: "Current Material Value",
@@ -368,7 +136,7 @@ const materialKpisByFilter: Record<
     },
   ],
 
-  Month: [
+  month: [
     {
       value: "$8,458,798",
       subtext: "Current Material Value",
@@ -416,10 +184,10 @@ const kpiVisuals = [
 ];
 
 const PlantPage = () => {
-  const [activeTab, setActiveTab] = useState<TabType>("Month");
+  const [activeTab, setActiveTab] = useState<TabType>("month");
   const navigate = useNavigate();
 
-  const inventoryColumns: Column<MockInventoryItem>[] = [
+  const inventoryColumns: Column<(typeof mockInventoryData)[0]>[] = [
     {
       header: "Material",
       accessor: (row) => <span className="text-gray-900">{row.material}</span>,
@@ -518,10 +286,10 @@ const PlantPage = () => {
   return (
     // <div className="xl:pr-5 px-2 md:pt-5 pb-10 space-y-6">
     <div className="xl:px-0 px-2 pb-10 space-y-6">
-      <FilterTabs initialPeriod={activeTab} onPeriodChange={setActiveTab} />
+      <FilterTabs activeTab={activeTab} onChange={setActiveTab} />
       <TitleSubtitle
-        title="Dashboard"
-        subtitle="Here’s a summary of your ongoing steel building projects."
+        title={dashboardText.header.title}
+        subtitle={dashboardText.header.subtitle}
       />
 
       <div className="grid grid-cols-2 xs:grid-cols-2 md:grid-cols-2 xl:grid-cols-4 xl:gap-4 gap-3">
@@ -580,7 +348,7 @@ const PlantPage = () => {
         title="Machine usage & maintenance reminders"
         columns={machineColumns}
         data={mockMachineUsageData}
-        onViewAll={() => navigate("/plants/equipment_management")}
+        onViewAll={() => navigate("/equipment_management")}
       />
     </div>
   );
