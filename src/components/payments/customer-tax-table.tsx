@@ -1,4 +1,6 @@
+import { EyeIcon } from "lucide-react";
 import { useNavigate } from "react-router";
+import { Button } from "../ui/button";
 
 type Customer = {
   id: string;
@@ -50,8 +52,8 @@ export default function CustomerTaxTable() {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-white shadow-sm rounded-lg p-4">
-      <h3 className="text-lg font-semibold text-gray-800 mb-3">
+    <div className="bg-white shadow-sm rounded-lg">
+      <h3 className="text-lg font-semibold text-gray-800  p-4">
         Default tax profile per customer
       </h3>
 
@@ -84,7 +86,11 @@ export default function CustomerTaxTable() {
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
             {customers.map((c, idx) => (
-              <tr key={idx} className="hover:bg-gray-50">
+              <tr
+                onClick={() => navigate(`/payments/customer/${c.id}`)}
+                key={idx}
+                className="hover:bg-gray-50 cursor-pointer"
+              >
                 <td className="px-4 py-4 whitespace-nowrap">
                   <div className="flex items-center space-x-3">
                     <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-700">
@@ -125,35 +131,15 @@ export default function CustomerTaxTable() {
                   </span>
                 </td>
                 <td className="px-4 py-4 whitespace-nowrap text-sm text-blue-500">
-                  <button
+                  <Button
+                    variant="ghost"
+                    size="icon"
                     onClick={() => navigate(`/payments/customer/${c.id}`)}
                     aria-label={`View ${c.name}`}
                     title={`View ${c.name}`}
-                    className="hover:opacity-90 flex items-center space-x-2"
                   >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      className="h-5 w-5 text-blue-500"
-                    >
-                      <path
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7S2.5 12 2.5 12z"
-                      />
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="3"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  </button>
+                    <EyeIcon />
+                  </Button>
                 </td>
               </tr>
             ))}
