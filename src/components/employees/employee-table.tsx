@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Edit, Trash2, Search, Eye, Users } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 export interface Employee {
   id: string;
@@ -41,6 +41,7 @@ interface EmployeeTableProps {
 }
 
 export function EmployeeTable({ employees }: EmployeeTableProps) {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -170,7 +171,11 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
             </TableHeader>
             <TableBody>
               {filteredEmployees.map((employee) => (
-                <TableRow key={employee.id}>
+                <TableRow
+                  key={employee.id}
+                  onClick={() => navigate(`/employees/${employee.id}`)}
+                  className="hover:bg-gray-50 cursor-pointer"
+                >
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar>
@@ -180,9 +185,13 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
                         </AvatarFallback>
                       </Avatar>
                       <div>
-                        <p className="font-medium text-blue-600 hover:underline">
+                        <Link
+                          to={`/employees/${employee.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-medium text-blue-600 hover:underline"
+                        >
                           {employee.name}
-                        </p>
+                        </Link>
                         <p className="text-sm text-gray-500">
                           Joined {employee.joinedDate}
                         </p>
@@ -227,6 +236,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
                     <div className="flex justify-end gap-2">
                       <Link
                         to={`/employees/${employee.id}`}
+                        onClick={(e) => e.stopPropagation()}
                         className="inline-flex h-8 w-8 items-center justify-center text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md"
                       >
                         <Eye className="h-4 w-4" />
@@ -235,6 +245,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -242,6 +253,7 @@ export function EmployeeTable({ employees }: EmployeeTableProps) {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
