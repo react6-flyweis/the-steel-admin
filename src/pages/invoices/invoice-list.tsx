@@ -3,15 +3,22 @@ import {
   FileText,
   Download,
   Printer,
-  Calendar,
   DollarSign,
   CheckCircle,
   CreditCard,
   AlertCircle,
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import DateRangePicker from "@/components/ui/date-range-picker";
+import type { DateRange as RDateRange } from "react-day-picker";
 import {
   Table,
   TableHeader,
@@ -134,6 +141,7 @@ export default function InvoiceListPage() {
   const [query, setQuery] = useState("");
   const [customerFilter, setCustomerFilter] = useState("All");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [dateRange, setDateRange] = useState<RDateRange | undefined>(undefined);
 
   // pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -144,6 +152,16 @@ export default function InvoiceListPage() {
       if (customerFilter !== "All" && inv.customer !== customerFilter)
         return false;
       if (statusFilter !== "All" && inv.status !== statusFilter) return false;
+      if (dateRange) {
+        const due = new Date(inv.dueDate);
+        if (dateRange.from && dateRange.to) {
+          if (due < dateRange.from || due > dateRange.to) return false;
+        } else if (dateRange.from) {
+          if (due < dateRange.from) return false;
+        } else if (dateRange.to) {
+          if (due > dateRange.to) return false;
+        }
+      }
       if (
         query &&
         !`${inv.invoiceNumber} ${inv.customer}`
@@ -153,7 +171,7 @@ export default function InvoiceListPage() {
         return false;
       return true;
     });
-  }, [invoices, customerFilter, statusFilter, query]);
+  }, [invoices, customerFilter, statusFilter, query, dateRange]);
 
   const totalAmount = filtered.reduce((s, i) => s + i.amount, 0);
   const totalPaid = filtered.reduce((s, i) => s + i.paid, 0);
@@ -171,12 +189,6 @@ export default function InvoiceListPage() {
   const current = Math.min(currentPage, totalPages);
   const start = (current - 1) * rowsPerPage;
   const paginated = filtered.slice(start, start + rowsPerPage);
-
-  const customers = useMemo(() => {
-    const set = new Set<string>();
-    invoices.forEach((i) => set.add(i.customer));
-    return ["All", ...Array.from(set)];
-  }, [invoices]);
 
   return (
     <div className="p-6 space-y-6">
@@ -244,60 +256,38 @@ export default function InvoiceListPage() {
       {/* Filters */}
       <Card>
         <CardContent>
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="w-full md:w-1/3">
+          <div className="flex flex-col md:flex-row gap-4 items-end">
+            <div className="w-full flex-1">
               <label className="text-xs text-gray-500">Choose Date</label>
               <div className="relative mt-1">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 size-4" />
-                <Input
-                  readOnly
-                  value="01 Jan-2025 - 12-Dec-2025"
-                  className="pl-10"
-                />
+                <DateRangePicker value={dateRange} onChange={setDateRange} />
               </div>
             </div>
 
-            <div className="w-full md:w-1/3">
-              <label className="text-xs text-gray-500">Customer</label>
-              <select
-                className="border rounded px-3 py-2 w-full mt-1"
-                value={customerFilter}
-                onChange={(e) => setCustomerFilter(e.target.value)}
-              >
-                {customers.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
+            <div className="flex-1">
+              <label className="text-xs text-gray-500">Status</label>
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-full mt-1">
+                  <SelectValue placeholder="All" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All">All</SelectItem>
+                  <SelectItem value="Paid">Paid</SelectItem>
+                  <SelectItem value="Unpaid">Unpaid</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
-
-            <div className="w-full md:w-1/3 flex items-end justify-between">
-              <div className="w-2/3">
-                <label className="text-xs text-gray-500">Status</label>
-                <select
-                  className="border rounded px-3 py-2 w-full mt-1"
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value)}
-                >
-                  <option value="All">All</option>
-                  <option value="Paid">Paid</option>
-                  <option value="Unpaid">Unpaid</option>
-                </select>
-              </div>
-              <div className="ml-4">
-                <Button
-                  onClick={() => {
-                    setQuery("");
-                    setCustomerFilter("All");
-                    setStatusFilter("All");
-                  }}
-                  className="bg-orange-500 text-white px-6 py-2"
-                >
-                  Search
-                </Button>
-              </div>
-            </div>
+            <Button
+              onClick={() => {
+                setQuery("");
+                setCustomerFilter("All");
+                setStatusFilter("All");
+                setDateRange(undefined);
+              }}
+              className="bg-orange-500 text-white px-6 py-2"
+            >
+              Search
+            </Button>
           </div>
         </CardContent>
       </Card>
