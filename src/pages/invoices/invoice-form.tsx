@@ -161,7 +161,31 @@ export default function InvoiceForm() {
 
   const onSubmit = (data: InvoiceFormValues) => {
     console.log("submit", data);
-    navigate("/invoice/list");
+    handlePreview();
+  };
+
+  const handlePreview = () => {
+    const values = getValues();
+    const items = (values.lineItems || []).map((li) => ({
+      id: li.id,
+      description: li.description,
+      notes: li.notes,
+      rate: li.rate,
+      quantity: li.quantity,
+      photos: li.images || [],
+    }));
+
+    navigate("/invoice/preview", {
+      state: {
+        invoiceNumber: values.invoiceNumber || invoiceNumber,
+        date: values.date,
+        daysToPay: values.daysToPay,
+        items,
+        subtotal: calculateSubtotal(),
+        taxAmount: calculateTax(),
+        total: calculateTotal(),
+      },
+    });
   };
 
   return (
