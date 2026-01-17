@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import StatCard from "@/components/ui/stat-card";
 import LeadDetailDialog from "@/components/leads/lead-detail-dialog";
 import ChatDialog from "@/components/leads/chat-dialog";
+import SuccessDialog from "@/components/success-dialog";
 import {
   Select,
   SelectContent,
@@ -28,7 +29,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import FilterTabs from "@/components/FilterTabs";
+import FilterTabs, { type Period } from "@/components/FilterTabs";
 
 // Mock data - replace with actual API calls
 const initialLeads = [
@@ -103,9 +104,10 @@ export default function LeadsPage() {
   const [projectValue, setProjectValue] = useState("all");
   const [assignments, setAssignments] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [period, setPeriod] = useState<"Today" | "Week" | "Month">("Today");
+  const [period, setPeriod] = useState<Period>("Month");
   const [leads] = useState(initialLeads);
   const [selectedLeads, setSelectedLeads] = useState<string[]>([]);
+  const [successOpen, setSuccessOpen] = useState(false);
   // const [searchQuery, setSearchQuery] = useState("");
 
   const handleSelectAll = (checked: boolean, listToSelect: typeof leads) => {
@@ -286,7 +288,11 @@ export default function LeadsPage() {
             </Link>
 
             <ImportLeadsDialog />
-            <Button variant="outline" className="bg-white">
+            <Button
+              variant="outline"
+              className="bg-white"
+              onClick={() => setSuccessOpen(true)}
+            >
               <Download className="h-4 w-4 mr-2" />
               Export Data
             </Button>
@@ -548,6 +554,11 @@ export default function LeadsPage() {
             </div>
           </CardContent>
         </Card>
+        <SuccessDialog
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          title="Data exported successfully"
+        />
       </div>
     </>
   );
