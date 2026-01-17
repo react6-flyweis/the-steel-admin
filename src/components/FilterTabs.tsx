@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type Period = "Today" | "Week" | "Month";
+export type Period = "Today" | "Week" | "Month";
 
 type Props = {
   initialPeriod?: Period;
