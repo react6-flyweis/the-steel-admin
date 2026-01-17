@@ -185,8 +185,6 @@ export default function ReportsOverview({ period }: { period?: Period }) {
             <YAxis
               tickLine={false}
               axisLine={false}
-              domain={[0, 40]}
-              ticks={[0, 10, 20, 30, 40]}
               tickFormatter={(value) => `${value}k`}
               tickMargin={12}
               tick={{ fill: "#A0AEC0", fontSize: 12, fontWeight: 600 }}
