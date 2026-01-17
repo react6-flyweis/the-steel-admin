@@ -62,7 +62,7 @@ export default function ScheduleMeeting() {
     console.log("Meeting scheduled:", data);
     // Handle form submission here
     setSuccessOpen(true);
-    navigate("/customers/meetings");
+    setTimeout(() => navigate("/customers/meetings"), 500);
   };
 
   return (
