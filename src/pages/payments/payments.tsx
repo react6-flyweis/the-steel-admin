@@ -4,6 +4,7 @@ import PaymentAgingAnalysis from "@/components/payments/payment-aging-analysis";
 import StageWisePaymentProgress from "@/components/payments/stage-wise-payment-progress";
 import AIRevenueForecasting from "@/components/payments/ai-revenue-forecasting";
 import CustomerTaxTable from "@/components/payments/customer-tax-table";
+import { Link } from "react-router";
 
 export default function PaymentsPage() {
   return (
@@ -40,27 +41,30 @@ export default function PaymentsPage() {
             <div className="text-sm text-red-700">
               2 payments are overdue ($45,000 total).
             </div>
-            <button className="text-sm font-medium text-red-600 border border-red-200 px-3 py-1 rounded-md hover:bg-red-50">
-              View Details
-            </button>
+            <Link
+              to="/leads/1/chats"
+              className="text-sm font-medium text-red-600 border border-red-200 px-3 py-1 rounded-md hover:bg-red-50"
+            >
+              Send Reminder
+            </Link>
           </div>
 
           <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-3">
             <div className="text-sm text-blue-700">
               Upcoming payment on 26 Oct - John Doe ($20,000).
             </div>
-            <button className="text-sm font-medium text-blue-600 border border-blue-200 px-3 py-1 rounded-md hover:bg-blue-50">
+            <Link
+              to="/leads/1/chats"
+              className="text-sm font-medium text-blue-600 border border-blue-200 px-3 py-1 rounded-md hover:bg-blue-50"
+            >
               Send Reminder
-            </button>
+            </Link>
           </div>
 
           <div className="flex items-center justify-between bg-green-50 border border-green-200 rounded-lg px-4 py-3">
             <div className="text-sm text-green-700">
               Average payment cycle improved by 3 days this month.
             </div>
-            <button className="text-sm font-medium text-green-600 border border-green-200 px-3 py-1 rounded-md hover:bg-green-50">
-              View Report
-            </button>
           </div>
         </div>
       </div>
