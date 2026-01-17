@@ -103,6 +103,9 @@ const CustomerPaymentProfile = lazy(
 const InvoiceForm = lazy(() => import("@/pages/invoices/invoice-form"));
 const InvoiceList = lazy(() => import("@/pages/invoices/invoice-list"));
 const SalesGrowth = lazy(() => import("@/pages/invoices/sales-growth"));
+const InvoicePreviewPage = lazy(
+  () => import("@/pages/invoices/invoice-preview")
+);
 
 // plant management section
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
@@ -373,6 +376,7 @@ export const adminRoutes: RouteObject[] = [
         children: [
           { index: true, element: <InvoiceForm /> },
           { path: "list", element: <InvoiceList /> },
+          { path: "preview", element: <InvoicePreviewPage /> },
           { path: "new", element: <InvoiceForm /> },
           { path: ":id", element: <InvoiceForm /> },
           { path: "sales-growth", element: <SalesGrowth /> },
