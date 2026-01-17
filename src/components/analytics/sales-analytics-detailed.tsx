@@ -1,6 +1,7 @@
 import { Download } from "lucide-react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/success-dialog";
 import {
   Select,
   SelectContent,
@@ -15,6 +16,7 @@ interface Props {
 
 const SalesAnalyticsDetailed = forwardRef<HTMLDivElement, Props>(
   ({ setActiveReport }, ref) => {
+    const [successOpen, setSuccessOpen] = useState(false);
     return (
       <div ref={ref} className="bg-white rounded-lg shadow p-6 w-full min-h-0">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-3">
@@ -104,12 +106,22 @@ const SalesAnalyticsDetailed = forwardRef<HTMLDivElement, Props>(
         </div>
 
         <div className="flex justify-end gap-3 mt-6">
-          <Button variant="outline" className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="flex items-center gap-2"
+            onClick={() => setSuccessOpen(true)}
+          >
             <Download className="h-4 w-4" />
             Export Report
           </Button>
           <Button onClick={() => setActiveReport(null)}>Close</Button>
         </div>
+        <SuccessDialog
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          title="Report exported"
+          okLabel="Great"
+        />
       </div>
     );
   }
