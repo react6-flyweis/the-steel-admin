@@ -16,7 +16,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { ChevronDown } from "lucide-react";
 
 interface LeadScore {
   id: string;
@@ -305,7 +304,6 @@ export default function LeadScoring() {
                           )} rounded-full px-4`}
                         >
                           <SelectValue />
-                          <ChevronDown className="ml-1 h-3 w-3" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectItem value="Hot">Hot</SelectItem>
