@@ -1,7 +1,8 @@
 import { Download } from "lucide-react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import SuccessDialog from "@/components/success-dialog";
 
 interface Member {
   name: string;
@@ -17,6 +18,7 @@ interface Props {
 
 const TeamPerformanceDetailed = forwardRef<HTMLDivElement, Props>(
   ({ setActiveReport }, ref) => {
+    const [successOpen, setSuccessOpen] = useState(false);
     const members: Member[] = [
       {
         name: "Alice Johnson",
@@ -48,7 +50,11 @@ const TeamPerformanceDetailed = forwardRef<HTMLDivElement, Props>(
             Team Performance - Detailed View
           </h2>
           <div className="flex items-center gap-3">
-            <Button variant="outline" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => setSuccessOpen(true)}
+            >
               <Download className="h-4 w-4" />
               Export Report
             </Button>
@@ -89,6 +95,11 @@ const TeamPerformanceDetailed = forwardRef<HTMLDivElement, Props>(
             </Card>
           ))}
         </div>
+        <SuccessDialog
+          open={successOpen}
+          onClose={() => setSuccessOpen(false)}
+          title="Report exported"
+        />
       </div>
     );
   }
