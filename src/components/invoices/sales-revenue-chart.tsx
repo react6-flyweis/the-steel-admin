@@ -86,7 +86,9 @@ export function SalesRevenueChart() {
                 >
                   {stat.value}
                 </span>
-                <span className={cn("text-sm font-semibold", stat.accentClass)}>
+                <span
+                  className={cn("text-[10px] font-semibold", stat.accentClass)}
+                >
                   {stat.label}
                 </span>
               </div>
