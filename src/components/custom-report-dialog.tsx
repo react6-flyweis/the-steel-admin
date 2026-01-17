@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import SuccessDialog from "@/components/success-dialog";
 
 export default function CustomReportDialog() {
   const [exportPdf, setExportPdf] = React.useState(false);
@@ -29,6 +30,7 @@ export default function CustomReportDialog() {
   const [includeCharts, setIncludeCharts] = React.useState(false);
   const [includeTables, setIncludeTables] = React.useState(false);
   const [emailWhenReady, setEmailWhenReady] = React.useState(false);
+  const [showSuccess, setShowSuccess] = React.useState(false);
 
   return (
     <Dialog>
@@ -179,11 +181,23 @@ export default function CustomReportDialog() {
               Cancel
             </Button>
           </DialogClose>
-          <Button size="lg" className="px-5">
-            Generate Report
-          </Button>
+          <DialogClose asChild>
+            <Button
+              size="lg"
+              className="px-5"
+              onClick={() => setShowSuccess(true)}
+            >
+              Generate Report
+            </Button>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
+      <SuccessDialog
+        open={showSuccess}
+        onClose={() => setShowSuccess(false)}
+        title="Report generated"
+        okLabel="Great"
+      />
     </Dialog>
   );
 }
