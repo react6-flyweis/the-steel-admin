@@ -24,40 +24,70 @@ export default function SmartReminders() {
     },
     {
       id: "2",
-      contactName: "Sarah Johnson",
-      score: 92,
-      bestTime: "3 PM today",
-      reason: "based on previous response patterns",
+      contactName: "Michael Brown",
+      score: 88,
+      bestTime: "10 AM tomorrow",
+      reason: "recent engagement spike",
     },
     {
       id: "3",
-      contactName: "Sarah Johnson",
-      score: 92,
-      bestTime: "3 PM today",
-      reason: "based on previous response patterns",
+      contactName: "Emily Davis",
+      score: 85,
+      bestTime: "11 AM tomorrow",
+      reason: "positive email reply",
     },
     {
       id: "4",
-      contactName: "Sarah Johnson",
-      score: 92,
-      bestTime: "3 PM today",
-      reason: "based on previous response patterns",
+      contactName: "David Wilson",
+      score: 80,
+      bestTime: "2 PM today",
+      reason: "recent site visit",
     },
     {
       id: "5",
-      contactName: "Sarah Johnson",
-      score: 92,
-      bestTime: "3 PM today",
-      reason: "based on previous response patterns",
+      contactName: "Olivia Martinez",
+      score: 78,
+      bestTime: "4 PM today",
+      reason: "opened last proposal",
     },
     {
       id: "6",
-      contactName: "Sarah Johnson",
-      score: 92,
-      bestTime: "3 PM today",
-      reason: "based on previous response patterns",
+      contactName: "James Anderson",
+      score: 75,
+      bestTime: "9 AM tomorrow",
+      reason: "follow-up recommended",
+    },
+    {
+      id: "7",
+      contactName: "Sophia Lee",
+      score: 73,
+      bestTime: "1 PM tomorrow",
+      reason: "recent demo attended",
+    },
+    {
+      id: "8",
+      contactName: "Liam Thompson",
+      score: 70,
+      bestTime: "5 PM today",
+      reason: "high intent signals",
+    },
+    {
+      id: "9",
+      contactName: "Isabella Garcia",
+      score: 68,
+      bestTime: "11 AM today",
+      reason: "requested pricing info",
+    },
+    {
+      id: "10",
+      contactName: "Noah Martinez",
+      score: 65,
+      bestTime: "3 PM tomorrow",
+      reason: "left voicemail",
     },
   ]);
+
+  const [visibleCount, setVisibleCount] = useState<number>(6);
 
   const handleApply = (id: string) => {
     console.log("Apply reminder:", id);
@@ -70,8 +100,8 @@ export default function SmartReminders() {
   };
 
   const handleLoadMore = () => {
-    console.log("Load more reminders");
-    // Implement load more logic
+    // Reveal two more reminders at a time; cap at the total length
+    setVisibleCount((prev) => Math.min(prev + 2, reminders.length));
   };
 
   return (
@@ -104,7 +134,7 @@ export default function SmartReminders() {
 
           <CardContent>
             <div className="flex flex-col gap-4">
-              {reminders.map((reminder) => (
+              {reminders.slice(0, visibleCount).map((reminder) => (
                 <Link
                   key={reminder.id}
                   to={`/leads/follow-up/smart-reminders/${reminder.id}`}
@@ -150,9 +180,15 @@ export default function SmartReminders() {
             </div>
 
             <div className="mt-6 text-center">
-              <Button variant="link" onClick={handleLoadMore}>
-                Load More
-              </Button>
+              {visibleCount < reminders.length ? (
+                <Button variant="link" onClick={handleLoadMore}>
+                  Load More
+                </Button>
+              ) : (
+                <Button variant="link" disabled>
+                  No more reminders
+                </Button>
+              )}
             </div>
           </CardContent>
         </Card>
