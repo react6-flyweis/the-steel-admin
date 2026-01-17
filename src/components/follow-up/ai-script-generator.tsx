@@ -52,21 +52,23 @@ export default function AiScriptGenerator() {
 
   return (
     <Card>
-      <CardHeader className="flex items-center justify-between border-b">
-        <div>
-          <CardTitle>✨ AI Script Generator</CardTitle>
-          <CardDescription>Recent generated scripts</CardDescription>
-        </div>
+      <Link to="/leads/follow-up/script-generator">
+        <CardHeader className="flex items-center justify-between border-b">
+          <div>
+            <CardTitle>✨ AI Script Generator</CardTitle>
+            <CardDescription>Recent generated scripts</CardDescription>
+          </div>
 
-        <div className="flex items-center space-x-2" data-slot="card-action">
-          <Link to="/leads/follow-up/script-generator">
-            <Button className="bg-purple-600 hover:bg-purple-700 text-white">
-              <SparkleIcon />
-              Generate
-            </Button>
-          </Link>
-        </div>
-      </CardHeader>
+          <div className="flex items-center space-x-2" data-slot="card-action">
+            <Link to="/leads/follow-up/script-generator">
+              <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                <SparkleIcon />
+                Generate
+              </Button>
+            </Link>
+          </div>
+        </CardHeader>
+      </Link>
 
       <CardContent className="space-y-3">
         {items.map((it) => {
