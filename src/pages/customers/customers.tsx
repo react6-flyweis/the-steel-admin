@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router";
 import AddCustomerDialog from "@/components/customers/add-customer-dialog";
-import FilterTabs from "@/components/FilterTabs";
+import FilterTabs, { type Period } from "@/components/FilterTabs";
 
 type Customer = {
   id: string;
@@ -83,9 +83,9 @@ function generateRandomCustomer(): Customer {
 export default function CustomersPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [period, setPeriod] = useState<"Today" | "Week" | "Month">("Today");
+  const [period, setPeriod] = useState<Period>("Month");
   // Seed state with a few random customers plus the initial seeds
-  const [customers, setCustomers] = useState<Customer[]>(() => {
+  const [customers] = useState<Customer[]>(() => {
     const customers = Array.from({ length: 8 }).map(() =>
       generateRandomCustomer()
     );
@@ -185,10 +185,11 @@ export default function CustomersPage() {
               Recent Signed Contracts
             </Button>
             <AddCustomerDialog
-              onAdd={(c) => {
-                const newCustomer = c ?? generateRandomCustomer();
-                setCustomers((prev) => [newCustomer, ...prev]);
-              }}
+              onAdd={() => {}}
+              // onAdd={(c) => {
+              //   const newCustomer = c ?? generateRandomCustomer();
+              //   setCustomers((prev) => [newCustomer, ...prev]);
+              // }}
               trigger={
                 <Button size="lg" className="">
                   Add New Customer
@@ -201,25 +202,29 @@ export default function CustomersPage() {
         {/* Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            title="Total Customers"
+            // (Todays | Week | Yearly) Total Cust.
+            title={`${period} Total Customers`}
             value={String(stats.total)}
             color="bg-blue-600"
             icon={<Users className="h-5 w-5 text-blue-600" />}
           />
           <StatCard
-            title="Active Customers"
+            // (Todays | Week | Yearly) Active Cust.
+            title={`${period} Active Customers`}
             value={String(stats.active)}
             color="bg-green-600"
             icon={<UserCheck className="h-5 w-5 text-green-600" />}
           />
           <StatCard
-            title="New Customers"
+            // New Cust. (Todays | Week | Yearly)
+            title={`New Customers (${period})`}
             value={String(stats.newCustomers)}
             color="bg-yellow-500"
             icon={<UserPlus className="h-5 w-5 text-yellow-600" />}
           />
           <StatCard
-            title="Returning Customers"
+            // (Todays | Week | Yearly) Returning Cust.
+            title={`${period} Returning Customers`}
             value={String(stats.returning)}
             color="bg-orange-500"
             icon={<RefreshCw className="h-5 w-5 text-orange-600" />}
