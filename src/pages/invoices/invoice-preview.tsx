@@ -122,7 +122,7 @@ export default function InvoicePreview() {
             </div>
 
             <div className="space-y-8">
-              {items.map((item, index) => (
+              {items.map((item: any, index: number) => (
                 <div
                   key={item.id}
                   className={index > 0 ? "border-t border-gray-100 pt-4" : ""}
