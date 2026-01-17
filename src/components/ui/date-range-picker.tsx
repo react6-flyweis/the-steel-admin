@@ -39,12 +39,16 @@ export default function DateRangePicker({ value, onChange }: Props) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <div role="button" tabIndex={0} className="relative inline-block">
+        <div
+          role="button w-full"
+          tabIndex={0}
+          className="relative inline-block"
+        >
           <Input
             readOnly
             value={formatValue()}
             placeholder="Select date range"
-            className={cn("w-40 pr-9 placeholder:text-gray-400")}
+            className={cn("min-w-40 w-full pr-9 placeholder:text-gray-400")}
           />
           <CalendarIcon className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 size-4 pointer-events-none" />
         </div>
