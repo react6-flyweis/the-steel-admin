@@ -1,4 +1,5 @@
 import { useForm, Controller } from "react-hook-form";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/success-dialog";
 import {
   Select,
   SelectContent,
@@ -41,6 +43,7 @@ export default function AddNewTaxModal({
   isOpen,
   onClose,
 }: AddNewTaxModalProps) {
+  const [successOpen, setSuccessOpen] = useState(false);
   const {
     register,
     handleSubmit,
@@ -62,6 +65,7 @@ export default function AddNewTaxModal({
     console.log("New Tax:", data);
     reset();
     onClose();
+    setSuccessOpen(true);
   };
 
   return (
@@ -178,6 +182,12 @@ export default function AddNewTaxModal({
           </DialogFooter>
         </form>
       </DialogContent>
+      <SuccessDialog
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        title="Tax added"
+        okLabel="Done"
+      />
     </Dialog>
   );
 }
