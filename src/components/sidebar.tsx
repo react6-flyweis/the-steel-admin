@@ -5,6 +5,13 @@ import {
   ChevronRight,
   ChevronUp,
   X,
+  Users,
+  DollarSign,
+  Headphones,
+  Megaphone,
+  Factory,
+  Hammer,
+  type LucideIcon,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import dashboardIcon from "@/assets/icons/sidebar/dashboard.svg";
@@ -41,7 +48,12 @@ interface NavigationItem {
   path: string;
   label: string;
   collapsible?: boolean;
-  subItems?: { path: string; label: string; badge?: number }[];
+  subItems?: {
+    path: string;
+    label: string;
+    badge?: number;
+    icon?: LucideIcon;
+  }[];
 }
 
 interface NavigationGroup {
@@ -122,16 +134,37 @@ const navigationGroups: NavigationGroup[] = [
         label: "Employees",
         collapsible: true,
         subItems: [
-          { path: "/employees", label: "All Employees", badge: 6 },
-          { path: "/employees?team=sales", label: "Sales", badge: 2 },
-          { path: "/employees?team=support", label: "Support", badge: 1 },
-          { path: "/employees?team=marketing", label: "Marketing", badge: 1 },
+          { path: "/employees", label: "All Employees", badge: 6, icon: Users },
+          {
+            path: "/employees?team=sales",
+            label: "Sales",
+            badge: 2,
+            icon: DollarSign,
+          },
+          {
+            path: "/employees?team=support",
+            label: "Support",
+            badge: 1,
+            icon: Headphones,
+          },
+          {
+            path: "/employees?team=marketing",
+            label: "Marketing",
+            badge: 1,
+            icon: Megaphone,
+          },
           {
             path: "/employees?team=construction",
             label: "Construction",
             badge: 1,
+            icon: Hammer,
           },
-          { path: "/employees?team=plant", label: "Plant", badge: 1 },
+          {
+            path: "/employees?team=plant",
+            label: "Plant",
+            badge: 1,
+            icon: Factory,
+          },
         ],
       },
       { path: "/employees/performance", label: "Employee performance" },
@@ -529,7 +562,30 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 }
                               >
                                 <div className="flex items-center justify-between">
-                                  <span>{subItem.label}</span>
+                                  <div className="flex items-center gap-3">
+                                    {subItem.icon && (
+                                      // render icon component; color depends on active state
+                                      <span
+                                        className={cn(
+                                          isActiveExact
+                                            ? "text-white"
+                                            : "text-gray-500"
+                                        )}
+                                      >
+                                        {(() => {
+                                          const Icon = subItem.icon;
+                                          return <Icon className="w-4 h-4" />;
+                                        })()}
+                                      </span>
+                                    )}
+                                    <span>{subItem.label}</span>
+                                  </div>
+
+                                  {subItem.badge ? (
+                                    <div className="flex items-center justify-center w-7 h-7 rounded-full bg-gray-50 shadow text-sm text-gray-600">
+                                      {subItem.badge}
+                                    </div>
+                                  ) : null}
                                 </div>
                               </NavLink>
                             );
