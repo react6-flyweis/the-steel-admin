@@ -68,14 +68,12 @@ export default function AddNewLead() {
     console.log("Form submitted:", formData);
     // Show success dialog
     setShowSuccess(true);
+    setTimeout(() => {
+      navigate("/leads");
+    }, 500);
   };
 
   const handleCancel = () => {
-    navigate("/leads");
-  };
-
-  const handleSuccessClose = () => {
-    setShowSuccess(false);
     navigate("/leads");
   };
 
@@ -569,7 +567,7 @@ export default function AddNewLead() {
       </form>
       <SuccessDialog
         open={showSuccess}
-        onClose={handleSuccessClose}
+        onClose={() => setShowSuccess(false)}
         title="Lead Added Successfully!"
       />
     </div>
