@@ -32,7 +32,7 @@ import PlantSalesChart from "@/components/dashboard/plant-sales-chart";
 type Period = "Today" | "Week" | "Month";
 
 export default function Dashboard() {
-  const [period, setPeriod] = useState<Period>("Today");
+  const [period, setPeriod] = useState<Period>("Month");
 
   const statsByPeriod: Record<
     Period,
@@ -83,7 +83,8 @@ export default function Dashboard() {
         {/* Metrics Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           <StatCard
-            title="Total Leads"
+            // Total Leads (Todays | in a Week | in a month)
+            title={`${period} Total Leads`}
             value={currentStats.totalLeads}
             icon={<img src={LeadsIcon} alt="leads" className="size-7" />}
             color="bg-blue-500"
@@ -91,7 +92,8 @@ export default function Dashboard() {
           />
 
           <StatCard
-            title="Confirmed Leads"
+            // Confirmed Leads (Todays | in a Week | in a month)
+            title={`${period} Confirmed Leads`}
             value={currentStats.confirmedLeads}
             icon={
               <img src={ConfirmedIcon} alt="confirmed" className="size-7" />
@@ -101,7 +103,8 @@ export default function Dashboard() {
           />
 
           <StatCard
-            title="Pipeline Value"
+            // Pipeline Value (Todays | in a Week | in a month)
+            title={`${period} Pipeline Value`}
             value={currentStats.pipelineValue}
             icon={<img src={ValueIcon} alt="value" className="size-7" />}
             color="bg-yellow-500"
@@ -109,7 +112,8 @@ export default function Dashboard() {
           />
 
           <StatCard
-            title="Monthly Revenue"
+            // (Today's | This Week | Monthly) Revenue
+            title={`${period} Revenue`}
             value={currentStats.monthlyRevenue}
             icon={<img src={RevenueIcon} alt="revenue" className="size-7" />}
             color="bg-orange-500"
