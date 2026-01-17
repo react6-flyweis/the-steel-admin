@@ -1,5 +1,7 @@
 import { X, Download } from "lucide-react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import SuccessDialog from "@/components/success-dialog";
 
 const stages = [
   { name: "New Leads", value: 245, pct: "100%", color: "bg-blue-500" },
@@ -11,6 +13,7 @@ const stages = [
 ];
 
 export default function ConversionFunnelDetailed() {
+  const [successOpen, setSuccessOpen] = useState(false);
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex items-center justify-between mb-6">
@@ -52,12 +55,21 @@ export default function ConversionFunnelDetailed() {
       </div>
 
       <div className="flex items-center justify-end gap-3 mt-6">
-        <Button variant="outline" className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          className="flex items-center gap-2"
+          onClick={() => setSuccessOpen(true)}
+        >
           <Download className="h-4 w-4" />
           Export Report
         </Button>
         <Button>Close</Button>
       </div>
+      <SuccessDialog
+        open={successOpen}
+        onClose={() => setSuccessOpen(false)}
+        title="Report exported"
+      />
     </div>
   );
 }
