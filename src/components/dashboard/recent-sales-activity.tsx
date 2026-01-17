@@ -61,32 +61,34 @@ export default function RecentSalesActivity({
   );
 
   return (
-    <Card>
-      <CardHeader className="border-b flex justify-between items-center">
-        <CardTitle>Recent Sales Activity</CardTitle>
-        <Link to="/employees/audit-log">
-          <Button variant="link" size="sm">
-            View All
-          </Button>
-        </Link>
-      </CardHeader>
+    <Link to="/employees/audit-log">
+      <Card>
+        <CardHeader className="border-b flex justify-between items-center">
+          <CardTitle>Recent Sales Activity</CardTitle>
+          <Link to="/employees/audit-log">
+            <Button variant="link" size="sm">
+              View All
+            </Button>
+          </Link>
+        </CardHeader>
 
-      <CardContent className="space-y-3">
-        {items.map((it) => (
-          <div
-            key={it.id}
-            className="flex items-start gap-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
-          >
-            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
-              {it.icon}
+        <CardContent className="space-y-3">
+          {items.map((it) => (
+            <div
+              key={it.id}
+              className="flex items-start gap-4 py-2 rounded-md hover:bg-gray-50 transition-colors"
+            >
+              <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+                {it.icon}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-gray-900 font-medium">{it.title}</div>
+                <div className="text-sm text-gray-500 mt-1">{it.subtitle}</div>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <div className="text-gray-900 font-medium">{it.title}</div>
-              <div className="text-sm text-gray-500 mt-1">{it.subtitle}</div>
-            </div>
-          </div>
-        ))}
-      </CardContent>
-    </Card>
+          ))}
+        </CardContent>
+      </Card>
+    </Link>
   );
 }
