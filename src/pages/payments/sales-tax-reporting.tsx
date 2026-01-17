@@ -25,59 +25,61 @@ import StateTaxSummary from "@/components/sales-tax/StateTaxSummary";
 import BuildingTypePieCard from "@/components/sales-tax/BuildingTypePieCard";
 import DetailedTaxReport from "@/components/sales-tax/DetailedTaxReport";
 import { cn } from "@/lib/utils";
+import SuccessDialog from "@/components/success-dialog";
 
 // Types
-// interface StateData {
-//   state: string;
-//   abbreviation: string;
-//   contracts: number;
-//   rate: string;
-//   sales: number;
-//   taxDue: number;
-// }
+interface StateData {
+  state: string;
+  abbreviation: string;
+  contracts: number;
+  rate: number; // percent number, e.g. 8.25
+  sales: number;
+  taxDue: number;
+}
 
-// const stateData: StateData[] = [
-//   {
-//     state: "Texas",
-//     abbreviation: "TX",
-//     contracts: 2,
-//     rate: "8.25%",
-//     sales: 112000,
-//     taxDue: 9240,
-//   },
-//   {
-//     state: "Louisiana",
-//     abbreviation: "LA",
-//     contracts: 1,
-//     rate: "9.45%",
-//     sales: 28500,
-//     taxDue: 2693.25,
-//   },
-//   {
-//     state: "New York",
-//     abbreviation: "NE",
-//     contracts: 1,
-//     rate: "8%",
-//     sales: 32000,
-//     taxDue: 1920,
-//   },
-//   {
-//     state: "Indiana",
-//     abbreviation: "IA",
-//     contracts: 1,
-//     rate: "5.5%",
-//     sales: 38000,
-//     taxDue: 2090,
-//   },
-//   {
-//     state: "Oklahoma",
-//     abbreviation: "OK",
-//     contracts: 1,
-//     rate: "4.5%",
-//     sales: 41000,
-//     taxDue: 1845,
-//   },
-// ];
+// Sample state-level data used for demo filtering of stat cards
+const stateData: StateData[] = [
+  {
+    state: "Texas",
+    abbreviation: "TX",
+    contracts: 2,
+    rate: 8.25,
+    sales: 112000,
+    taxDue: 9240,
+  },
+  {
+    state: "Louisiana",
+    abbreviation: "LA",
+    contracts: 1,
+    rate: 9.45,
+    sales: 28500,
+    taxDue: 2693.25,
+  },
+  {
+    state: "New York",
+    abbreviation: "NY",
+    contracts: 1,
+    rate: 8,
+    sales: 32000,
+    taxDue: 1920,
+  },
+  {
+    state: "Indiana",
+    abbreviation: "IN",
+    contracts: 1,
+    rate: 5.5,
+    sales: 38000,
+    taxDue: 2090,
+  },
+  {
+    state: "Oklahoma",
+    abbreviation: "OK",
+    contracts: 1,
+    rate: 4.5,
+    sales: 41000,
+    taxDue: 1845,
+  },
+];
 
 export default function SalesTaxReporting() {
   // const navigate = useNavigate();
@@ -86,12 +88,24 @@ export default function SalesTaxReporting() {
   );
   const [stateFilter, setStateFilter] = useState("tx");
   const [reportType, setReportType] = useState("this-month");
+  const [successOpen, setSuccessOpen] = useState(false);
 
-  // Sample data
-  const totalContracts = 6;
-  const totalSales = 251500;
-  const totalTaxDue = 17788.25;
-  const avgTaxRate = 7.07;
+  // Compute filtered stats from sample state data
+  const filteredData =
+    stateFilter && stateFilter !== "all"
+      ? stateData.filter(
+          (s) =>
+            s.abbreviation.toLowerCase() === stateFilter.toLowerCase() ||
+            s.state.toLowerCase().replace(/\s+/g, "-") ===
+              stateFilter.toLowerCase()
+        )
+      : stateData;
+
+  const totalContracts = filteredData.reduce((acc, s) => acc + s.contracts, 0);
+  const totalSales = filteredData.reduce((acc, s) => acc + s.sales, 0);
+  const totalTaxDue = filteredData.reduce((acc, s) => acc + s.taxDue, 0);
+  const avgTaxRate =
+    totalSales > 0 ? Number(((totalTaxDue / totalSales) * 100).toFixed(2)) : 0;
 
   const stats = [
     {
@@ -163,14 +177,24 @@ export default function SalesTaxReporting() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button
-            variant="default"
-            className="bg-green-600 hover:bg-green-700 text-white px-4"
-            onClick={() => alert("Report will be emailed shortly.")}
-          >
-            <Mail className="w-4 h-4" />
-            Email Report
-          </Button>
+          <>
+            <Button
+              variant="default"
+              className="bg-green-600 hover:bg-green-700 text-white px-4"
+              onClick={() => {
+                setSuccessOpen(true);
+              }}
+            >
+              <Mail className="w-4 h-4" />
+              Email Report
+            </Button>
+            <SuccessDialog
+              open={successOpen}
+              onClose={() => setSuccessOpen(false)}
+              title="Report Emailed"
+              okLabel="Close"
+            />
+          </>
           <Button
             variant="default"
             className="bg-blue-600 hover:bg-blue-700 text-white px-4"
