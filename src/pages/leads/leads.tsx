@@ -32,6 +32,13 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import FilterTabs, { type Period } from "@/components/FilterTabs";
 
 // Mock data - replace with actual API calls
+const now = new Date();
+const daysAgo = (n: number) => {
+  const d = new Date(now);
+  d.setDate(d.getDate() - n);
+  return d;
+};
+
 const initialLeads = [
   {
     id: "ID-2025-1047",
@@ -47,7 +54,7 @@ const initialLeads = [
     statusColor: "purple",
     quoteValue: "$12,500",
     chatCount: 2,
-    createdAt: new Date("2026-01-15"), // Today
+    createdAt: daysAgo(0), // today
   },
   {
     id: "ID-2025-1048",
@@ -63,7 +70,7 @@ const initialLeads = [
     statusColor: "orange",
     quoteValue: "$125,000",
     chatCount: 4,
-    createdAt: new Date("2026-01-13"), // This week
+    createdAt: daysAgo(2), // a few days ago
   },
   {
     id: "ID-2025-1049",
@@ -79,7 +86,7 @@ const initialLeads = [
     statusColor: "purple",
     quoteValue: "$220,000",
     chatCount: 2,
-    createdAt: new Date("2026-01-10"), // This week
+    createdAt: daysAgo(5), // within the week
   },
   {
     id: "ID-2025-1050",
@@ -95,7 +102,7 @@ const initialLeads = [
     statusColor: "green",
     quoteValue: "$45,000",
     chatCount: 2,
-    createdAt: new Date("2026-01-05"), // This month
+    createdAt: daysAgo(20), // earlier this month
   },
 ];
 
@@ -162,7 +169,7 @@ export default function LeadsPage() {
     const leadDate = new Date(
       date.getFullYear(),
       date.getMonth(),
-      date.getDate()
+      date.getDate(),
     );
 
     if (period === "Today") {
@@ -269,8 +276,8 @@ export default function LeadsPage() {
             value={String(
               filteredLeads.reduce(
                 (acc, l) => acc + (l.chatCount > 0 ? 1 : 0),
-                0
-              )
+                0,
+              ),
             )}
             color="bg-orange-500"
             icon={<Mail className="h-5 w-5 text-orange-600" />}
