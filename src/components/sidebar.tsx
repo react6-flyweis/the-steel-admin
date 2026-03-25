@@ -307,7 +307,10 @@ const navigationGroups: NavigationGroup[] = [
     label: "Communication",
     color: "bg-gray-400",
     link: "/communication",
-    items: [{ path: "/communication", label: "Communication" }],
+    items: [
+      { path: "/communication", label: "Communication" },
+      { path: "/communication/ai-chat", label: "AI Chat" },
+    ],
   },
 ];
 
@@ -320,7 +323,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const [collapsedSections, setCollapsedSections] = useState<Set<string>>(
-    new Set()
+    new Set(),
   );
 
   // Determine active group based on current path
@@ -332,11 +335,11 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         }
         if (item.collapsible && item.subItems) {
           return item.subItems.some((subItem) =>
-            location.pathname.startsWith(subItem.path)
+            location.pathname.startsWith(subItem.path),
           );
         }
         return location.pathname.startsWith(item.path);
-      })
+      }),
     ) || navigationGroups[0];
 
   // Auto-expand collapsible section if any of its child routes is active
@@ -345,7 +348,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       if (item.collapsible && item.subItems) {
         const fullPath = location.pathname + location.search;
         const isAnySubItemActive = item.subItems.some(
-          (subItem) => fullPath === subItem.path
+          (subItem) => fullPath === subItem.path,
         );
         if (isAnySubItemActive) {
           setCollapsedSections((prev) => {
@@ -372,7 +375,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
   // Get the index of the active group
   const activeGroupIndex = navigationGroups.findIndex(
-    (group) => group.id === activeGroup.id
+    (group) => group.id === activeGroup.id,
   );
 
   // Calculate padding based on active group index
@@ -518,7 +521,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                   const isExpanded = !collapsedSections.has(item.path);
                   const fullPath = location.pathname + location.search;
                   const isAnySubItemActive = item.subItems.some(
-                    (subItem) => fullPath === subItem.path
+                    (subItem) => fullPath === subItem.path,
                   );
 
                   return (
@@ -529,7 +532,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                           "w-full flex items-center justify-between text-sm px-4 py-2 rounded-lg transition-colors bg-white",
                           {
                             "ring shadow-lg": isAnySubItemActive,
-                          }
+                          },
                         )}
                       >
                         <span>{item.label}</span>
@@ -557,7 +560,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                       [`text-white ${activeGroup.color}`]:
                                         isActiveExact,
                                       "bg-white shadow": !isActiveExact,
-                                    }
+                                    },
                                   )
                                 }
                               >
@@ -569,7 +572,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                         className={cn(
                                           isActiveExact
                                             ? "text-white"
-                                            : "text-gray-500"
+                                            : "text-gray-500",
                                         )}
                                       >
                                         {(() => {
@@ -611,7 +614,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                         {
                           "bg-white shadow-lg": !isFirst && !isActive,
                         },
-                        { "w-[95%] mb-5": isFirst }
+                        { "w-[95%] mb-5": isFirst },
                       )
                     }
                   >

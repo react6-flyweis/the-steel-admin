@@ -6,6 +6,7 @@ import { AdminLayout } from "@/components/admin-layout";
 const SignIn = lazy(() => import("@/pages/sign-in"));
 const Notifications = lazy(() => import("@/pages/notifications"));
 const Communication = lazy(() => import("@/pages/communication"));
+const AIChat = lazy(() => import("@/pages/communication-ai-chat"));
 const Analytics = lazy(() => import("@/pages/analytics"));
 const Settings = lazy(() => import("@/pages/settings"));
 const Profile = lazy(() => import("@/pages/profile"));
@@ -13,7 +14,7 @@ const Profile = lazy(() => import("@/pages/profile"));
 // Dashboard section
 const Dashboard = lazy(() => import("@/pages/dashboard/dashboard"));
 const SalesTaxReportingLegacy = lazy(
-  () => import("@/pages/dashboard/sales-tax-reporting")
+  () => import("@/pages/dashboard/sales-tax-reporting"),
 );
 const SalesTaxFiling = lazy(() => import("@/pages/dashboard/sales-tax-filing"));
 const PipelineStages = lazy(() => import("@/pages/dashboard/pipeline-stages"));
@@ -21,28 +22,28 @@ const PipelineStages = lazy(() => import("@/pages/dashboard/pipeline-stages"));
 // customers section
 const Customers = lazy(() => import("@/pages/customers/customers"));
 const CustomerInsights = lazy(
-  () => import("@/pages/customers/customer-insights")
+  () => import("@/pages/customers/customer-insights"),
 );
 const CustomerDetailLayout = lazy(
-  () => import("@/pages/customers/customer-detail/customer-layout")
+  () => import("@/pages/customers/customer-detail/customer-layout"),
 );
 const CustomerInfo = lazy(
-  () => import("@/pages/customers/customer-detail/customer-info")
+  () => import("@/pages/customers/customer-detail/customer-info"),
 );
 const CustomerPayments = lazy(
-  () => import("@/pages/customers/customer-detail/customer-payments")
+  () => import("@/pages/customers/customer-detail/customer-payments"),
 );
 const CustomerStatus = lazy(
-  () => import("@/pages/customers/customer-detail/customer-status")
+  () => import("@/pages/customers/customer-detail/customer-status"),
 );
 const CustomerOrder = lazy(
-  () => import("@/pages/customers/customer-detail/customer-order")
+  () => import("@/pages/customers/customer-detail/customer-order"),
 );
 const Contracts = lazy(() => import("@/pages/customers/contracts"));
 const ContractDetail = lazy(() => import("@/pages/customers/contract-detail"));
 const Meetings = lazy(() => import("@/pages/customers/meetings"));
 const ScheduleMeeting = lazy(
-  () => import("@/pages/customers/schedule-meeting")
+  () => import("@/pages/customers/schedule-meeting"),
 );
 
 // leads section
@@ -50,27 +51,27 @@ const Leads = lazy(() => import("@/pages/leads/leads"));
 const AddNewLead = lazy(() => import("@/pages/leads/add-new-lead"));
 const FollowUp = lazy(() => import("@/pages/leads/follow-up"));
 const LeadCommunicationTimelinePage = lazy(
-  () => import("@/pages/leads/lead-communication-timeline")
+  () => import("@/pages/leads/lead-communication-timeline"),
 );
 const SingleLeadTimelinePage = lazy(
-  () => import("@/pages/leads/single-lead-timeline")
+  () => import("@/pages/leads/single-lead-timeline"),
 );
 const SingleLeadEmailsPage = lazy(
-  () => import("@/pages/leads/single-lead-emails")
+  () => import("@/pages/leads/single-lead-emails"),
 );
 const SingleLeadChatsPage = lazy(
-  () => import("@/pages/leads/single-lead-chats")
+  () => import("@/pages/leads/single-lead-chats"),
 );
 const SmartReminders = lazy(() => import("@/pages/leads/smart-reminders"));
 const SmartReminderDetail = lazy(() => import("@/pages/leads/single-reminder"));
 const SingleLeadNotesPage = lazy(
-  () => import("@/pages/leads/single-lead-notes")
+  () => import("@/pages/leads/single-lead-notes"),
 );
 const SingleLeadCallsPage = lazy(
-  () => import("@/pages/leads/single-lead-calls")
+  () => import("@/pages/leads/single-lead-calls"),
 );
 const AiScriptGeneratorPage = lazy(
-  () => import("@/pages/leads/ai-script-generator")
+  () => import("@/pages/leads/ai-script-generator"),
 );
 const LeadScoring = lazy(() => import("@/pages/leads/lead-scoring"));
 const FollowUpKpis = lazy(() => import("@/pages/leads/follow-up-kpis"));
@@ -79,24 +80,24 @@ const AIMarketing = lazy(() => import("@/pages/leads/ai-marketing"));
 // employees section
 const Employees = lazy(() => import("@/pages/employees/employees"));
 const EmployeeProfile = lazy(
-  () => import("@/pages/employees/employee-profile")
+  () => import("@/pages/employees/employee-profile"),
 );
 const EmployeePerformance = lazy(
-  () => import("@/pages/employees/employee-performance")
+  () => import("@/pages/employees/employee-performance"),
 );
 const EmployeeAuditLog = lazy(() => import("@/pages/employees/audit-log"));
 
 // Payments section
 const Payments = lazy(() => import("@/pages/payments/payments"));
 const SalesTaxReporting = lazy(
-  () => import("@/pages/payments/sales-tax-reporting")
+  () => import("@/pages/payments/sales-tax-reporting"),
 );
 const DetailedTaxReportPage = lazy(
-  () => import("@/pages/payments/detailed-tax-report")
+  () => import("@/pages/payments/detailed-tax-report"),
 );
 const PaymentTaxationPage = lazy(() => import("@/pages/payments/taxation"));
 const CustomerPaymentProfile = lazy(
-  () => import("@/pages/payments/customer-payment-profile")
+  () => import("@/pages/payments/customer-payment-profile"),
 );
 
 // Invoice section
@@ -104,103 +105,99 @@ const InvoiceForm = lazy(() => import("@/pages/invoices/invoice-form"));
 const InvoiceList = lazy(() => import("@/pages/invoices/invoice-list"));
 const SalesGrowth = lazy(() => import("@/pages/invoices/sales-growth"));
 const InvoicePreviewPage = lazy(
-  () => import("@/pages/invoices/invoice-preview")
+  () => import("@/pages/invoices/invoice-preview"),
 );
 
 // plant management section
 const EquipmentView = lazy(() => import("@/plant/components/EquipmentView"));
 const MaterialInventoryView = lazy(
   () =>
-    import(
-      "@/plant/components/material_inventory_management/MaterialInventoryView"
-    )
+    import("@/plant/components/material_inventory_management/MaterialInventoryView"),
 );
 const ProductionManagementView = lazy(
-  () => import("@/plant/components/ProductionManagementView")
+  () => import("@/plant/components/ProductionManagementView"),
 );
 const MaintenanceAndSchedulingView = lazy(
   () =>
-    import(
-      "@/plant/components/maintenance_and_scheduling/MaintenanceAndSchedulingView"
-    )
+    import("@/plant/components/maintenance_and_scheduling/MaintenanceAndSchedulingView"),
 );
 const UpcomingScheduleView = lazy(
   () =>
-    import("@/plant/components/maintenance_and_scheduling/UpcomingScheduleView")
+    import("@/plant/components/maintenance_and_scheduling/UpcomingScheduleView"),
 );
 const BreakdownCasesView = lazy(
   () =>
-    import("@/plant/components/maintenance_and_scheduling/BreakdownCasesView")
+    import("@/plant/components/maintenance_and_scheduling/BreakdownCasesView"),
 );
 const ServiceProvidersView = lazy(
   () =>
-    import("@/plant/components/maintenance_and_scheduling/ServiceProvidersView")
+    import("@/plant/components/maintenance_and_scheduling/ServiceProvidersView"),
 );
 const EquipmentAllocationView = lazy(
   () =>
-    import("@/plant/components/equipment_allocation/EquipmentAllocationView")
+    import("@/plant/components/equipment_allocation/EquipmentAllocationView"),
 );
 const TransferRequestsView = lazy(
-  () => import("@/plant/components/equipment_allocation/TransferRequestsView")
+  () => import("@/plant/components/equipment_allocation/TransferRequestsView"),
 );
 const UsageTrackingView = lazy(
-  () => import("@/plant/components/equipment_allocation/UsageTrackingView")
+  () => import("@/plant/components/equipment_allocation/UsageTrackingView"),
 );
 const PlantDashboard = lazy(() => import("@/plant/pages/PlantPage"));
 
 // Financial Accounts section
 
 const PaymentOverview = lazy(
-  () => import("@/modules/accounts/pages/PaymentOverview")
+  () => import("@/modules/accounts/pages/PaymentOverview"),
 );
 const OrdersAndPaymentsPage = lazy(
-  () => import("@/modules/accounts/pages/OrdersAndPaymentsPage")
+  () => import("@/modules/accounts/pages/OrdersAndPaymentsPage"),
 );
 const WipProfitPage = lazy(
-  () => import("@/modules/accounts/pages/analysis/WipProfitPage")
+  () => import("@/modules/accounts/pages/analysis/WipProfitPage"),
 );
 const CogsAnalysis = lazy(
-  () => import("@/modules/accounts/pages/analysis/CogsAnalysis")
+  () => import("@/modules/accounts/pages/analysis/CogsAnalysis"),
 );
 const ExpensesPage = lazy(
-  () => import("@/modules/accounts/pages/management/ExpensesPage")
+  () => import("@/modules/accounts/pages/management/ExpensesPage"),
 );
 const IncomePage = lazy(
-  () => import("@/modules/accounts/pages/management/IncomePage")
+  () => import("@/modules/accounts/pages/management/IncomePage"),
 );
 const LaborExpensesPage = lazy(
-  () => import("@/modules/accounts/pages/management/LaborExpensesPage")
+  () => import("@/modules/accounts/pages/management/LaborExpensesPage"),
 );
 const AccountsDashboard = lazy(
-  () => import("@/modules/accounts/pages/Dashboard")
+  () => import("@/modules/accounts/pages/Dashboard"),
 );
 const NewInvoice = lazy(() => import("@/modules/accounts/pages/NewInvoice"));
 const InvoicePreview = lazy(
-  () => import("@/modules/accounts/pages/InvoicePreview")
+  () => import("@/modules/accounts/pages/InvoicePreview"),
 );
 const FinancialReportPage = lazy(
-  () => import("@/modules/accounts/pages/management/FinancialReportPage")
+  () => import("@/modules/accounts/pages/management/FinancialReportPage"),
 );
 const TaxationPage = lazy(
-  () => import("@/modules/accounts/pages/management/TaxationPage")
+  () => import("@/modules/accounts/pages/management/TaxationPage"),
 );
 
 // Construction Panel (lazy imports)
 const ConstructionDashboard = lazy(
-  () => import("@/modules/construction/pages/Dashboard")
+  () => import("@/modules/construction/pages/Dashboard"),
 );
 const Projects = lazy(() => import("@/modules/construction/pages/Projects"));
 const Tasks = lazy(() => import("@/modules/construction/pages/Tasks"));
 const Materials = lazy(() => import("@/modules/construction/pages/Materials"));
 const Reports = lazy(() => import("@/modules/construction/pages/Reports"));
 const MaterialsViewPage = lazy(
-  () => import("@/modules/construction/pages/MaterialsViewPage")
+  () => import("@/modules/construction/pages/MaterialsViewPage"),
 );
 const ProjectViewPage = lazy(
-  () => import("@/modules/construction/pages/ProjectViewPage")
+  () => import("@/modules/construction/pages/ProjectViewPage"),
 );
 const DrawingAttachment = lazy(
-  () => import("@/modules/construction/pages/DrawingAttachment")
+  () => import("@/modules/construction/pages/DrawingAttachment"),
 );
 
 export const adminRoutes: RouteObject[] = [
@@ -355,7 +352,10 @@ export const adminRoutes: RouteObject[] = [
       { path: "notifications", element: <Notifications /> },
       {
         path: "communication",
-        element: <Communication />,
+        children: [
+          { index: true, element: <Communication /> },
+          { path: "ai-chat", element: <AIChat /> },
+        ],
       },
       {
         path: "analytics",
