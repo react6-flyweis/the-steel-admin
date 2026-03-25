@@ -48,6 +48,7 @@ const initialLeads = [
     assignedTo: null,
     assignedToName: "",
     assignmentStatus: "Assign",
+    score: 25,
     progress: 3,
     progressStep: "Step 4/7",
     status: "Proposal sent",
@@ -64,6 +65,7 @@ const initialLeads = [
     assignedTo: "Sarah Lee",
     assignedToName: "Sarah Lee",
     assignmentStatus: "1 person assigned",
+    score: 45,
     progress: 3,
     progressStep: "Step 4/7",
     status: "Quotation Sent",
@@ -80,6 +82,7 @@ const initialLeads = [
     assignedTo: "Sarah Lee",
     assignedToName: "Sarah Lee",
     assignmentStatus: "1 person assigned",
+    score: 72,
     progress: 3,
     progressStep: "Step 4/7",
     status: "Proposal sent",
@@ -96,6 +99,7 @@ const initialLeads = [
     assignedTo: "Sarah Lee",
     assignedToName: "Sarah Lee",
     assignmentStatus: "1 person assigned",
+    score: 88,
     progress: 3,
     progressStep: "Step 4/7",
     status: "Closed",
@@ -133,19 +137,18 @@ export default function LeadsPage() {
     }
   };
 
-  const getProgressDots = (progress: number) => {
-    return (
-      <div className="flex items-center gap-1">
-        {[...Array(7)].map((_, i) => (
-          <div
-            key={i}
-            className={`w-2 h-2 rounded-full ${
-              i < progress ? "bg-green-500" : "bg-gray-300"
-            }`}
-          />
-        ))}
-      </div>
-    );
+  const getScoreColorClass = (score: number) => {
+    if (score < 30) return "bg-blue-500";
+    if (score < 50) return "bg-green-500";
+    if (score < 80) return "bg-amber-500";
+    return "bg-red-500";
+  };
+
+  const getScoreTextColorClass = (score: number) => {
+    if (score < 30) return "text-blue-600";
+    if (score < 50) return "text-green-600";
+    if (score < 80) return "text-amber-600";
+    return "text-red-600";
   };
 
   const getStatusBadgeColor = (color: string) => {
@@ -388,7 +391,7 @@ export default function LeadsPage() {
                       Assigned To
                     </th>
                     <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Progress
+                      Score
                     </th>
                     <th className="px-3 py-2 sm:px-6 sm:py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                       Status
@@ -470,11 +473,24 @@ export default function LeadsPage() {
                         </div>
                       </td>
                       <td className="px-3 py-2 sm:px-6 sm:py-4">
-                        <div className="flex flex-col gap-1">
-                          {getProgressDots(lead.progress)}
-                          <span className="text-xs text-gray-500">
-                            {lead.progressStep}
-                          </span>
+                        <div className="min-w-32">
+                          <div className="relative h-4 w-full rounded-full bg-gray-200 overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${getScoreColorClass(
+                                lead.score,
+                              )}`}
+                              style={{
+                                width: `${Math.max(0, Math.min(100, lead.score))}%`,
+                              }}
+                            />
+                            <span
+                              className={`absolute inset-0 flex items-center justify-end pr-2 text-xs font-semibold ${getScoreTextColorClass(
+                                lead.score,
+                              )}`}
+                            >
+                              {lead.score}
+                            </span>
+                          </div>
                         </div>
                       </td>
                       <td className="px-3 py-2 sm:px-6 sm:py-4">
